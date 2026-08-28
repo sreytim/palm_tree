@@ -1,0 +1,65 @@
+import { TechniqueStep } from "@/lib/types";
+import { images } from "@/lib/images";
+
+export const techniqueSteps: TechniqueStep[] = [
+  {
+    number: "01",
+    slug: "selecting-the-leaves",
+    title: "Selecting the Leaves",
+    image: images.step1Selecting,
+    imageAlt: "A person examining palm fronds still on the tree before cutting",
+    description:
+      "Every roof begins in the palm grove. Fronds are chosen by hand — mature enough to be strong, but not so old that they have begun to dry unevenly on the tree. A frond that springs back gently when bent is considered ready to cut.",
+    tip: "Cutting is traditionally done in the early morning, while the fronds still hold moisture from the night and bend without cracking.",
+  },
+  {
+    number: "02",
+    slug: "preparing-the-leaves",
+    title: "Preparing the Leaves",
+    image: images.step2Preparing,
+    imageAlt: "Palm leaves being cleaned and sorted by hand",
+    description:
+      "Back at the household, each frond is inspected leaflet by leaflet. Torn, discolored, or insect-damaged sections are trimmed away, since even a small weak point can let water through once the panel is on the roof.",
+    tip: "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.",
+  },
+  {
+    number: "03",
+    slug: "drying-the-leaves",
+    title: "Drying the Leaves",
+    image: images.step3Drying,
+    imageAlt: "Palm leaves resting on a raised bamboo drying rack in the shade",
+    description:
+      "Cleaned leaves are laid across a raised rack to dry evenly over several days. Some households favor slow, shaded drying over direct sun, believing it produces panels that resist cracking and pests for longer.",
+    tip: "Leaves are turned once a day so both sides dry at the same rate, avoiding warping.",
+  },
+  {
+    number: "04",
+    slug: "weaving-and-arranging",
+    title: "Weaving and Arranging",
+    image: images.step4Weaving,
+    imageAlt: "Hands weaving palm leaflets into a cross pattern over a spine",
+    description:
+      "Dried leaflets are folded over a central spine and woven into a tight cross pattern, one over another, until no gaps remain for water to pass through. This is the most skill-intensive stage, often taking years to learn by hand.",
+    tip: "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.",
+  },
+  {
+    number: "05",
+    slug: "attaching-the-covering",
+    title: "Attaching the Covering",
+    image: images.step5Attaching,
+    imageAlt: "Finished woven panels being lashed to a roof frame",
+    description:
+      "Finished panels are lashed to the roof's bamboo frame in overlapping rows, starting at the eaves and working up toward the ridge — the same shedding principle used by shingles the world over.",
+    tip: "Consistent overlap between rows matters more than the total number of panels used.",
+  },
+  {
+    number: "06",
+    slug: "maintaining-and-repairing",
+    title: "Maintaining and Repairing",
+    image: images.step6Maintaining,
+    imageAlt: "A person patching a worn section of a palm leaf roof",
+    description:
+      "A palm-leaf roof is rarely left untouched. Each year before the rains, households check the underside for thin, light-letting spots and weave small patch panels to replace worn sections before the wet season begins.",
+    tip: "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.",
+  },
+];
