@@ -2,18 +2,18 @@
 
 :root {
   /* Core palette — grounded in palm leaf, roasted wood, sun-dried thatch */
-  --cream: #f4ecd8;         /* rice-paper page background */
-  --cream-deep: #ece0c4;    /* recessed panels / alt sections */
-  --ink: #2b2417;           /* warm near-black for body text */
-  --ink-soft: #5a4f3a;      /* secondary text */
-  --palm: #435c34;          /* deep palm frond green — primary accent */
-  --palm-deep: #2f4225;     /* darker green for text-on-cream emphasis */
-  --palm-light: #7c9a5e;    /* lighter frond green */
-  --clay: #a85832;          /* sun-baked clay / thatch rust — secondary accent */
+  --cream: #f4ecd8; /* rice-paper page background */
+  --cream-deep: #ece0c4; /* recessed panels / alt sections */
+  --ink: #2b2417; /* warm near-black for body text */
+  --ink-soft: #5a4f3a; /* secondary text */
+  --palm: #435c34; /* deep palm frond green — primary accent */
+  --palm-deep: #2f4225; /* darker green for text-on-cream emphasis */
+  --palm-light: #7c9a5e; /* lighter frond green */
+  --clay: #a85832; /* sun-baked clay / thatch rust — secondary accent */
   --clay-deep: #7e3f21;
-  --wood: #6b4423;          /* roasted wood brown */
+  --wood: #6b4423; /* roasted wood brown */
   --wood-deep: #4a2e17;
-  --beige: #ddc79c;         /* muted beige for borders, dividers */
+  --beige: #ddc79c; /* muted beige for borders, dividers */
   --beige-soft: #e8dcbe;
 
   --font-display: var(--font-fraunces);
@@ -54,7 +54,47 @@ body {
   font-family: var(--font-body);
 }
 
-h1, h2, h3, h4 {
+html[lang="km"] body {
+  font-family: var(--font-khmer), var(--font-body);
+  line-height: 1.8;
+}
+
+html[lang="km"] h1,
+html[lang="km"] h2,
+html[lang="km"] h3,
+html[lang="km"] h4 {
+  font-family: var(--font-khmer), var(--font-display);
+  line-height: 1.35;
+}
+
+.language-switcher {
+  display: inline-flex;
+  gap: 0.15rem;
+  border: 1px solid var(--beige);
+  border-radius: 999px;
+  padding: 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.language-switcher button {
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  color: var(--ink-soft);
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.language-switcher button[aria-pressed="true"] {
+  background: var(--palm);
+  color: var(--cream);
+}
+
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-display);
 }
 
@@ -73,7 +113,9 @@ input:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -90,15 +132,39 @@ input:focus-visible,
 .weave-bg {
   background-color: var(--cream);
   background-image:
-    repeating-linear-gradient(45deg, rgba(67, 92, 52, 0.09) 0px, rgba(67, 92, 52, 0.09) 2px, transparent 2px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(107, 68, 35, 0.08) 0px, rgba(107, 68, 35, 0.08) 2px, transparent 2px, transparent 16px);
+    repeating-linear-gradient(
+      45deg,
+      rgba(67, 92, 52, 0.09) 0px,
+      rgba(67, 92, 52, 0.09) 2px,
+      transparent 2px,
+      transparent 16px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(107, 68, 35, 0.08) 0px,
+      rgba(107, 68, 35, 0.08) 2px,
+      transparent 2px,
+      transparent 16px
+    );
 }
 
 .weave-bg-dark {
   background-color: var(--palm-deep);
   background-image:
-    repeating-linear-gradient(45deg, rgba(244, 236, 216, 0.06) 0px, rgba(244, 236, 216, 0.06) 2px, transparent 2px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(244, 236, 216, 0.05) 0px, rgba(244, 236, 216, 0.05) 2px, transparent 2px, transparent 16px);
+    repeating-linear-gradient(
+      45deg,
+      rgba(244, 236, 216, 0.06) 0px,
+      rgba(244, 236, 216, 0.06) 2px,
+      transparent 2px,
+      transparent 16px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(244, 236, 216, 0.05) 0px,
+      rgba(244, 236, 216, 0.05) 2px,
+      transparent 2px,
+      transparent 16px
+    );
 }
 
 .weave-divider {
@@ -112,10 +178,33 @@ input:focus-visible,
     var(--clay) 12px
   );
   clip-path: polygon(
-    0% 0%, 4% 100%, 8% 0%, 12% 100%, 16% 0%, 20% 100%, 24% 0%, 28% 100%,
-    32% 0%, 36% 100%, 40% 0%, 44% 100%, 48% 0%, 52% 100%, 56% 0%, 60% 100%,
-    64% 0%, 68% 100%, 72% 0%, 76% 100%, 80% 0%, 84% 100%, 88% 0%, 92% 100%,
-    96% 0%, 100% 100%, 100% 0%
+    0% 0%,
+    4% 100%,
+    8% 0%,
+    12% 100%,
+    16% 0%,
+    20% 100%,
+    24% 0%,
+    28% 100%,
+    32% 0%,
+    36% 100%,
+    40% 0%,
+    44% 100%,
+    48% 0%,
+    52% 100%,
+    56% 0%,
+    60% 100%,
+    64% 0%,
+    68% 100%,
+    72% 0%,
+    76% 100%,
+    80% 0%,
+    84% 100%,
+    88% 0%,
+    92% 100%,
+    96% 0%,
+    100% 100%,
+    100% 0%
   );
   opacity: 0.85;
 }
@@ -123,7 +212,9 @@ input:focus-visible,
 .reveal {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 .reveal.is-visible {
@@ -147,7 +238,12 @@ input:focus-visible,
   border-image-slice: 1;
   border-width: 2px;
   border-style: solid;
-  border-image-source: linear-gradient(135deg, var(--palm) 0%, var(--beige) 50%, var(--clay) 100%);
+  border-image-source: linear-gradient(
+    135deg,
+    var(--palm) 0%,
+    var(--beige) 50%,
+    var(--clay) 100%
+  );
 }
 
 ::-webkit-scrollbar {

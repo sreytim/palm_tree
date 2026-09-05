@@ -6,7 +6,8 @@ import { LayoutGrid, List } from "lucide-react";
 import { ArchiveItem } from "@/lib/types";
 import SearchBar from "./SearchBar";
 import CategoryFilter from "./CategoryFilter";
-import ArchiveCard from "./ArchiveCard";
+import EntryCard from "./EntryCard";
+import { useLanguage } from "./LanguageProvider";
 
 const categories = [
   "Palm Leaf Preparation",
@@ -19,11 +20,14 @@ const categories = [
 ];
 
 export default function ArchiveBrowser({ items }: { items: ArchiveItem[] }) {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(
-    initialCategory && categories.includes(initialCategory) ? initialCategory : "All"
+    initialCategory && categories.includes(initialCategory)
+      ? initialCategory
+      : "All",
   );
   const [view, setView] = useState<"grid" | "list">("grid");
 
@@ -54,7 +58,9 @@ export default function ArchiveBrowser({ items }: { items: ArchiveItem[] }) {
             aria-pressed={view === "grid"}
             aria-label="Grid view"
             className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
-              view === "grid" ? "bg-palm text-cream" : "text-ink-soft hover:text-ink"
+              view === "grid"
+                ? "bg-palm text-cream"
+                : "text-ink-soft hover:text-ink"
             }`}
           >
             <LayoutGrid size={16} />
@@ -65,7 +71,9 @@ export default function ArchiveBrowser({ items }: { items: ArchiveItem[] }) {
             aria-pressed={view === "list"}
             aria-label="List view"
             className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
-              view === "list" ? "bg-palm text-cream" : "text-ink-soft hover:text-ink"
+              view === "list"
+                ? "bg-palm text-cream"
+                : "text-ink-soft hover:text-ink"
             }`}
           >
             <List size={16} />
@@ -74,27 +82,32 @@ export default function ArchiveBrowser({ items }: { items: ArchiveItem[] }) {
       </div>
 
       <div className="mt-5">
-        <CategoryFilter categories={categories} active={category} onChange={setCategory} />
+        <CategoryFilter
+          categories={categories}
+          active={category}
+          onChange={setCategory}
+        />
       </div>
 
       <p className="mt-6 text-sm text-ink-soft" role="status">
-        {filtered.length} {filtered.length === 1 ? "entry" : "entries"} found
+        {filtered.length}{" "}
+        {filtered.length === 1 ? t("entryFound") : t("entriesFound")}
       </p>
 
       {filtered.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-beige py-16 text-center">
-          <p className="text-ink-soft">No archive entries match your search yet.</p>
+          <p className="text-ink-soft">{t("noMatches")}</p>
         </div>
       ) : view === "grid" ? (
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((item) => (
-            <ArchiveCard key={item.id} item={item} view="grid" />
+            <EntryCard key={item.id} item={item} view="grid" />
           ))}
         </div>
       ) : (
         <div className="mt-6 flex flex-col gap-5">
           {filtered.map((item) => (
-            <ArchiveCard key={item.id} item={item} view="list" />
+            <EntryCard key={item.id} item={item} view="list" />
           ))}
         </div>
       )}

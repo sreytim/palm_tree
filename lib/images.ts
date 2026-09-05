@@ -1,71 +1,81 @@
 /**
  * Central image registry.
  *
- * Every photo in the archive is referenced through this file. Replace the
- * URL strings below with real photographs later (upload to /public/photos
- * and swap the path here) — no component code needs to change.
+ * Maintains a single source of truth for all images in the app so real media
+ * can replace the placeholders without changing component code.
  *
- * Placeholder photos are served from Picsum (picsum.photos) using a fixed
- * "seed" per image so the same subject always renders the same picture.
+ * Recommended structure:
+ * public/images/
+ *   hero/
+ *   categories/
+ *   process/
+ *   techniques/
+ *   archive/
+ *   stories/
+ *   gallery/
+ *   about/
  */
 
-const picsum = (seed: string, w: number, h: number) =>
-  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+const asset = (
+  folder: string,
+  filename: string,
+  extension: "svg" | "jpg" | "jpeg" | "png" | "webp" = "svg",
+) => `/images/${folder}/${filename}.${extension}`;
 
 export const images = {
-  heroHouse: picsum("palm-house-hero", 1600, 2000),
-  heroTexture: picsum("palm-leaves-macro", 1200, 1200),
+  heroHouse: "/covering.jpeg",
+  heroTexture: "/images/palm-tree.jpeg",
 
-  categorySelecting: picsum("selecting-leaves", 800, 600),
-  categoryPreparing: picsum("preparing-leaves", 800, 600),
-  categoryWeaving: picsum("weaving-leaves", 800, 600),
-  categoryAttaching: picsum("attaching-roof", 800, 600),
-  categoryMaintaining: picsum("maintaining-roof", 800, 600),
-  categoryStories: picsum("elder-portrait-1", 800, 600),
-  categoryHouses: picsum("traditional-house-1", 800, 600),
+  categorySelecting: asset("categories", "selecting"),
+  categoryPreparing: "/palm_leaf1.jpg",
+  categoryWeaving: "/palm_leaf3.jpg",
+  categoryAttaching: "/covering.jpeg",
+  categoryMaintaining: "/maintain.jpg",
+  categoryStories: "/stories_from_elders.png",
+  categoryHouses: "/palm_house1.jpg",
 
-  processInterview: picsum("process-interview", 700, 500),
-  processDocument: picsum("process-document", 700, 500),
-  processPhotograph: picsum("process-photograph", 700, 500),
-  processPreserve: picsum("process-preserve", 700, 500),
-  processShare: picsum("process-share", 700, 500),
+  processInterview: asset("process", "interview"),
+  processDocument: asset("process", "document"),
+  processPhotograph: asset("process", "photograph"),
+  processPreserve: asset("process", "preserve"),
+  processShare: asset("process", "share"),
 
-  step1Selecting: picsum("step-selecting", 1200, 900),
-  step2Preparing: picsum("step-preparing", 1200, 900),
-  step3Drying: picsum("step-drying", 1200, 900),
-  step4Weaving: picsum("step-weaving", 1200, 900),
-  step5Attaching: picsum("step-attaching", 1200, 900),
-  step6Maintaining: picsum("step-maintaining", 1200, 900),
+  step1Selecting: asset("techniques", "step-1-selecting"),
+  step2Preparing: asset("techniques", "step-2-preparing"),
+  step3Drying: asset("techniques", "step-3-drying"),
+  step4Weaving: asset("techniques", "step-4-weaving"),
+  step5Attaching: asset("techniques", "step-5-attaching"),
+  step6Maintaining: asset("techniques", "step-6-maintaining"),
 
-  archive1: picsum("archive-prep-overview", 900, 700),
-  archive2: picsum("archive-weave-pattern", 900, 700),
-  archive3: picsum("archive-roof-frame", 900, 700),
-  archive4: picsum("archive-lashing", 900, 700),
-  archive5: picsum("archive-repair", 900, 700),
-  archive6: picsum("archive-house-full", 900, 700),
-  archive7: picsum("archive-drying-rack", 900, 700),
-  archive8: picsum("archive-tools", 900, 700),
+  archive1: "/palm_leaf1.jpg",
+  archive2: "/palm_leaf3.jpg",
+  archive3: "/palm_house1.jpg",
+  archive4: asset("archive", "archive-4"),
+  archive5: asset("archive", "archive-5"),
+  archive6: "/palm_house1.jpg",
+  archive7: "/palm_leaf2.jpg",
+  archive8: asset("archive", "archive-8"),
 
-  storyPortrait1: picsum("elder-portrait-1", 500, 600),
-  storyPortrait2: picsum("elder-portrait-2", 500, 600),
-  storyPortrait3: picsum("elder-portrait-3", 500, 600),
-  storyPortrait4: picsum("elder-portrait-4", 500, 600),
+  storyPortrait1: asset("stories", "portrait-1"),
+  storyPortrait2: asset("stories", "portrait-2"),
+  storyPortrait3: asset("stories", "portrait-3"),
+  storyPortrait4: asset("stories", "portrait-4"),
 
-  galleryLeaves1: picsum("gallery-leaves-1", 800, 1000),
-  galleryLeaves2: picsum("gallery-leaves-2", 800, 600),
-  galleryHouse1: picsum("gallery-house-1", 900, 700),
-  galleryHouse2: picsum("gallery-house-2", 700, 900),
-  galleryTools1: picsum("gallery-tools-1", 800, 600),
-  galleryWeaving1: picsum("gallery-weaving-1", 800, 1000),
-  galleryWeaving2: picsum("gallery-weaving-2", 900, 600),
-  galleryPreparing1: picsum("gallery-preparing-1", 800, 600),
-  galleryAttaching1: picsum("gallery-attaching-1", 900, 700),
-  galleryFinished1: picsum("gallery-finished-1", 800, 1000),
-  galleryFinished2: picsum("gallery-finished-2", 900, 600),
-  galleryCommunity1: picsum("gallery-community-1", 800, 600),
-  galleryCommunity2: picsum("gallery-community-2", 700, 900),
-  galleryCommunity3: picsum("gallery-community-3", 900, 700),
+  galleryLeaves1: asset("gallery", "leaves-1"),
+  galleryLeaves2: asset("gallery", "leaves-2"),
+  galleryHouse1: "/palm_house1.jpg",
+  galleryHouse2: asset("gallery", "house-2"),
+  galleryTools1: asset("gallery", "tools-1"),
+  galleryWeaving1: asset("gallery", "weaving-1"),
+  galleryWeaving2: asset("gallery", "weaving-2"),
+  galleryPreparing1: "/palm_leaf1.jpg",
+  galleryAttaching1: asset("gallery", "attaching-1"),
+  galleryFinished1: "/palm_house1.jpg",
+  galleryFinished2: asset("gallery", "finished-2"),
+  galleryCommunity1: asset("gallery", "community-1"),
+  galleryCommunity2: asset("gallery", "community-2"),
+  galleryCommunity3: asset("gallery", "community-3"),
 
-  aboutFounder: picsum("about-founder", 900, 900),
-  aboutCommunity: picsum("about-community", 1000, 700),
+  aboutFounder: "/about.jpg",
+  aboutCommunity: "/about.jpg",
 };

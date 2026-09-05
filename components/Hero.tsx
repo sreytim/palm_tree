@@ -1,21 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { images } from "@/lib/images";
+import { useLanguage } from "./LanguageProvider";
 
 export default function Hero() {
+  const { t } = useLanguage();
   return (
     <section className="relative overflow-hidden weave-bg">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-14 sm:pt-20 pb-16 sm:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
         <div className="lg:col-span-6 order-2 lg:order-1">
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-clay-deep mb-5">
-            A Community Cultural Archive
+            {t("communityArchive")}
           </p>
           <h1 className="font-display text-[2.6rem] sm:text-6xl lg:text-[3.4rem] leading-[1.05] font-medium text-ink text-balance">
             Traditional Palm-Leaf House Covering Techniques
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-ink-soft leading-relaxed max-w-xl">
-            Preserving the knowledge, skills, and stories behind a traditional way of building and living.
+            {t("preserving")}
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -23,14 +27,14 @@ export default function Hero() {
               href="/archive"
               className="inline-flex items-center gap-2 rounded-full bg-palm text-cream px-7 py-3.5 text-sm font-semibold tracking-wide hover:bg-palm-deep transition-colors duration-200"
             >
-              Explore the Archive
+              {t("exploreArchive")}
               <ArrowRight size={16} />
             </Link>
             <Link
               href="/about"
               className="inline-flex items-center gap-2 rounded-full border-2 border-wood text-wood px-7 py-3.5 text-sm font-semibold tracking-wide hover:bg-wood hover:text-cream transition-colors duration-200"
             >
-              About This Archive
+              {t("aboutArchive")}
             </Link>
           </div>
         </div>
@@ -65,8 +69,13 @@ export default function Hero() {
           className="flex flex-col items-center gap-2 text-ink-soft hover:text-palm-deep transition-colors group"
           aria-label="Scroll to learn why this knowledge matters"
         >
-          <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">Scroll</span>
-          <ArrowDown size={16} className="animate-bounce group-hover:translate-y-0.5 transition-transform" />
+          <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
+            {t("scroll")}
+          </span>
+          <ArrowDown
+            size={16}
+            className="animate-bounce group-hover:translate-y-0.5 transition-transform"
+          />
         </a>
       </div>
     </section>

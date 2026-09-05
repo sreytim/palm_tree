@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
-import { Fraunces, Work_Sans, IBM_Plex_Mono } from "next/font/google";
+import {
+  Fraunces,
+  Work_Sans,
+  IBM_Plex_Mono,
+  Noto_Sans_Khmer,
+} from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LanguageProvider from "@/components/LanguageProvider";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -24,8 +30,15 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
 });
 
+const notoSansKhmer = Noto_Sans_Khmer({
+  variable: "--font-khmer",
+  subsets: ["khmer"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Traditional Palm-Leaf House Covering Techniques | A Community Cultural Archive",
+  title:
+    "Traditional Palm-Leaf House Covering Techniques | A Community Cultural Archive",
   description:
     "A digital archive preserving the knowledge, skills, and stories behind traditional palm-leaf house covering techniques, documented directly from community elders.",
 };
@@ -38,11 +51,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-cream text-ink`}
+        className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} ${notoSansKhmer.variable} antialiased bg-cream text-ink`}
       >
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <LanguageProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

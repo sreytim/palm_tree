@@ -1,16 +1,27 @@
 "use client";
 
+import { useLanguage } from "./LanguageProvider";
+
 interface CategoryFilterProps {
   categories: string[];
   active: string;
   onChange: (category: string) => void;
 }
 
-export default function CategoryFilter({ categories, active, onChange }: CategoryFilterProps) {
+export default function CategoryFilter({
+  categories,
+  active,
+  onChange,
+}: CategoryFilterProps) {
+  const { t } = useLanguage();
   const all = ["All", ...categories];
 
   return (
-    <div className="flex flex-wrap gap-2" role="group" aria-label="Filter archive by category">
+    <div
+      className="flex flex-wrap gap-2"
+      role="group"
+      aria-label={t("filterByCategory")}
+    >
       {all.map((cat) => {
         const isActive = active === cat;
         return (
@@ -25,7 +36,7 @@ export default function CategoryFilter({ categories, active, onChange }: Categor
                 : "bg-transparent border-beige text-ink-soft hover:border-palm hover:text-palm-deep"
             }`}
           >
-            {cat}
+            {cat === "All" ? t("all") : cat}
           </button>
         );
       })}

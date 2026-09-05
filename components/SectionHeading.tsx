@@ -1,3 +1,8 @@
+"use client";
+
+import { useLanguage } from "./LanguageProvider";
+import { localizeLabel } from "@/lib/i18n";
+
 interface SectionHeadingProps {
   eyebrow?: string;
   title: string;
@@ -13,6 +18,7 @@ export default function SectionHeading({
   align = "left",
   tone = "dark",
 }: SectionHeadingProps) {
+  const { language } = useLanguage();
   const alignClass = align === "center" ? "text-center mx-auto" : "text-left";
   const titleColor = tone === "light" ? "text-cream" : "text-ink";
   const ledeColor = tone === "light" ? "text-cream/80" : "text-ink-soft";
@@ -25,13 +31,19 @@ export default function SectionHeading({
             tone === "light" ? "text-beige" : "text-clay-deep"
           }`}
         >
-          {eyebrow}
+          {localizeLabel(eyebrow, language)}
         </p>
       )}
-      <h2 className={`font-display text-3xl sm:text-4xl md:text-[2.75rem] leading-[1.1] font-medium ${titleColor}`}>
-        {title}
+      <h2
+        className={`font-display text-3xl sm:text-4xl md:text-[2.75rem] leading-[1.1] font-medium ${titleColor}`}
+      >
+        {localizeLabel(title, language)}
       </h2>
-      {lede && <p className={`mt-4 text-base sm:text-lg leading-relaxed ${ledeColor}`}>{lede}</p>}
+      {lede && (
+        <p className={`mt-4 text-base sm:text-lg leading-relaxed ${ledeColor}`}>
+          {localizeLabel(lede, language)}
+        </p>
+      )}
     </div>
   );
 }

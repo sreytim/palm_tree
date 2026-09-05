@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, LucideIcon } from "lucide-react";
+import { useLanguage } from "./LanguageProvider";
+import { localizeLabel } from "@/lib/i18n";
 
 interface CategoryCardProps {
   title: string;
@@ -19,6 +23,7 @@ export default function CategoryCard({
   href,
   icon: Icon,
 }: CategoryCardProps) {
+  const { language } = useLanguage();
   return (
     <Link
       href={href}
@@ -38,11 +43,18 @@ export default function CategoryCard({
         </span>
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-display text-xl font-medium text-ink mb-2">{title}</h3>
-        <p className="text-sm text-ink-soft leading-relaxed flex-1">{description}</p>
+        <h3 className="font-display text-xl font-medium text-ink mb-2">
+          {localizeLabel(title, language)}
+        </h3>
+        <p className="text-sm text-ink-soft leading-relaxed flex-1">
+          {localizeLabel(description, language)}
+        </p>
         <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-palm-deep">
-          Explore
-          <ArrowUpRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          {localizeLabel("Explore", language)}
+          <ArrowUpRight
+            size={15}
+            className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
         </span>
       </div>
     </Link>

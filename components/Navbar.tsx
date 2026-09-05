@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Leaf } from "lucide-react";
+import { useLanguage } from "./LanguageProvider";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const links = [
   { href: "/", label: "Home" },
@@ -15,6 +17,7 @@ const links = [
 ];
 
 export default function Navbar() {
+  const { t } = useLanguage();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -49,7 +52,7 @@ export default function Navbar() {
           <span className="font-display text-base sm:text-lg leading-tight text-ink">
             Palm-Leaf
             <span className="block text-[0.65rem] sm:text-xs font-mono tracking-[0.15em] uppercase text-ink-soft">
-              House Archive
+              {t("houseArchive")}
             </span>
           </span>
         </Link>
@@ -63,26 +66,39 @@ export default function Navbar() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
-                    active ? "text-cream bg-palm" : "text-ink-soft hover:text-ink hover:bg-beige-soft"
+                    active
+                      ? "text-cream bg-palm"
+                      : "text-ink-soft hover:text-ink hover:bg-beige-soft"
                   }`}
                 >
-                  {link.label}
+                  {t(
+                    link.label.toLowerCase() as
+                      | "home"
+                      | "archive"
+                      | "techniques"
+                      | "stories"
+                      | "gallery"
+                      | "about",
+                  )}
                 </Link>
               </li>
             );
           })}
         </ul>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? "Close menu" : "Open menu"}
-          className="md:hidden flex items-center justify-center h-10 w-10 rounded-full border border-beige text-ink hover:bg-beige-soft transition-colors"
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? t("closeMenu") : t("openMenu")}
+            className="md:hidden flex items-center justify-center h-10 w-10 rounded-full border border-beige text-ink hover:bg-beige-soft transition-colors"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </nav>
 
       <div
@@ -101,10 +117,20 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   aria-current={active ? "page" : undefined}
                   className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                    active ? "bg-palm text-cream" : "text-ink hover:bg-beige-soft"
+                    active
+                      ? "bg-palm text-cream"
+                      : "text-ink hover:bg-beige-soft"
                   }`}
                 >
-                  {link.label}
+                  {t(
+                    link.label.toLowerCase() as
+                      | "home"
+                      | "archive"
+                      | "techniques"
+                      | "stories"
+                      | "gallery"
+                      | "about",
+                  )}
                 </Link>
               </li>
             );

@@ -3,12 +3,16 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, MapPin, Calendar, User, Lightbulb } from "lucide-react";
-import { archiveItems, getArchiveItemBySlug, getRelatedArchiveItems } from "@/data/archive";
-import ArchiveCard from "@/components/ArchiveCard";
+import {
+  entries,
+  getArchiveItemBySlug,
+  getRelatedArchiveItems,
+} from "@/data/entries";
+import EntryCard from "@/components/EntryCard";
 import WeaveDivider from "@/components/WeaveDivider";
 
 export function generateStaticParams() {
-  return archiveItems.map((item) => ({ slug: item.slug }));
+  return entries.map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({
@@ -91,12 +95,18 @@ export default async function ArchiveDetailPage({
         </div>
 
         <div className="pt-10">
-          <h2 className="font-display text-2xl font-medium text-ink mb-4">Introduction</h2>
-          <p className="text-base sm:text-lg text-ink-soft leading-relaxed max-w-3xl">{item.introduction}</p>
+          <h2 className="font-display text-2xl font-medium text-ink mb-4">
+            Introduction
+          </h2>
+          <p className="text-base sm:text-lg text-ink-soft leading-relaxed max-w-3xl">
+            {item.introduction}
+          </p>
         </div>
 
         <div className="pt-14">
-          <h2 className="font-display text-2xl font-medium text-ink mb-6">Step-by-Step Process</h2>
+          <h2 className="font-display text-2xl font-medium text-ink mb-6">
+            Step-by-Step Process
+          </h2>
           <ol className="space-y-6">
             {item.steps.map((step, i) => (
               <li key={step.title} className="flex gap-5">
@@ -104,8 +114,12 @@ export default async function ArchiveDetailPage({
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className="font-display text-lg font-medium text-ink">{step.title}</h3>
-                  <p className="mt-1 text-sm sm:text-base text-ink-soft leading-relaxed">{step.description}</p>
+                  <h3 className="font-display text-lg font-medium text-ink">
+                    {step.title}
+                  </h3>
+                  <p className="mt-1 text-sm sm:text-base text-ink-soft leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
               </li>
             ))}
@@ -114,14 +128,19 @@ export default async function ArchiveDetailPage({
 
         {item.tips.length > 0 && (
           <div className="pt-14">
-            <h2 className="font-display text-2xl font-medium text-ink mb-6">Traditional Knowledge &amp; Tips</h2>
+            <h2 className="font-display text-2xl font-medium text-ink mb-6">
+              Traditional Knowledge &amp; Tips
+            </h2>
             <ul className="space-y-3">
               {item.tips.map((tip) => (
                 <li
                   key={tip}
                   className="flex gap-3 rounded-2xl bg-cream-deep border border-beige p-4 text-sm sm:text-base text-ink-soft leading-relaxed"
                 >
-                  <Lightbulb size={18} className="text-clay-deep shrink-0 mt-0.5" />
+                  <Lightbulb
+                    size={18}
+                    className="text-clay-deep shrink-0 mt-0.5"
+                  />
                   <span>{tip}</span>
                 </li>
               ))}
@@ -130,7 +149,9 @@ export default async function ArchiveDetailPage({
         )}
 
         <div className="pt-14">
-          <h2 className="font-display text-2xl font-medium text-ink mb-4">Contributor Story</h2>
+          <h2 className="font-display text-2xl font-medium text-ink mb-4">
+            Contributor Story
+          </h2>
           <blockquote className="border-l-4 border-clay pl-5 sm:pl-6 italic text-base sm:text-lg text-ink leading-relaxed font-display">
             {item.contributorStory}
           </blockquote>
@@ -138,11 +159,22 @@ export default async function ArchiveDetailPage({
 
         {item.relatedImages.length > 0 && (
           <div className="pt-14">
-            <h2 className="font-display text-2xl font-medium text-ink mb-6">Related Images</h2>
+            <h2 className="font-display text-2xl font-medium text-ink mb-6">
+              Related Images
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {item.relatedImages.map((img) => (
-                <div key={img.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden img-zoom">
-                  <Image src={img.src} alt={img.alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                <div
+                  key={img.src}
+                  className="relative aspect-[4/3] rounded-2xl overflow-hidden img-zoom"
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -155,10 +187,12 @@ export default async function ArchiveDetailPage({
           <WeaveDivider />
           <div className="bg-cream-deep">
             <div className="mx-auto max-w-6xl px-5 sm:px-8 py-16">
-              <h2 className="font-display text-2xl font-medium text-ink mb-6">Related Archive Entries</h2>
+              <h2 className="font-display text-2xl font-medium text-ink mb-6">
+                Related Archive Entries
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {related.map((r) => (
-                  <ArchiveCard key={r.id} item={r} view="grid" />
+                  <EntryCard key={r.id} item={r} view="grid" />
                 ))}
               </div>
             </div>
