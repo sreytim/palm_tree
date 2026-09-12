@@ -2,8 +2,8 @@
 
 :root {
   /* Core palette — grounded in palm leaf, roasted wood, sun-dried thatch */
-  --cream: #f4ecd8; /* rice-paper page background */
-  --cream-deep: #ece0c4; /* recessed panels / alt sections */
+  --cream: #f5ecd9; /* shared page and section background */
+  --cream-deep: #f5ecd9; /* kept for existing utilities; matches the page background */
   --ink: #2b2417; /* warm near-black for body text */
   --ink-soft: #5a4f3a; /* secondary text */
   --palm: #435c34; /* deep palm frond green — primary accent */
@@ -112,6 +112,22 @@ input:focus-visible,
   border-radius: 4px;
 }
 
+.search-bar-input:focus,
+.search-bar-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--beige);
+  background: var(--cream);
+  border-radius: 9999px !important;
+  appearance: none;
+}
+
+.search-bar-input::-webkit-search-cancel-button,
+.search-bar-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -123,90 +139,12 @@ input:focus-visible,
   }
 }
 
-/* ---------------------------------------------------------- */
-/* Signature motif: a woven palm-frond diagonal lattice.       */
-/* Two crossing hairline diagonals echo the over-under weave   */
-/* used to bind real palm-leaf panels together.                */
-/* ---------------------------------------------------------- */
-
 .weave-bg {
-  background-color: var(--cream);
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(67, 92, 52, 0.09) 0px,
-      rgba(67, 92, 52, 0.09) 2px,
-      transparent 2px,
-      transparent 16px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(107, 68, 35, 0.08) 0px,
-      rgba(107, 68, 35, 0.08) 2px,
-      transparent 2px,
-      transparent 16px
-    );
+  background: var(--cream);
 }
 
 .weave-bg-dark {
-  background-color: var(--palm-deep);
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(244, 236, 216, 0.06) 0px,
-      rgba(244, 236, 216, 0.06) 2px,
-      transparent 2px,
-      transparent 16px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(244, 236, 216, 0.05) 0px,
-      rgba(244, 236, 216, 0.05) 2px,
-      transparent 2px,
-      transparent 16px
-    );
-}
-
-.weave-divider {
-  height: 14px;
-  width: 100%;
-  background-image: repeating-linear-gradient(
-    45deg,
-    var(--palm) 0px,
-    var(--palm) 6px,
-    var(--clay) 6px,
-    var(--clay) 12px
-  );
-  clip-path: polygon(
-    0% 0%,
-    4% 100%,
-    8% 0%,
-    12% 100%,
-    16% 0%,
-    20% 100%,
-    24% 0%,
-    28% 100%,
-    32% 0%,
-    36% 100%,
-    40% 0%,
-    44% 100%,
-    48% 0%,
-    52% 100%,
-    56% 0%,
-    60% 100%,
-    64% 0%,
-    68% 100%,
-    72% 0%,
-    76% 100%,
-    80% 0%,
-    84% 100%,
-    88% 0%,
-    92% 100%,
-    96% 0%,
-    100% 100%,
-    100% 0%
-  );
-  opacity: 0.85;
+  background: var(--cream);
 }
 
 .reveal {
@@ -230,8 +168,17 @@ input:focus-visible,
   transition: transform 0.6s ease;
 }
 
-.img-zoom:hover img {
-  transform: scale(1.06);
+@media (hover: hover) and (pointer: fine) {
+  .img-zoom:hover img {
+    transform: scale(1.06);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .img-zoom img {
+    transform: none !important;
+    transition: none;
+  }
 }
 
 .frond-border {
