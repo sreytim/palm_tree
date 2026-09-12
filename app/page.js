@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { Suspense } from "react";
 import { Leaf, ArrowRight } from "lucide-react";
 import Hero from "@/components/Hero";
 import SectionHeading from "@/components/SectionHeading";
@@ -81,7 +82,9 @@ export default function HomePage() {
             </p>
           </FadeIn>
           <div className="mt-8">
-            <ArchiveBrowser items={entries} />
+            <Suspense fallback={null}>
+              <ArchiveBrowser items={entries} />
+            </Suspense>
           </div>
         </div>
       </section>
