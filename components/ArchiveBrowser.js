@@ -4,8 +4,9 @@ import { useSearchParams } from "next/navigation";
 import SearchBar from "./SearchBar";
 import EntryCard from "./EntryCard";
 import { useLanguage } from "./LanguageProvider";
+import { localizeLabel } from "@/lib/i18n";
 export default function ArchiveBrowser({ items }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category");
   const [query, setQuery] = useState("");
@@ -20,21 +21,36 @@ export default function ArchiveBrowser({ items }) {
     },
   ];
   const filtered = useMemo(() => {
-    return items.filter((item) => {
+    const normalizedQuery = query.trim().toLowerCase();
+    return items
+      .map((item) => {
+        const title = localizeLabel(item.title, language).toLowerCase();
+        const description = localizeLabel(
+          item.description,
+          language,
+        ).toLowerCase();
+        const contributor = item.contributor.toLowerCase();
+        const searchableText = [title, description, contributor].join(" ");
+        const matchesQuery =
+          normalizedQuery.length === 0 ||
+          searchableText.includes(normalizedQuery);
+        const relevance =
+          (title === normalizedQuery ? 3 : title.includes(normalizedQuery) ? 2 : 0) +
+          (description.includes(normalizedQuery) ? 1 : 0) +
+          (contributor.includes(normalizedQuery) ? 1 : 0);
+
+        return { item, matchesQuery, relevance };
+      })
+      .filter(({ item, matchesQuery }) => {
       const matchesCategory =
         initialCategory === null ||
         initialCategory === "All" ||
         item.category === initialCategory;
-      const q = query.trim().toLowerCase();
-      const matchesQuery =
-        q.length === 0 ||
-        item.title.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        item.contributor.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q);
       return matchesCategory && matchesQuery;
-    });
-  }, [items, initialCategory, query]);
+      })
+      .sort((first, second) => second.relevance - first.relevance)
+      .map(({ item }) => item);
+  }, [items, initialCategory, language, query]);
   return (
     <div>
       <div className="w-full">
@@ -54,7 +70,7 @@ export default function ArchiveBrowser({ items }) {
               <button
                 key={suggestion.search}
                 type="button"
-                onClick={() => setQuery(suggestion.search)}
+                onClick={() => setQuery(t(suggestion.label))}
                 className="rounded-full border border-beige bg-cream px-4 py-2 text-sm text-ink-soft transition-colors hover:border-palm hover:text-palm-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-palm focus-visible:ring-offset-2"
               >
                 {t(suggestion.label)}

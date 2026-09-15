@@ -5,7 +5,6 @@ import { Suspense } from "react";
 import { Leaf, ArrowRight } from "lucide-react";
 import Hero from "@/components/Hero";
 import SectionHeading from "@/components/SectionHeading";
-import ProcessTimeline from "@/components/ProcessTimeline";
 import WeaveDivider from "@/components/WeaveDivider";
 import FadeIn from "@/components/FadeIn";
 import { images } from "@/lib/images";
@@ -86,20 +85,6 @@ export default function HomePage() {
               <ArchiveBrowser items={entries} />
             </Suspense>
           </div>
-        </div>
-      </section>
-
-      {/* From Knowledge to Archive */}
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-16">
-        <FadeIn>
-          <SectionHeading
-            eyebrow="From Knowledge to Archive"
-            title="How each entry is collected"
-            lede="Every technique documented here follows the same careful path, from a conversation with a community member to a published record anyone can explore."
-          />
-        </FadeIn>
-        <div className="mt-10">
-          <ProcessTimeline />
         </div>
       </section>
 
