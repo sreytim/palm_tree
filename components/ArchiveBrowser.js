@@ -35,18 +35,22 @@ export default function ArchiveBrowser({ items }) {
           normalizedQuery.length === 0 ||
           searchableText.includes(normalizedQuery);
         const relevance =
-          (title === normalizedQuery ? 3 : title.includes(normalizedQuery) ? 2 : 0) +
+          (title === normalizedQuery
+            ? 3
+            : title.includes(normalizedQuery)
+              ? 2
+              : 0) +
           (description.includes(normalizedQuery) ? 1 : 0) +
           (contributor.includes(normalizedQuery) ? 1 : 0);
 
         return { item, matchesQuery, relevance };
       })
       .filter(({ item, matchesQuery }) => {
-      const matchesCategory =
-        initialCategory === null ||
-        initialCategory === "All" ||
-        item.category === initialCategory;
-      return matchesCategory && matchesQuery;
+        const matchesCategory =
+          initialCategory === null ||
+          initialCategory === "All" ||
+          item.category === initialCategory;
+        return matchesCategory && matchesQuery;
       })
       .sort((first, second) => second.relevance - first.relevance)
       .map(({ item }) => item);
