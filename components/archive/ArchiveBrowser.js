@@ -1,10 +1,10 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import SearchBar from "./SearchBar";
+import SearchBar from "../common/SearchBar";
 import EntryCard from "./EntryCard";
-import { useLanguage } from "./LanguageProvider";
-import { localizeLabel } from "@/lib/i18n";
+import { useLanguage } from "../common/LanguageProvider";
+import { localizeLabel } from "@/lang/i18n";
 export default function ArchiveBrowser({ items }) {
   const { language, t } = useLanguage();
   const searchParams = useSearchParams();

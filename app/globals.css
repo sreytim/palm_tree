@@ -69,26 +69,49 @@ html[lang="km"] h4 {
 
 .language-switcher {
   display: inline-flex;
-  gap: 0.15rem;
+  align-items: center;
+  gap: 0.1rem;
   border: 1px solid var(--beige);
   border-radius: 999px;
-  padding: 0.2rem;
-  font-size: 0.7rem;
+  padding: 0.15rem;
+  font-size: 0.68rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .language-switcher button {
+  min-height: 2rem;
   border-radius: 999px;
-  padding: 0.35rem 0.6rem;
+  padding: 0.25rem 0.65rem;
   color: var(--ink-soft);
   transition:
     background-color 0.2s,
-    color 0.2s;
+    color 0.2s,
+    box-shadow 0.2s;
 }
 
 .language-switcher button[aria-pressed="true"] {
   background: var(--palm);
   color: var(--cream);
+}
+
+.auth-actions button,
+.auth-actions a {
+  min-height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .header-actions {
+    gap: 0.35rem;
+  }
+
+  .language-switcher button {
+    padding-inline: 0.5rem;
+  }
 }
 
 h1,

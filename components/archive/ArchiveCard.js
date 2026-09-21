@@ -2,12 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Calendar, ArrowRight } from "lucide-react";
-import { useLanguage } from "./LanguageProvider";
-import { localizeLabel } from "@/lib/i18n";
+import { useLanguage } from "../common/LanguageProvider";
+import { localizeLabel } from "@/lang/i18n";
 
 export default function ArchiveCard({ item, view = "grid" }) {
   const { language, t } = useLanguage();
-  const techniqueHref = `/techniques?entry=${encodeURIComponent(item.slug)}`;
+  const techniqueHref = `/archive/${encodeURIComponent(item.slug)}`;
   const label = `${t("viewDetails")}: ${localizeLabel(item.title, language)}`;
 
   if (view === "list") {

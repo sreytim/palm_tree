@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { translations } from "@/lib/i18n";
+import { translations } from "@/lang/i18n";
 
 const LanguageContext = createContext(null);
 
