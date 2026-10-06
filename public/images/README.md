@@ -16,6 +16,10 @@ draft SVG files with real `.jpg`, `.jpeg`, `.png`, or `.webp` images. Update the
 extension for that image in `lib/images.ts`; component code does not need to
 change.
 
+The homepage uses existing photographs at `public/palm_leaf_houses.png`,
+`public/images/palm-tree.jpeg`, and `public/about.jpg` for its hero and community
+sections.
+
 Example:
 
 ```ts

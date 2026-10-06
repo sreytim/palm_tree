@@ -1,8 +1,9 @@
 -- ============================================================================
--- Lab 6, Part 1 — the entries table, Row Level Security and the four policies
+-- Community contribution entries, row-level security and contributor policies
 --
--- Run this BEFORE supabase/seed-entries.sql: the seed inserts into this table.
--- Paste the whole file into the Supabase SQL editor and run it once.
+-- Manual/lab setup only: apply migrations 0001–0004, run this file and any
+-- seed script, then apply 0005_community_contributions.sql. Standard migration
+-- installs should skip this file; migration 0005 creates this table itself.
 --
 -- Safe to commit: no keys, no user uuid.
 -- ============================================================================
@@ -49,23 +50,38 @@ create index entries_status_idx   on entries (status);
 -- Row Level Security -------------------------------------------------------
 alter table entries enable row level security;
 
-create policy "anyone can read entries"
-  on entries for select using (true);
+drop policy if exists "anyone can read entries" on entries;
+drop policy if exists "owners add their own entries" on entries;
+drop policy if exists "owners edit their own entries" on entries;
+drop policy if exists "owners delete their own entries" on entries;
+drop policy if exists entries_public_published on entries;
+drop policy if exists entries_owner_read on entries;
+drop policy if exists entries_contributor_insert on entries;
+drop policy if exists entries_editor_update on entries;
+drop policy if exists entries_editor_delete on entries;
 
-create policy "owners add their own entries"
-  on entries for insert with check (auth.uid() = owner);
+create policy entries_public_published on entries
+  for select using (status = 'published');
 
--- WITH CHECK is stated explicitly. PostgreSQL would fall back to the USING
--- expression for the write check, so this is not a hole today — but making it
--- explicit keeps the policy safe if USING is ever edited (e.g. to let editors
--- in), which would otherwise silently widen who a row can be handed to.
-create policy "owners edit their own entries"
-  on entries for update
-  using (auth.uid() = owner)
-  with check (auth.uid() = owner);
+create policy entries_owner_read on entries
+  for select to authenticated
+  using (owner = (select auth.uid()));
 
-create policy "owners delete their own entries"
-  on entries for delete using (auth.uid() = owner);
+create policy entries_contributor_insert on entries
+  for insert to authenticated
+  with check (
+    owner = (select auth.uid())
+    and (select public.current_profile_role()) in ('contributor','editor','admin')
+  );
+
+create policy entries_editor_update on entries
+  for update to authenticated
+  using (public.is_editor())
+  with check (public.is_editor());
+
+create policy entries_editor_delete on entries
+  for delete to authenticated
+  using (public.is_editor());
 
 -- Privileges ---------------------------------------------------------------
 -- RLS decides which ROWS a role may touch; these decide whether it may touch
@@ -82,4 +98,4 @@ grant select, insert, update, delete on entries to authenticated;
 
 -- Verify afterwards:
 --   select count(*) from entries;                                  -- expect 8 after seeding
---   select policyname from pg_policies where tablename = 'entries'; -- expect 4
+--   select policyname from pg_policies where tablename = 'entries'; -- expect 5

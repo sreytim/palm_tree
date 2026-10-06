@@ -2,35 +2,49 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { supabase } from "@/lib/supabase-client";
+import { getSafeRedirectPath } from "@/lib/safe-redirect";
 
 export default function SignupPage() {
   const { t } = useLanguage();
+  const router = useRouter();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setMessage("");
     setIsLoading(true);
 
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
-        email: formState.email,
+      const next = getSafeRedirectPath(
+        new URLSearchParams(window.location.search).get("next"),
+      );
+      const redirectTo = new URL(next, window.location.origin).toString();
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formState.email.trim().toLowerCase(),
         password: formState.password,
+        options: { emailRedirectTo: redirectTo },
       });
 
       if (signUpError) {
+        console.error("Signup failed:", signUpError);
         setError(t("invalidCredentials"));
+      } else if (data.session) {
+        router.push(next);
       } else {
-        window.location.href = "/";
+        setMessage(t("signupConfirmationRequired"));
       }
-    } catch {
+    } catch (signUpError) {
+      console.error("Signup request failed:", signUpError);
       setError(t("invalidCredentials"));
     } finally {
       setIsLoading(false);
@@ -152,6 +166,11 @@ export default function SignupPage() {
           {error && (
             <p role="alert" style={{ color: "#7e3f21", fontSize: "14px" }}>
               {error}
+            </p>
+          )}
+          {message && (
+            <p role="status" style={{ color: "#435c34", fontSize: "14px" }}>
+              {message}
             </p>
           )}
 

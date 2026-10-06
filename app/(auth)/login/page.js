@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { supabase } from "@/lib/supabase-client";
+import { getSafeRedirectPath } from "@/lib/safe-redirect";
 
 export default function LoginPage() {
   const { t } = useLanguage();
+  const router = useRouter();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -26,11 +29,14 @@ export default function LoginPage() {
       });
 
       if (signInError) {
+        console.error("Login failed:", signInError);
         setError(t("invalidCredentials"));
       } else {
-        window.location.href = "/";
+        const next = new URLSearchParams(window.location.search).get("next");
+        router.push(getSafeRedirectPath(next));
       }
-    } catch {
+    } catch (signInError) {
+      console.error("Login request failed:", signInError);
       setError(t("invalidCredentials"));
     } finally {
       setIsLoading(false);
@@ -147,6 +153,12 @@ export default function LoginPage() {
               }}
               placeholder={t("enterPassword")}
             />
+            <Link
+              href="/forgot-password"
+              className="mt-2 inline-block text-sm font-medium text-[#435c34] hover:underline"
+            >
+              {t("forgotPassword")}
+            </Link>
           </div>
 
           {error && (

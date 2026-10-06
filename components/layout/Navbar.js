@@ -28,9 +28,18 @@ export default function Navbar() {
   }, []);
   useEffect(() => {
     let mounted = true;
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (mounted) setUser(session?.user ?? null);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data: { session }, error }) => {
+        if (error) {
+          console.error("Could not restore the authentication session:", error);
+          return;
+        }
+        if (mounted) setUser(session?.user ?? null);
+      })
+      .catch((error) => {
+        console.error("Could not restore the authentication session:", error);
+      });
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) =>
@@ -42,9 +51,17 @@ export default function Navbar() {
     };
   }, []);
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setOpen(false);
-    router.push("/");
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Logout failed:", error);
+        return;
+      }
+      setOpen(false);
+      router.push("/");
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    }
   };
   return (
     <header

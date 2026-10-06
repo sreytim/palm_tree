@@ -1,23 +1,86 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getArchiveItemBySlug } from "@/data/entries";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
+import { supabase } from "@/lib/supabase-client";
+import { COLUMNS, toUiEntry } from "@/lib/entry-mapping";
 
 export default function ArchiveEntryPage({ params }) {
   const { slug } = params;
-  const item = getArchiveItemBySlug(slug);
+  const staticItem = getArchiveItemBySlug(slug);
+  const [lookup, setLookup] = useState(null);
   const { language, t } = useLanguage();
 
+  useEffect(() => {
+    if (staticItem) return;
+    let active = true;
+
+    supabase
+      .from("entries")
+      .select(COLUMNS)
+      .eq("slug", slug)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (!active) return;
+        if (error) {
+          console.error("Could not load contributed archive entry:", error);
+          setLookup({ slug, item: null, failed: true });
+        } else {
+          setLookup({
+            slug,
+            item: data ? toUiEntry(data) : null,
+            failed: false,
+          });
+        }
+      })
+      .catch((error) => {
+        if (!active) return;
+        console.error("Could not load contributed archive entry:", error);
+        setLookup({ slug, item: null, failed: true });
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [slug, staticItem]);
+
+  const currentLookup = lookup?.slug === slug ? lookup : null;
+  const databaseItem = currentLookup?.item ?? null;
+  const isLoading = !staticItem && !currentLookup;
+  const loadFailed = Boolean(currentLookup?.failed);
+  const item = staticItem || databaseItem;
   if (!item) {
+    if (isLoading) {
+      return (
+        <p role="status" className="mx-auto max-w-5xl px-5 py-16 text-ink-soft">
+          {t("loadingEntry")}
+        </p>
+      );
+    }
+    if (loadFailed) {
+      return (
+        <p role="alert" className="mx-auto max-w-5xl px-5 py-16 text-clay-deep">
+          {t("entryLoadFailed")}
+        </p>
+      );
+    }
     notFound();
   }
 
+  const isDraft = item.status === "draft";
+
   return (
     <article>
+      {isDraft && (
+        <p className="bg-beige-soft px-5 py-3 text-center text-sm text-ink">
+          {t("draftReviewNotice")}
+        </p>
+      )}
       <div className="relative h-[46vh] min-h-[320px] w-full sm:h-[56vh]">
         <Image
           src={item.image}

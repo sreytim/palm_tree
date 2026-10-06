@@ -12,7 +12,7 @@ import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
 import EntriesBrowser from "@/components/archive/EntriesBrowser";
 export default function HomePage() {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   return (
     <>
       <Hero />
@@ -27,7 +27,7 @@ export default function HomePage() {
             <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden">
               <Image
                 src={images.aboutCommunity}
-                alt="Community members working together on a traditional roof"
+                alt="A craftswoman preparing palm leaves in shallow water"
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 40vw"
@@ -84,6 +84,23 @@ export default function HomePage() {
             <Suspense fallback={null}>
               <EntriesBrowser pageSize={{ small: 4, large: 6 }} />
             </Suspense>
+          </div>
+          <div className="mt-10 rounded-3xl border border-beige bg-cream px-6 py-8 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:px-8">
+            <div>
+              <h3 className="font-display text-2xl font-medium text-ink">
+                {t("shareHouseKnowledge")}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft sm:text-base">
+                {t("shareHouseKnowledgeHint")}
+              </p>
+            </div>
+            <Link
+              href="/contribute"
+              className="mt-5 inline-flex shrink-0 items-center gap-2 rounded-full bg-palm px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-palm-deep sm:mt-0"
+            >
+              {t("contributeEntry")}
+              <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
