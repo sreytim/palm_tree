@@ -1,8 +1,13 @@
 import { images } from "@/lib/images";
 export const techniqueSteps = [
     {
+        id: "step-01-selecting",
         number: "01",
+        position: 1,
         slug: "selecting-the-leaves",
+        topicSlugs: ["palm-leaf-preparation", "palm-leaves"],
+        entryIds: ["arch-01"],
+        galleryIds: ["gal-01"],
         title: "Selecting the Leaves",
         image: images.step1Selecting,
         imageAlt: "A person examining palm fronds still on the tree before cutting",
@@ -10,8 +15,13 @@ export const techniqueSteps = [
         tip: "Cutting is traditionally done in the early morning, while the fronds still hold moisture from the night and bend without cracking.",
     },
     {
+        id: "step-02-preparing",
         number: "02",
+        position: 2,
         slug: "preparing-the-leaves",
+        topicSlugs: ["palm-leaf-preparation"],
+        entryIds: ["arch-01"],
+        galleryIds: [],
         title: "Preparing the Leaves",
         image: images.step2Preparing,
         imageAlt: "Palm leaves being cleaned and sorted by hand",
@@ -19,8 +29,16 @@ export const techniqueSteps = [
         tip: "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.",
     },
     {
+        id: "step-03-drying",
         number: "03",
+        position: 3,
         slug: "drying-the-leaves",
+        topicSlugs: ["palm-leaf-preparation"],
+        entryIds: ["arch-07"],
+        galleryIds: ["gal-05"],
+        // Provenance only: this guidance comes from arch-07's "Turning the
+        // leaves daily" step. It is not duplicated in that entry's tips.
+        tipSourceEntryId: "arch-07",
         title: "Drying the Leaves",
         image: images.step3Drying,
         imageAlt: "Palm leaves resting on a raised bamboo drying rack in the shade",
@@ -28,8 +46,16 @@ export const techniqueSteps = [
         tip: "Leaves are turned once a day so both sides dry at the same rate, avoiding warping.",
     },
     {
+        id: "step-04-weaving",
         number: "04",
+        position: 4,
         slug: "weaving-and-arranging",
+        topicSlugs: ["leaf-weaving", "weaving"],
+        entryIds: ["arch-02", "arch-05"],
+        galleryIds: ["gal-04", "gal-09"],
+        // The `tip` above is the canonical wording for this guidance; arch-02
+        // carries the same sentence (see also the entry's own tips).
+        tipSourceEntryId: "arch-02",
         title: "Weaving and Arranging",
         image: images.step4Weaving,
         imageAlt: "Hands weaving palm leaflets into a cross pattern over a spine",
@@ -37,8 +63,16 @@ export const techniqueSteps = [
         tip: "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.",
     },
     {
+        id: "step-05-attaching",
         number: "05",
+        position: 5,
         slug: "attaching-the-covering",
+        topicSlugs: ["roof-covering", "attaching-palm-leaves"],
+        entryIds: ["arch-04"],
+        galleryIds: ["gal-06"],
+        // The `tip` above is the canonical wording for this guidance; arch-04
+        // carries the same sentence (see also the entry's own tips).
+        tipSourceEntryId: "arch-04",
         title: "Attaching the Covering",
         image: images.step5Attaching,
         imageAlt: "Finished woven panels being lashed to a roof frame",
@@ -46,8 +80,16 @@ export const techniqueSteps = [
         tip: "Consistent overlap between rows matters more than the total number of panels used.",
     },
     {
+        id: "step-06-maintaining",
         number: "06",
+        position: 6,
         slug: "maintaining-and-repairing",
+        topicSlugs: ["maintenance-repair"],
+        entryIds: ["arch-05"],
+        galleryIds: ["gal-07"],
+        // The `tip` above is the canonical wording for this guidance; arch-05
+        // carries the same sentence (see also the entry's own tips).
+        tipSourceEntryId: "arch-05",
         title: "Maintaining and Repairing",
         image: images.step6Maintaining,
         imageAlt: "A person patching a worn section of a palm leaf roof",

@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Calendar, ArrowRight } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 import { useLanguage } from "../common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
+import { getTopicBySlug } from "@/data/topics";
 
 export default function ArchiveCard({ item, view = "grid" }) {
   const { language, t } = useLanguage();
   const techniqueHref = `/archive/${encodeURIComponent(item.slug)}`;
   const label = `${t("viewDetails")}: ${localizeLabel(item.title, language)}`;
+  // The entry's subject. Rendered so the topic keeps its Khmer translation
+  // now that `title` carries the document title instead of the topic name.
+  const topic = getTopicBySlug(item.primaryTopicSlug);
 
   if (view === "list") {
     return (
@@ -37,6 +41,11 @@ export default function ArchiveCard({ item, view = "grid" }) {
                   {t("sampleEntry")}
                 </span>
               )}
+              {topic && (
+                <span className="font-mono text-[0.6rem] tracking-[0.1em] uppercase text-clay-deep/80">
+                  {localizeLabel(topic.name, language)}
+                </span>
+              )}
             </div>
             <h3 className="font-display text-xl font-medium text-ink">
               {localizeLabel(item.title, language)}
@@ -53,9 +62,6 @@ export default function ArchiveCard({ item, view = "grid" }) {
                 <MapPin size={12} /> {item.location}
               </span>
             </div>
-            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-palm-deep w-fit">
-              {t("viewDetails")} <ArrowRight size={14} />
-            </span>
           </div>
         </article>
       </Link>
@@ -79,6 +85,11 @@ export default function ArchiveCard({ item, view = "grid" }) {
           />
         </div>
         <div className="flex flex-1 flex-col p-6">
+          {topic && (
+            <span className="mb-2 w-fit rounded-full bg-beige-soft px-2.5 py-1 font-mono text-[0.6rem] tracking-[0.15em] uppercase text-clay-deep">
+              {localizeLabel(topic.name, language)}
+            </span>
+          )}
           <h3 className="font-display text-lg font-medium text-ink leading-snug">
             {localizeLabel(item.title, language)}
           </h3>
@@ -90,9 +101,6 @@ export default function ArchiveCard({ item, view = "grid" }) {
             <span aria-hidden="true">&middot;</span>
             <span>{item.date}</span>
           </div>
-          <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-palm-deep w-fit">
-            {t("viewDetails")} <ArrowRight size={14} />
-          </span>
         </div>
       </article>
     </Link>

@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import { images } from "@/lib/images";
 import { useLanguage } from "./LanguageProvider";
 export default function Hero() {
@@ -19,22 +17,6 @@ export default function Hero() {
           <p className="mt-6 text-lg sm:text-xl text-ink-soft leading-relaxed max-w-xl">
             {t("preserving")}
           </p>
-
-          <div className="mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
-            <Link
-              href="/#archive"
-              className="inline-flex items-center gap-2 rounded-full bg-palm text-cream px-7 py-3.5 text-sm font-semibold tracking-wide hover:bg-palm-deep transition-colors duration-200"
-            >
-              {t("exploreArchive")}
-              <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 rounded-full border-2 border-wood text-wood px-7 py-3.5 text-sm font-semibold tracking-wide hover:bg-wood hover:text-cream transition-colors duration-200"
-            >
-              {t("aboutArchive")}
-            </Link>
-          </div>
         </div>
 
         <div className="lg:col-span-6 order-1 lg:order-2 relative">

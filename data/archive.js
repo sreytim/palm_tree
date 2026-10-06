@@ -12,10 +12,15 @@ export const archiveItems = [
   {
     id: "arch-01",
     slug: "preparing-palm-leaves-for-house-covering",
-    title: "Palm-Leaf Houses",
+    // Document title: what this entry documents (titleised from its slug).
+    title: "Preparing Palm Leaves for House Covering",
+    // Topic: the subject this entry belongs to. This used to be stored in
+    // `title`, which conflated a topic name with a document title.
+    primaryTopicSlug: "palm-leaf-houses",
+    topicSlugs: ["palm-leaf-houses", "palm-leaf-preparation"],
     category: "Palm Leaf Preparation",
     description:
-      "Explore traditional Khmer houses that use palm leaves as a natural material for roofing and walls.",
+      "Before a single leaf touches the frame of a roof, it passes through many hands.",
     image: images.archive1,
     imageAlt: "Bundles of palm leaves laid out to prepare for house covering",
     contributor: "Community Elder Interview",
@@ -51,6 +56,9 @@ export const archiveItems = [
     ],
     contributorStory:
       '"My mother would wake before sunrise during harvest weeks. She always said the leaf remembers how it was cut — if you tear it in anger, it will tear again on the roof." — as recalled by a community elder, sample contributor.',
+    personId: "person-community-elder",
+    techniqueStepIds: ["step-01-selecting", "step-02-preparing"],
+    galleryIds: ["gal-01", "gal-05"],
     relatedImages: [
       {
         src: images.archive7,
@@ -67,10 +75,12 @@ export const archiveItems = [
   {
     id: "arch-02",
     slug: "the-cross-weave-pattern",
-    title: "Roof Covering",
+    title: "The Cross-Weave Pattern",
+    primaryTopicSlug: "roof-covering",
+    topicSlugs: ["roof-covering", "leaf-weaving"],
     category: "Weaving Techniques",
     description:
-      "Discover how palm leaves are prepared, layered, and secured to create durable traditional roofing.",
+      "The cross-weave is the technique most families in this community used to bind loose leaflets into a single rigid panel strong enough to shed monsoon rain.",
     image: images.archive2,
     imageAlt:
       "Detail of a woven palm leaf roofing panel showing the cross pattern",
@@ -102,11 +112,14 @@ export const archiveItems = [
       },
     ],
     tips: [
-      "A tighter weave near the base of the panel prevents water from pooling where the roof will overlap.",
+      "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.",
       "Weaving is traditionally done in the shade to keep the leaves pliable for longer.",
     ],
     contributorStory:
       '"It took me two rainy seasons of watching before my hands understood the rhythm. My grandmother never explained it in words — she just wove, and I copied." — as recalled by a community contributor, sample entry.',
+    personId: "person-community-elder",
+    techniqueStepIds: ["step-04-weaving"],
+    galleryIds: ["gal-04", "gal-09"],
     relatedImages: [
       {
         src: images.categoryWeaving,
@@ -123,10 +136,12 @@ export const archiveItems = [
   {
     id: "arch-03",
     slug: "raising-the-roof-frame",
-    title: "Wall Covering",
+    title: "Raising the Roof Frame",
+    primaryTopicSlug: "wall-covering",
+    topicSlugs: ["wall-covering", "house-construction"],
     category: "House Construction",
     description:
-      "Learn how palm leaves are woven, arranged, and attached to form natural walls that provide shade and ventilation.",
+      "A palm-leaf covering is only as good as the frame beneath it.",
     image: images.archive3,
     imageAlt: "Bamboo frame of a traditional house under construction",
     contributor: "Family Interview, Contributor's Uncle",
@@ -162,6 +177,10 @@ export const archiveItems = [
     ],
     contributorStory:
       '"When we raised our frame, half the village came to help lift the ridge beam. Nobody built alone — that was the tradition as much as the house itself." — as recalled by a family contributor, sample entry.',
+    personId: "person-family-uncle",
+    // No technique step covers framing yet — a gap in the six-stage process.
+    techniqueStepIds: [],
+    galleryIds: ["gal-10"],
     relatedImages: [
       {
         src: images.categoryAttaching,
@@ -177,10 +196,12 @@ export const archiveItems = [
   {
     id: "arch-04",
     slug: "tying-panels-to-the-roof-frame",
-    title: "Palm-Leaf Preparation",
+    title: "Tying Panels to the Roof Frame",
+    primaryTopicSlug: "palm-leaf-preparation",
+    topicSlugs: ["palm-leaf-preparation", "roof-covering"],
     category: "Attachment Techniques",
     description:
-      "Learn how palm leaves are selected, cut, dried, and prepared before being used for house construction.",
+      "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.",
     image: images.archive4,
     imageAlt: "Woven palm leaf panels being tied to a roof frame",
     contributor: "Community Elder Interview",
@@ -211,11 +232,14 @@ export const archiveItems = [
       },
     ],
     tips: [
-      "Consistent overlap is more important than the total number of panels used.",
+      "Consistent overlap between rows matters more than the total number of panels used.",
       "Ridge capping is often reinforced yearly, since it takes the most direct sun and rain exposure.",
     ],
     contributorStory:
       '"My father always tied the ridge himself. He said if the top failed, everything below it failed too, no matter how well it was woven." — as recalled by a community elder, sample entry.',
+    personId: "person-community-elder",
+    techniqueStepIds: ["step-05-attaching"],
+    galleryIds: ["gal-06"],
     relatedImages: [
       { src: images.archive3, alt: "Roof frame ready for panel attachment" },
       {
@@ -229,10 +253,12 @@ export const archiveItems = [
   {
     id: "arch-05",
     slug: "seasonal-roof-repair",
-    title: "Leaf Weaving",
+    title: "Seasonal Roof Repair",
+    primaryTopicSlug: "leaf-weaving",
+    topicSlugs: ["leaf-weaving", "maintenance-repair"],
     category: "Maintenance & Repair",
     description:
-      "Explore traditional methods of arranging, weaving, sewing, and binding palm leaves into usable panels.",
+      "A well-built palm-leaf roof can last several years, but it is rarely left untouched.",
     image: images.archive5,
     imageAlt: "A person repairing a section of a palm leaf roof",
     contributor: "Community Elder Interview",
@@ -264,10 +290,13 @@ export const archiveItems = [
     ],
     tips: [
       "Repairs are best done in the dry season, when leaves are easier to source and weave.",
-      "Checking for light spots from inside is faster and more reliable than inspecting the roof from outside.",
+      "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.",
     ],
     contributorStory:
       '"Every year before the rains, my whole family spent a morning walking the house, finding the thin spots. It became a kind of yearly ritual, almost like a small celebration before the wet season began." — as recalled by a community elder, sample entry.',
+    personId: "person-community-elder",
+    techniqueStepIds: ["step-06-maintaining", "step-04-weaving"],
+    galleryIds: ["gal-09"],
     relatedImages: [
       {
         src: images.categoryMaintaining,
@@ -283,10 +312,12 @@ export const archiveItems = [
   {
     id: "arch-06",
     slug: "the-family-house-in-kampong-speu",
-    title: "House Construction",
+    title: "The Family House in Kampong Speu",
+    primaryTopicSlug: "house-construction",
+    topicSlugs: ["house-construction", "traditional-house-types"],
     category: "Traditional Houses",
     description:
-      "Discover how prepared palm-leaf materials are attached to the wooden or bamboo structure of a traditional house.",
+      "This entry documents a single household's house as an example of a still-standing, actively maintained palm-leaf roof.",
     image: images.archive6,
     imageAlt:
       "A complete traditional house with a palm leaf roof, raised on wooden stilts",
@@ -318,6 +349,10 @@ export const archiveItems = [
     ],
     contributorStory:
       '"This roof has covered three generations of my family. We have replaced sections of it many times, but never all at once — it has always felt like the same roof, just renewed." — as recalled by the household contributor, sample entry.',
+    personId: "person-household-visit",
+    // Its steps describe the standing house, not a leaf-processing stage.
+    techniqueStepIds: [],
+    galleryIds: ["gal-02", "gal-07", "gal-12"],
     relatedImages: [
       {
         src: images.categoryHouses,
@@ -334,10 +369,12 @@ export const archiveItems = [
   {
     id: "arch-07",
     slug: "drying-technique-for-longer-lasting-panels",
-    title: "Traditional House Types",
+    title: "Drying Technique for Longer-Lasting Panels",
+    primaryTopicSlug: "traditional-house-types",
+    topicSlugs: ["traditional-house-types", "palm-leaf-preparation"],
     category: "Palm Leaf Preparation",
     description:
-      "Explore different forms of traditional houses that incorporate palm leaves as part of their construction and covering.",
+      "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.",
     image: images.archive7,
     imageAlt: "Palm leaf panels resting on a raised drying rack in the shade",
     contributor: "Community Elder Interview",
@@ -368,6 +405,9 @@ export const archiveItems = [
     ],
     contributorStory:
       '"Direct sun is fast, but fast is not always better. Slow drying in the shade was something my grandfather insisted on, even when the family was in a hurry to finish a roof." — as recalled by a community elder, sample entry.',
+    personId: "person-community-elder",
+    techniqueStepIds: ["step-03-drying"],
+    galleryIds: ["gal-05", "gal-13"],
     relatedImages: [
       {
         src: images.archive1,
@@ -383,10 +423,12 @@ export const archiveItems = [
   {
     id: "arch-08",
     slug: "the-tools-of-a-traditional-thatcher",
-    title: "Maintenance & Repair",
+    title: "The Tools of a Traditional Thatcher",
+    primaryTopicSlug: "maintenance-repair",
+    topicSlugs: ["maintenance-repair", "tools"],
     category: "Weaving Techniques",
     description:
-      "Learn traditional ways of maintaining, replacing, and repairing palm-leaf roofs and walls to extend their use.",
+      "The tools involved in this craft are few, simple, and often handmade.",
     image: images.archive8,
     imageAlt: "A set of traditional hand tools used for palm leaf thatching",
     contributor: "Community Elder Interview",
@@ -417,6 +459,10 @@ export const archiveItems = [
     ],
     contributorStory:
       '"This knife belonged to my father. I have sharpened it more times than I can count, but I have never replaced it." — as recalled by a community elder, sample entry.',
+    personId: "person-community-elder",
+    // Tools are not one of the six leaf-processing stages.
+    techniqueStepIds: [],
+    galleryIds: ["gal-03"],
     relatedImages: [
       {
         src: images.categoryWeaving,

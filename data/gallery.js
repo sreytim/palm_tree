@@ -1,9 +1,14 @@
 import { images } from "@/lib/images";
+import { getTopicBySlug } from "./topics";
 /**
  * Sample Gallery Entries
  *
  * Replace src, title, description, contributor, and location with details
  * from real photographs as they are collected from the community.
+ *
+ * Each entry points at a `topicSlug` (the shared subject vocabulary in
+ * `data/topics.js`) and at the archive entries and technique steps it
+ * illustrates, so a photograph can be reached from the content it documents.
  */
 export const galleryImages = [
     {
@@ -14,7 +19,10 @@ export const galleryImages = [
         description: "Fronds gathered in the early morning, before the midday heat sets in.",
         contributor: "Sample Archive Entry",
         location: "Kampong Speu Province",
-        category: "Palm Leaves",
+        topicSlug: "palm-leaves",
+        entryIds: ["arch-01"],
+        techniqueStepIds: ["step-01-selecting"],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-02",
@@ -24,7 +32,10 @@ export const galleryImages = [
         description: "A raised traditional house, photographed during a household visit.",
         contributor: "Household Visit, Sample Entry",
         location: "Kampong Speu Province",
-        category: "Traditional Houses",
+        topicSlug: "traditional-houses",
+        entryIds: ["arch-06"],
+        techniqueStepIds: [],
+        personId: "person-sample-household",
     },
     {
         id: "gal-03",
@@ -34,7 +45,10 @@ export const galleryImages = [
         description: "Simple, handmade tools kept and maintained across generations.",
         contributor: "Sample Archive Entry",
         location: "Takeo Province",
-        category: "Tools",
+        topicSlug: "tools",
+        entryIds: ["arch-08"],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-04",
@@ -44,7 +58,10 @@ export const galleryImages = [
         description: "A contributor demonstrates the traditional cross-weave technique.",
         contributor: "Sample Archive Entry",
         location: "Takeo Province",
-        category: "Weaving",
+        topicSlug: "weaving",
+        entryIds: ["arch-02"],
+        techniqueStepIds: ["step-04-weaving"],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-05",
@@ -54,7 +71,10 @@ export const galleryImages = [
         description: "Leaves rest under partial shade during the multi-day drying process.",
         contributor: "Sample Archive Entry",
         location: "Kampong Chhnang Province",
-        category: "Preparing Leaves",
+        topicSlug: "preparing-leaves",
+        entryIds: ["arch-07", "arch-01"],
+        techniqueStepIds: ["step-03-drying"],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-06",
@@ -64,7 +84,10 @@ export const galleryImages = [
         description: "Rows of panels lashed into place, overlapping from eave to ridge.",
         contributor: "Sample Archive Entry",
         location: "Kampong Speu Province",
-        category: "Attaching Palm Leaves",
+        topicSlug: "attaching-palm-leaves",
+        entryIds: ["arch-04"],
+        techniqueStepIds: ["step-05-attaching"],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-07",
@@ -74,7 +97,10 @@ export const galleryImages = [
         description: "Light filters gently through a freshly completed covering.",
         contributor: "Sample Archive Entry",
         location: "Kampong Speu Province",
-        category: "Finished Houses",
+        topicSlug: "finished-houses",
+        entryIds: ["arch-06"],
+        techniqueStepIds: ["step-06-maintaining"],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-08",
@@ -84,7 +110,10 @@ export const galleryImages = [
         description: "Neighbors gather to help lift and secure a new roof frame.",
         contributor: "Sample Archive Entry",
         location: "Takeo Province",
-        category: "Community Members",
+        topicSlug: "community-members",
+        entryIds: [],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-09",
@@ -94,7 +123,10 @@ export const galleryImages = [
         description: "Panels are left flat for a day before being carried to the roof.",
         contributor: "Sample Archive Entry",
         location: "Takeo Province",
-        category: "Weaving",
+        topicSlug: "weaving",
+        entryIds: ["arch-02", "arch-05"],
+        techniqueStepIds: ["step-04-weaving"],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-10",
@@ -104,7 +136,10 @@ export const galleryImages = [
         description: "The roof's steep angle helps rain drain quickly during the wet season.",
         contributor: "Sample Archive Entry",
         location: "Kampong Chhnang Province",
-        category: "Traditional Houses",
+        topicSlug: "traditional-houses",
+        entryIds: ["arch-03"],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-11",
@@ -114,7 +149,10 @@ export const galleryImages = [
         description: "An elder guides a younger family member through the weave, hand over hand.",
         contributor: "Sample Archive Entry",
         location: "Kampong Speu Province",
-        category: "Community Members",
+        topicSlug: "community-members",
+        entryIds: [],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-12",
@@ -124,7 +162,10 @@ export const galleryImages = [
         description: "Several palm-leaf-roofed houses stand along a quiet village road.",
         contributor: "Sample Archive Entry",
         location: "Kampong Speu Province",
-        category: "Finished Houses",
+        topicSlug: "finished-houses",
+        entryIds: ["arch-06"],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-13",
@@ -134,7 +175,10 @@ export const galleryImages = [
         description: "The fine parallel fibers that give each leaflet its strength and flexibility.",
         contributor: "Sample Archive Entry",
         location: "Kampong Chhnang Province",
-        category: "Palm Leaves",
+        topicSlug: "palm-leaves",
+        entryIds: ["arch-07"],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
     {
         id: "gal-14",
@@ -144,9 +188,16 @@ export const galleryImages = [
         description: "Families share food and conversation during a break in construction.",
         contributor: "Sample Archive Entry",
         location: "Takeo Province",
-        category: "Community Members",
+        topicSlug: "community-members",
+        entryIds: [],
+        techniqueStepIds: [],
+        personId: "person-sample-archive",
     },
 ];
 export function getGalleryCategories() {
-    return Array.from(new Set(galleryImages.map((img) => img.category)));
+    return Array.from(
+        new Set(
+            galleryImages.map((img) => getTopicBySlug(img.topicSlug)?.name),
+        ),
+    ).filter(Boolean);
 }

@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/components/common/LanguageProvider";
 import { supabase } from "@/lib/supabase-client";
 
 export default function SignupPage() {
+  const { t } = useLanguage();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -24,12 +26,12 @@ export default function SignupPage() {
       });
 
       if (signUpError) {
-        setError("Invalid email or password");
+        setError(t("invalidCredentials"));
       } else {
         window.location.href = "/";
       }
     } catch {
-      setError("Invalid email or password");
+      setError(t("invalidCredentials"));
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +75,7 @@ export default function SignupPage() {
             fontFamily: "var(--font-display)",
           }}
         >
-          Sign Up
+          {t("signUp")}
         </h1>
         <form
           onSubmit={handleSubmit}
@@ -90,7 +92,7 @@ export default function SignupPage() {
                 marginBottom: "6px",
               }}
             >
-              Email
+              {t("email")}
             </label>
             <input
               type="email"
@@ -109,7 +111,7 @@ export default function SignupPage() {
                 color: "#2b2417",
                 boxSizing: "border-box",
               }}
-              placeholder="Enter your email"
+              placeholder={t("enterEmail")}
             />
           </div>
 
@@ -124,7 +126,7 @@ export default function SignupPage() {
                 marginBottom: "6px",
               }}
             >
-              Password
+              {t("password")}
             </label>
             <input
               type="password"
@@ -143,7 +145,7 @@ export default function SignupPage() {
                 color: "#2b2417",
                 boxSizing: "border-box",
               }}
-              placeholder="Enter your password"
+              placeholder={t("enterPassword")}
             />
           </div>
 
@@ -169,7 +171,7 @@ export default function SignupPage() {
               fontSize: "16px",
             }}
           >
-            {isLoading ? "Creating account..." : "Create Account"}
+            {isLoading ? t("creatingAccount") : t("createAccount")}
           </button>
         </form>
         <p
@@ -180,9 +182,9 @@ export default function SignupPage() {
             textAlign: "center",
           }}
         >
-          Already have an account?{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link href="/login" style={{ color: "#435c34", fontWeight: "600" }}>
-            Log in
+            {t("logIn")}
           </Link>
         </p>
       </div>

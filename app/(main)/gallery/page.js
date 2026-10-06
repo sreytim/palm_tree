@@ -1,24 +1,34 @@
+"use client";
+
 import Gallery from "@/components/gallery/Gallery";
 import { galleryImages } from "@/data/gallery";
+import { getTopicBySlug } from "@/data/topics";
+import { useLanguage } from "@/components/common/LanguageProvider";
 
-export const metadata = {
-  title: "Gallery | Traditional Palm-Leaf House Covering Techniques",
-  description:
-    "A visual collection of palm-leaf house building, weaving, and community documentation.",
-};
+/**
+ * Gallery images reference a `topicSlug` in the shared vocabulary. Resolve it
+ * to the display label here so the client gallery renders the same badge text
+ * it always has, from a single source of truth.
+ */
+const imagesWithTopicName = galleryImages.map((image) => ({
+  ...image,
+  category: getTopicBySlug(image.topicSlug)?.name ?? image.topicSlug,
+}));
 
 export default function GalleryPage() {
+  const { t } = useLanguage();
+
   return (
     <main className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
       <div className="mb-8">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-clay-deep">
-          Photo archive
+          {t("photoArchiveLabel")}
         </p>
         <h1 className="mt-3 font-display text-4xl font-medium text-ink sm:text-5xl">
-          Gallery
+          {t("gallery")}
         </h1>
       </div>
-      <Gallery images={galleryImages} />
+      <Gallery images={imagesWithTopicName} />
     </main>
   );
 }

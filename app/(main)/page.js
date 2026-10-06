@@ -10,8 +10,7 @@ import FadeIn from "@/components/common/FadeIn";
 import { images } from "@/lib/images";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
-import ArchiveBrowser from "@/components/archive/ArchiveBrowser";
-import { entries } from "@/data/entries";
+import EntriesBrowser from "@/components/archive/EntriesBrowser";
 export default function HomePage() {
   const { language } = useLanguage();
   return (
@@ -30,6 +29,7 @@ export default function HomePage() {
                 src={images.aboutCommunity}
                 alt="Community members working together on a traditional roof"
                 fill
+                priority
                 sizes="(max-width: 1024px) 90vw, 40vw"
                 className="object-cover"
               />
@@ -82,7 +82,7 @@ export default function HomePage() {
           </FadeIn>
           <div className="mt-8">
             <Suspense fallback={null}>
-              <ArchiveBrowser items={entries} />
+              <EntriesBrowser pageSize={{ small: 4, large: 6 }} />
             </Suspense>
           </div>
         </div>
@@ -102,13 +102,6 @@ export default function HomePage() {
                 language,
               )}
             </p>
-            <Link
-              href="/#archive"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-cream text-palm-deep px-8 py-4 text-sm font-semibold tracking-wide hover:bg-beige-soft transition-colors duration-200"
-            >
-              {localizeLabel("Explore the Archive", language)}
-              <ArrowRight size={16} />
-            </Link>
           </FadeIn>
         </div>
       </section>

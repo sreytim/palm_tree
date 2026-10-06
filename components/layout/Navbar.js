@@ -9,7 +9,6 @@ import { supabase } from "@/lib/supabase-client";
 const links = [
   { href: "/", label: "Home" },
   { href: "/techniques", label: "Techniques" },
-  { href: "/stories", label: "Stories" },
   { href: "/about", label: "About" },
 ];
 export default function Navbar() {
@@ -111,7 +110,7 @@ export default function Navbar() {
                 onClick={handleLogout}
                 className="auth-secondary-button rounded-full border border-palm px-3 py-2 text-xs font-medium text-ink hover:bg-beige-soft transition-colors"
               >
-                Log out
+                {t("logOut")}
               </button>
             </div>
           ) : (
@@ -120,13 +119,13 @@ export default function Navbar() {
                 href="/login"
                 className={`auth-primary-button rounded-full px-4 py-2 font-medium transition-colors ${isLoginPage ? "bg-palm text-cream hover:bg-palm-deep" : "text-ink hover:bg-beige-soft hover:text-palm-deep"}`}
               >
-                Log in
+                {t("logIn")}
               </Link>
               <Link
                 href="/signup"
                 className={`auth-primary-button rounded-full px-4 py-2 font-medium transition-colors ${isSignupPage ? "bg-palm text-cream hover:bg-palm-deep" : "text-ink hover:bg-beige-soft hover:text-palm-deep"}`}
               >
-                Sign up
+                {t("signUp")}
               </Link>
             </div>
           )}
@@ -178,7 +177,7 @@ export default function Navbar() {
                   onClick={handleLogout}
                   className="shrink-0 font-medium text-palm-deep hover:text-palm"
                 >
-                  Log out
+                  {t("logOut")}
                 </button>
               </div>
             ) : (
@@ -188,14 +187,14 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   className="text-ink"
                 >
-                  Log in
+                  {t("logIn")}
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setOpen(false)}
                   className="font-medium text-palm-deep hover:text-palm"
                 >
-                  Sign up
+                  {t("signUp")}
                 </Link>
               </div>
             )}

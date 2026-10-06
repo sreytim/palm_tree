@@ -1,12 +1,12 @@
 "use client";
 import { useLanguage } from "./LanguageProvider";
 export default function LanguageSwitcher() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   return (
     <div
       className="language-switcher"
       role="group"
-      aria-label="Choose language"
+      aria-label={t("chooseLanguage")}
     >
       <button
         type="button"
