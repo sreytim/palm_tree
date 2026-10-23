@@ -8,8 +8,6 @@ import {
   Lightbulb,
   ArrowLeft,
   MapPin,
-  Calendar,
-  User,
 } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import FadeIn from "@/components/common/FadeIn";
@@ -39,7 +37,7 @@ function TechniquesPageContent() {
         <div className="relative h-[46vh] sm:h-[56vh] min-h-[320px] w-full">
           <Image
             src={item.image}
-            alt={item.imageAlt}
+            alt={localizeLabel(item.imageAlt, language)}
             fill
             priority
             sizes="100vw"
@@ -70,20 +68,12 @@ function TechniquesPageContent() {
               {t("sampleArchiveEntry")}
             </p>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-10 border-b border-beige text-sm">
-            <div className="flex items-center gap-2 text-ink-soft">
-              <User size={16} className="text-palm-deep shrink-0" />
-              <span>{item.contributor}</span>
-            </div>
-            <div className="flex items-center gap-2 text-ink-soft">
-              <Calendar size={16} className="text-palm-deep shrink-0" />
-              <span>{item.date}</span>
-            </div>
-            <div className="flex items-center gap-2 text-ink-soft">
+          {item.location && (
+            <div className="flex items-center gap-2 pb-10 text-sm text-ink-soft">
               <MapPin size={16} className="text-palm-deep shrink-0" />
-              <span>{item.location}</span>
+              <span>{localizeLabel(item.location, language)}</span>
             </div>
-          </div>
+          )}
           <section className="pt-10">
             <h2 className="font-display text-2xl font-medium text-ink mb-4">
               {t("introduction")}
@@ -202,7 +192,7 @@ function TechniquesPageContent() {
           const stepDescription = localizeLabel(step.description, language);
 
           return (
-            <FadeIn key={step.slug}>
+            <FadeIn key={step.slug} delay={i * 70}>
               <div
                 className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}
               >
@@ -210,7 +200,7 @@ function TechniquesPageContent() {
                   <div className="relative aspect-[4/3] rounded-[1.75rem] overflow-hidden img-zoom">
                     <Image
                       src={step.image}
-                      alt={step.imageAlt}
+                      alt={localizeLabel(step.imageAlt, language)}
                       fill
                       sizes="(max-width: 1024px) 100vw, 58vw"
                       className="object-cover"

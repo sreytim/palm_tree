@@ -63,13 +63,15 @@ export const translations = {
     password: "Password",
     enterEmail: "Enter your email",
     enterPassword: "Enter your password",
-    invalidCredentials: "Invalid email or password",
+    invalidCredentials: "Invalid email or password.",
     loggingIn: "Logging in...",
     creatingAccount: "Creating account...",
     needAnAccount: "Need an account?",
     alreadyHaveAccount: "Already have an account?",
     signupConfirmationRequired:
       "Account created. Check your email to confirm the account, then log in to continue.",
+    accountCreationFailed:
+      "We couldn't create your account. Check your email and password, then try again.",
     forgotPassword: "Forgot password?",
     backToLogin: "Back to log in",
     forgotPasswordInstructions:
@@ -106,7 +108,31 @@ export const translations = {
       "Create an account or log in to share traditional house knowledge with the community.",
     contributorRole: "Community contributor",
     contributorRoleUnavailable:
-      "Your account is not enabled to submit entries yet. Please contact the archive team.",
+      "Your account does not yet have contributor access. Please contact the archive team for help.",
+    reviewUnavailable: "Review queue unavailable",
+    reviewUnavailableHint:
+      "We couldn't verify your account. Please reload and try again.",
+    reviewPermissionUnavailableHint:
+      "We couldn't verify your review permissions. Please reload and try again.",
+    reviewEntriesUnavailableHint:
+      "We couldn't load submissions. Please reload and try again.",
+    editorAccessRequired: "Editor access required",
+    editorAccessRequiredHint:
+      "Only archive editors can review and publish community submissions.",
+    reviewSubmissions: "Review submissions",
+    pendingSubmissions: "Pending community submissions",
+    reviewSubmissionsHint:
+      "Review each entry and its attached photo. Publishing makes it visible in the public archive; archiving removes it from the review queue without publishing.",
+    noPendingSubmissions: "There are no submissions waiting for review.",
+    locationNotProvided: "No location or date provided",
+    viewSubmissionPhoto: "View photo",
+    previewSubmission: "Preview entry",
+    submissionDetails: "Read full submission",
+    submittedOn: "Submitted",
+    publishSubmission: "Publish entry",
+    archiveSubmission: "Archive submission",
+    savingReview: "Saving...",
+    reviewUpdateFailed: "We couldn't update this submission. Please try again.",
     contributionAuthUnavailable:
       "We couldn't check your sign-in right now.",
     contributionAuthUnavailableHint:
@@ -116,6 +142,10 @@ export const translations = {
     contributeReviewNotice:
       "Your entry is saved as a draft for review and will appear in the public archive only after an editor approves it. Do not include private addresses or sensitive information.",
     contributionTitle: "Title",
+    contributorName: "Name to credit publicly",
+    contributorNameHint:
+      "This name will appear with your published entry. A single name is fine.",
+    contributorNameLength: "Enter a name between 1 and 80 characters.",
     contributionDescription: "Description",
     contributionCategory: "Category",
     selectContributionCategory: "Choose a category",
@@ -194,6 +224,7 @@ export const translations = {
     sampleArchiveEntry: "Sample Archive Entry — for demonstration purposes",
     generalArchivePageTitle: "Archive",
     galleryPageTitle: "Gallery",
+    noGalleryImages: "Community photographs will appear here as they are reviewed and added.",
     chooseLanguageLabel: "Choose language",
   },
   km: {
@@ -265,6 +296,8 @@ export const translations = {
     alreadyHaveAccount: "មានគណនីរួចហើយទេ?",
     signupConfirmationRequired:
       "បានបង្កើតគណនីហើយ។ សូមពិនិត្យអ៊ីមែលដើម្បីបញ្ជាក់គណនី បន្ទាប់មកចូលគណនីដើម្បីបន្ត។",
+    accountCreationFailed:
+      "យើងមិនអាចបង្កើតគណនីរបស់អ្នកបានទេ។ សូមពិនិត្យអ៊ីមែល និងពាក្យសម្ងាត់ រួចព្យាយាមម្ដងទៀត។",
     forgotPassword: "ភ្លេចពាក្យសម្ងាត់មែនទេ?",
     backToLogin: "ត្រឡប់ទៅចូលគណនី",
     forgotPasswordInstructions:
@@ -301,7 +334,31 @@ export const translations = {
       "បង្កើតគណនី ឬចូលគណនី ដើម្បីចែករំលែកចំណេះដឹងអំពីផ្ទះប្រពៃណីជាមួយសហគមន៍។",
     contributorRole: "អ្នកចូលរួមសហគមន៍",
     contributorRoleUnavailable:
-      "គណនីរបស់អ្នកមិនទាន់អាចដាក់ស្នើកំណត់ត្រាបានទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ។",
+      "គណនីរបស់អ្នកមិនទាន់មានសិទ្ធិជាអ្នកចូលរួមទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារដើម្បីទទួលជំនួយ។",
+    reviewUnavailable: "មិនអាចប្រើបញ្ជីពិនិត្យបានទេ",
+    reviewUnavailableHint:
+      "យើងមិនអាចផ្ទៀងផ្ទាត់គណនីរបស់អ្នកបានទេ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយព្យាយាមម្ដងទៀត។",
+    reviewPermissionUnavailableHint:
+      "យើងមិនអាចផ្ទៀងផ្ទាត់សិទ្ធិពិនិត្យរបស់អ្នកបានទេ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយព្យាយាមម្ដងទៀត។",
+    reviewEntriesUnavailableHint:
+      "យើងមិនអាចផ្ទុកការដាក់ស្នើបានទេ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយព្យាយាមម្ដងទៀត។",
+    editorAccessRequired: "ត្រូវការសិទ្ធិអ្នកកែសម្រួល",
+    editorAccessRequiredHint:
+      "មានតែអ្នកកែសម្រួលបណ្ណសារប៉ុណ្ណោះដែលអាចពិនិត្យ និងផ្សព្វផ្សាយការដាក់ស្នើពីសហគមន៍បាន។",
+    reviewSubmissions: "ពិនិត្យការដាក់ស្នើ",
+    pendingSubmissions: "ការដាក់ស្នើពីសហគមន៍ដែលរង់ចាំ",
+    reviewSubmissionsHint:
+      "ពិនិត្យកំណត់ត្រានីមួយៗ និងរូបថតដែលភ្ជាប់មក។ ការផ្សព្វផ្សាយនឹងធ្វើឱ្យវាបង្ហាញក្នុងបណ្ណសារសាធារណៈ។ ការដាក់ក្នុងបណ្ណសារនឹងដកវាចេញពីបញ្ជីរង់ចាំ ដោយមិនផ្សព្វផ្សាយ។",
+    noPendingSubmissions: "មិនមានការដាក់ស្នើដែលកំពុងរង់ចាំការពិនិត្យទេ។",
+    locationNotProvided: "មិនបានផ្តល់ទីតាំង ឬកាលបរិច្ឆេទទេ",
+    viewSubmissionPhoto: "មើលរូបថត",
+    previewSubmission: "មើលកំណត់ត្រាជាមុន",
+    submissionDetails: "អានការដាក់ស្នើពេញលេញ",
+    submittedOn: "បានដាក់ស្នើ",
+    publishSubmission: "ផ្សព្វផ្សាយកំណត់ត្រា",
+    archiveSubmission: "ដាក់ក្នុងបណ្ណសារ",
+    savingReview: "កំពុងរក្សាទុក...",
+    reviewUpdateFailed: "មិនអាចធ្វើបច្ចុប្បន្នភាពការដាក់ស្នើនេះបានទេ។ សូមព្យាយាមម្ដងទៀត។",
     contributionAuthUnavailable: "មិនអាចពិនិត្យស្ថានភាពចូលគណនីរបស់អ្នកបានទេនៅពេលនេះ។",
     contributionAuthUnavailableHint:
       "សូមពិនិត្យការតភ្ជាប់ ហើយព្យាយាមម្តងទៀត។ គណនី និងមាតិកាដែលបានរក្សាទុករបស់អ្នកមិនត្រូវបានផ្លាស់ប្តូរទេ។",
@@ -310,6 +367,10 @@ export const translations = {
     contributeReviewNotice:
       "កំណត់ត្រារបស់អ្នកនឹងត្រូវរក្សាទុកជាសេចក្តីព្រាងសម្រាប់ពិនិត្យ ហើយនឹងបង្ហាញជាសាធារណៈតែបន្ទាប់ពីអ្នកកែសម្រួលអនុម័តប៉ុណ្ណោះ។ កុំបញ្ចូលអាសយដ្ឋានឯកជន ឬព័ត៌មានរសើប។",
     contributionTitle: "ចំណងជើង",
+    contributorName: "ឈ្មោះសម្រាប់បង្ហាញជាសាធារណៈ",
+    contributorNameHint:
+      "ឈ្មោះនេះនឹងបង្ហាញជាមួយកំណត់ត្រារបស់អ្នកនៅពេលផ្សព្វផ្សាយ។ អាចប្រើឈ្មោះតែមួយបាន។",
+    contributorNameLength: "សូមបញ្ចូលឈ្មោះដែលមានប្រវែងពី ១ ដល់ ៨០ តួអក្សរ។",
     contributionDescription: "ការពិពណ៌នា",
     contributionCategory: "ប្រភេទ",
     selectContributionCategory: "ជ្រើសរើសប្រភេទ",
@@ -388,6 +449,7 @@ export const translations = {
     sampleArchiveEntry: "កំណត់ត្រាគំរូ — សម្រាប់គោលបំណងបង្ហាញ",
     generalArchivePageTitle: "បណ្ណសារ",
     galleryPageTitle: "វិចិត្រសាល",
+    noGalleryImages: "រូបថតសហគមន៍នឹងបង្ហាញនៅទីនេះ នៅពេលដែលរូបថតទាំងនោះត្រូវបានពិនិត្យ និងបន្ថែម។",
     chooseLanguageLabel: "ជ្រើសរើសភាសា",
   },
 };
@@ -730,6 +792,259 @@ export const localizedLabels = {
     en: "Publishing the record so it can be explored by the community and beyond.",
     km: "ផ្សព្វផ្សាយកំណត់ត្រា ដើម្បីឱ្យសហគមន៍ និងអ្នកដទៃអាចស្វែងយល់បាន។",
   },
+  "The Cross-Weave Pattern": {
+    en: "The Cross-Weave Pattern",
+    km: "លំនាំត្បាញឆ្លាស់",
+  },
+  "Raising the Roof Frame": {
+    en: "Raising the Roof Frame",
+    km: "ការលើកគ្រោងដំបូល",
+  },
+  "Seasonal Roof Repair": {
+    en: "Seasonal Roof Repair",
+    km: "ការជួសជុលដំបូលតាមរដូវ",
+  },
+  "The Family House in Kampong Speu": {
+    en: "The Family House in Kampong Speu",
+    km: "ផ្ទះគ្រួសារនៅកំពង់ស្ពឺ",
+  },
+  "Drying Technique for Longer-Lasting Panels": {
+    en: "Drying Technique for Longer-Lasting Panels",
+    km: "បច្ចេកទេសសម្ងួតដើម្បីឱ្យបន្ទះប្រើបានយូរ",
+  },
+  "The Tools of a Traditional Thatcher": {
+    en: "The Tools of a Traditional Thatcher",
+    km: "ឧបករណ៍របស់ជាងប្រក់ដំបូលប្រពៃណី",
+  },
+  "Before a single leaf touches the frame of a roof, it passes through many hands.":
+    {
+      en: "Before a single leaf touches the frame of a roof, it passes through many hands.",
+      km: "មុនពេលស្លឹកត្នោតមួយសន្លឹកប៉ះនឹងគ្រោងដំបូល វាបានឆ្លងកាត់ដៃមនុស្សជាច្រើន។",
+    },
+  "The cross-weave is the technique most families in this community used to bind loose leaflets into a single rigid panel strong enough to shed monsoon rain.":
+    {
+      en: "The cross-weave is the technique most families in this community used to bind loose leaflets into a single rigid panel strong enough to shed monsoon rain.",
+      km: "ការត្បាញឆ្លាស់គឺជាបច្ចេកទេសដែលគ្រួសារភាគច្រើនក្នុងសហគមន៍នេះប្រើ ដើម្បីភ្ជាប់ស្លឹកត្នោតតូចៗឱ្យក្លាយជាបន្ទះរឹងមាំមួយ ដែលអាចបង្ហូរទឹកភ្លៀងមូសុងបាន។",
+    },
+  "A palm-leaf covering is only as good as the frame beneath it.": {
+    en: "A palm-leaf covering is only as good as the frame beneath it.",
+    km: "ស្រទាប់គ្របស្លឹកត្នោតមានគុណភាពល្អត្រឹមតែប៉ុណ្ណោះ ប្រសិនបើគ្រោងដែលទ្រទ្រង់វានៅខាងក្រោមមានភាពរឹងមាំ។",
+  },
+  "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.":
+    {
+      en: "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.",
+      km: "ការភ្ជាប់បន្ទះត្រូវធ្វើជាជួរត្រួតជាន់គ្នាយ៉ាងប្រុងប្រយ័ត្ន ដោយចាប់ផ្តើមពីចុងដំបូល ហើយធ្វើឡើងទៅកាន់កំពូលដំបូលជានិច្ច។",
+    },
+  "A well-built palm-leaf roof can last several years, but it is rarely left untouched.":
+    {
+      en: "A well-built palm-leaf roof can last several years, but it is rarely left untouched.",
+      km: "ដំបូលស្លឹកត្នោតដែលសាងសង់បានល្អអាចប្រើប្រាស់បានច្រើនឆ្នាំ ប៉ុន្តែត្រូវការការថែទាំជាប្រចាំ។",
+    },
+  "This entry documents a single household's house as an example of a still-standing, actively maintained palm-leaf roof.":
+    {
+      en: "This entry documents a single household's house as an example of a still-standing, actively maintained palm-leaf roof.",
+      km: "កំណត់ត្រានេះរៀបរាប់អំពីផ្ទះរបស់គ្រួសារមួយ ជាឧទាហរណ៍នៃផ្ទះដែលនៅឈររឹងមាំ និងដំបូលស្លឹកត្នោតដែលកំពុងត្រូវបានថែទាំ។",
+    },
+  "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.":
+    {
+      en: "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.",
+      km: "ផ្ទុយពីការហាលស្លឹកក្រោមពន្លឺថ្ងៃផ្ទាល់ គ្រួសារខ្លះក្នុងសហគមន៍នេះចូលចិត្តសម្ងួតវាយឺតៗក្នុងម្លប់ ដោយជឿថាវាធ្វើឱ្យបន្ទះប្រើបានយូរ និងមិនងាយប្រេះ។",
+    },
+  "The tools involved in this craft are few, simple, and often handmade.": {
+    en: "The tools involved in this craft are few, simple, and often handmade.",
+    km: "ឧបករណ៍ដែលប្រើក្នុងសិប្បកម្មនេះមានតិច សាមញ្ញ ហើយជាញឹកញាប់ធ្វើឡើងដោយដៃ។",
+  },
+  "The tools involved in this craft are few, simple, and often handmade.": {
+    en: "The tools involved in this craft are few, simple, and often handmade.",
+    km: "ឧបករណ៍ដែលប្រើក្នុងសិប្បកម្មនេះមានតិច សាមញ្ញ ហើយជាញឹកញាប់ធ្វើឡើងដោយដៃ។",
+  },
+  "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.":
+    {
+      en: "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.",
+      km: "ការភ្ជាប់បន្ទះត្រូវធ្វើជាជួរត្រួតជាន់គ្នាយ៉ាងប្រុងប្រយ័ត្ន ដោយចាប់ផ្តើមពីចុងដំបូល ហើយធ្វើឡើងទៅកាន់កំពូលដំបូលជានិច្ច។",
+    },
+  "A well-built palm-leaf roof can last several years, but it is rarely left untouched.":
+    {
+      en: "A well-built palm-leaf roof can last several years, but it is rarely left untouched.",
+      km: "ដំបូលស្លឹកត្នោតដែលសាងសង់បានល្អអាចប្រើប្រាស់បានច្រើនឆ្នាំ ប៉ុន្តែត្រូវការការថែទាំជាប្រចាំ។",
+    },
+  "This entry documents a single household's house as an example of a still-standing, actively maintained palm-leaf roof.":
+    {
+      en: "This entry documents a single household's house as an example of a still-standing, actively maintained palm-leaf roof.",
+      km: "កំណត់ត្រានេះរៀបរាប់អំពីផ្ទះរបស់គ្រួសារមួយ ជាឧទាហរណ៍នៃផ្ទះដែលនៅឈររឹងមាំ និងដំបូលស្លឹកត្នោតដែលកំពុងត្រូវបានថែទាំ។",
+    },
+  "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.":
+    {
+      en: "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.",
+      km: "ផ្ទុយពីការហាលស្លឹកក្រោមពន្លឺថ្ងៃផ្ទាល់ គ្រួសារខ្លះក្នុងសហគមន៍នេះចូលចិត្តសម្ងួតវាយឺតៗក្នុងម្លប់ ដោយជឿថាវាធ្វើឱ្យបន្ទះប្រើបានយូរ និងមិនងាយប្រេះ។",
+    },
+  "The tools involved in this craft are few, simple, and often handmade. This entry documents the small set of tools one contributor still keeps and uses today, each with its own specific role.":
+    {
+      en: "The tools involved in this craft are few, simple, and often handmade. This entry documents the small set of tools one contributor still keeps and uses today, each with its own specific role.",
+      km: "ឧបករណ៍ដែលប្រើក្នុងសិប្បកម្មនេះមានតិច សាមញ្ញ ហើយជាញឹកញាប់ធ្វើឡើងដោយដៃ។ កំណត់ត្រានេះរៀបរាប់អំពីឧបករណ៍មួយចំនួនដែលអ្នករួមចំណែកម្នាក់នៅរក្សាទុក និងប្រើប្រាស់រហូតមកដល់សព្វថ្ងៃ ដោយឧបករណ៍នីមួយៗមានតួនាទីជាក់លាក់។",
+    },
+  "Detail of a woven palm leaf roofing panel showing the cross pattern": {
+    en: "Detail of a woven palm leaf roofing panel showing the cross pattern",
+    km: "រូបភាពលម្អិតនៃបន្ទះដំបូលស្លឹកត្នោតដែលបង្ហាញលំនាំត្បាញឆ្លាស់",
+  },
+  "Bamboo frame of a traditional house under construction": {
+    en: "Bamboo frame of a traditional house under construction",
+    km: "គ្រោងឫស្សីនៃផ្ទះប្រពៃណីដែលកំពុងសាងសង់",
+  },
+  "Woven palm leaf panels being tied to a roof frame": {
+    en: "Woven palm leaf panels being tied to a roof frame",
+    km: "បន្ទះស្លឹកត្នោតដែលបានត្បាញកំពុងត្រូវបានចងទៅនឹងគ្រោងដំបូល",
+  },
+  "A person repairing a section of a palm leaf roof": {
+    en: "A person repairing a section of a palm leaf roof",
+    km: "មនុស្សម្នាក់កំពុងជួសជុលផ្នែកមួយនៃដំបូលស្លឹកត្នោត",
+  },
+  "A complete traditional house with a palm leaf roof, raised on wooden stilts":
+    {
+      en: "A complete traditional house with a palm leaf roof, raised on wooden stilts",
+      km: "ផ្ទះប្រពៃណីពេញលេញដែលមានដំបូលស្លឹកត្នោត និងលើកផុតពីដីដោយសសរឈើ",
+    },
+  "Palm leaf panels resting on a raised drying rack in the shade": {
+    en: "Palm leaf panels resting on a raised drying rack in the shade",
+    km: "បន្ទះស្លឹកត្នោតដាក់លើរានសម្ងួតដែលលើកផុតពីដីក្នុងម្លប់",
+  },
+  "A set of traditional hand tools used for palm leaf thatching": {
+    en: "A set of traditional hand tools used for palm leaf thatching",
+    km: "សំណុំឧបករណ៍ដៃប្រពៃណីសម្រាប់ប្រក់ដំបូលស្លឹកត្នោត",
+  },
+  "A person examining palm fronds still on the tree before cutting": {
+    en: "A person examining palm fronds still on the tree before cutting",
+    km: "មនុស្សម្នាក់កំពុងពិនិត្យទងស្លឹកត្នោតនៅលើដើម មុនពេលកាត់",
+  },
+  "Palm leaves being cleaned and sorted by hand": {
+    en: "Palm leaves being cleaned and sorted by hand",
+    km: "ស្លឹកត្នោតកំពុងត្រូវបានសម្អាត និងតម្រៀបដោយដៃ",
+  },
+  "Palm leaves resting on a raised bamboo drying rack in the shade": {
+    en: "Palm leaves resting on a raised bamboo drying rack in the shade",
+    km: "ស្លឹកត្នោតដាក់លើរានឫស្សីសម្ងួតដែលលើកផុតពីដីក្នុងម្លប់",
+  },
+  "Hands weaving palm leaflets into a cross pattern over a spine": {
+    en: "Hands weaving palm leaflets into a cross pattern over a spine",
+    km: "ដៃកំពុងត្បាញស្លឹកត្នោតតូចៗជាលំនាំឆ្លាស់លើឆ្អឹងកណ្តាល",
+  },
+  "Finished woven panels being lashed to a roof frame": {
+    en: "Finished woven panels being lashed to a roof frame",
+    km: "បន្ទះដែលបានត្បាញរួចកំពុងត្រូវបានចងភ្ជាប់ទៅនឹងគ្រោងដំបូល",
+  },
+  "A person patching a worn section of a palm leaf roof": {
+    en: "A person patching a worn section of a palm leaf roof",
+    km: "មនុស្សម្នាក់កំពុងប៉ះជួសជុលផ្នែកដែលពុកផុយនៃដំបូលស្លឹកត្នោត",
+  },
+  "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.":
+    {
+      en: "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.",
+      km: "នៅដំណាក់កាលនេះ ត្រូវកាន់ស្លឹកដោយថ្នមៗ ព្រោះការកាន់ដោយមិនប្រុងប្រយ័ត្នអាចបណ្តាលឱ្យស្នាមរហែកលេចឡើងនៅលើកំណាត់ត្បាញដែលបានបញ្ចប់។",
+    },
+  "Family Interview, Contributor's Uncle": {
+    en: "Family Interview, Contributor's Uncle",
+    km: "សម្ភាសន៍គ្រួសារ៖ ពូរបស់អ្នករួមចំណែក",
+  },
+  "Household Visit and Interview": {
+    en: "Household Visit and Interview",
+    km: "ទស្សនកិច្ចផ្ទះ និងសម្ភាសន៍",
+  },
+  "Kampong Speu Province, Cambodia (sample)": {
+    en: "Kampong Speu Province, Cambodia (sample)",
+    km: "ខេត្តកំពង់ស្ពឺ ប្រទេសកម្ពុជា (គំរូ)",
+  },
+  "Takeo Province, Cambodia (sample)": {
+    en: "Takeo Province, Cambodia (sample)",
+    km: "ខេត្តតាកែវ ប្រទេសកម្ពុជា (គំរូ)",
+  },
+  "Kampong Chhnang Province, Cambodia (sample)": {
+    en: "Kampong Chhnang Province, Cambodia (sample)",
+    km: "ខេត្តកំពង់ឆ្នាំង ប្រទេសកម្ពុជា (គំរូ)",
+  },
+  "Selecting the Leaves": {
+    en: "Selecting the Leaves",
+    km: "ការជ្រើសរើសស្លឹកត្នោត",
+  },
+  "Every roof begins in the palm grove. Fronds are chosen by hand — mature enough to be strong, but not so old that they have begun to dry unevenly on the tree. A frond that springs back gently when bent is considered ready to cut.":
+    {
+      en: "Every roof begins in the palm grove. Fronds are chosen by hand — mature enough to be strong, but not so old that they have begun to dry unevenly on the tree. A frond that springs back gently when bent is considered ready to cut.",
+      km: "ដំបូលទាំងអស់ចាប់ផ្តើមពីចម្ការត្នោត។ គេជ្រើសរើសទងស្លឹកដោយដៃ ដោយយកស្លឹកដែលធំល្មមរឹងមាំ ប៉ុន្តែមិនចាស់ពេករហូតចាប់ផ្តើមស្ងួតមិនស្មើគ្នានៅលើដើម។ ទងស្លឹកដែលត្រឡប់មកត្រង់វិញបន្តិចៗក្រោយពេលបត់ ត្រូវបានចាត់ទុកថាអាចកាត់បាន។",
+    },
+  "Cutting is traditionally done in the early morning, while the fronds still hold moisture from the night and bend without cracking.":
+    {
+      en: "Cutting is traditionally done in the early morning, while the fronds still hold moisture from the night and bend without cracking.",
+      km: "តាមប្រពៃណី គេកាត់នៅពេលព្រឹកព្រលឹម ខណៈទងស្លឹកនៅមានសំណើមពីពេលយប់ និងអាចបត់បានដោយមិនប្រេះ។",
+    },
+  "Preparing the Leaves": {
+    en: "Preparing the Leaves",
+    km: "ការរៀបចំស្លឹកត្នោត",
+  },
+  "Back at the household, each frond is inspected leaflet by leaflet. Torn, discolored, or insect-damaged sections are trimmed away, since even a small weak point can let water through once the panel is on the roof.":
+    {
+      en: "Back at the household, each frond is inspected leaflet by leaflet. Torn, discolored, or insect-damaged sections are trimmed away, since even a small weak point can let water through once the panel is on the roof.",
+      km: "នៅពេលយកមកដល់ផ្ទះ គេពិនិត្យទងស្លឹកនីមួយៗពីស្លឹកតូចមួយទៅស្លឹកតូចមួយ។ ផ្នែកដែលរហែក ប្រែពណ៌ ឬខូចដោយសត្វល្អិត ត្រូវកាត់ចេញ ព្រោះចំណុចខ្សោយតូចមួយក៏អាចឱ្យទឹកជ្រាបបាន នៅពេលដាក់បន្ទះលើដំបូល។",
+    },
+  "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.":
+    {
+      en: "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.",
+      km: "នៅដំណាក់កាលនេះ ត្រូវកាន់ស្លឹកដោយថ្នមៗ ព្រោះការកាន់ដោយមិនប្រុងប្រយ័ត្នអាចបណ្តាលឱ្យស្នាមរហែកលេចឡើងនៅលើកំណាត់ត្បាញដែលបានបញ្ចប់។",
+    },
+  "Drying the Leaves": {
+    en: "Drying the Leaves",
+    km: "ការសម្ងួតស្លឹកត្នោត",
+  },
+  "Cleaned leaves are laid across a raised rack to dry evenly over several days. Some households favor slow, shaded drying over direct sun, believing it produces panels that resist cracking and pests for longer.":
+    {
+      en: "Cleaned leaves are laid across a raised rack to dry evenly over several days. Some households favor slow, shaded drying over direct sun, believing it produces panels that resist cracking and pests for longer.",
+      km: "ស្លឹកដែលបានសម្អាតត្រូវបានដាក់លើរានហាលដែលលើកផុតពីដី ដើម្បីសម្ងួតឱ្យស្មើគ្នាក្នុងរយៈពេលច្រើនថ្ងៃ។ គ្រួសារខ្លះចូលចិត្តសម្ងួតយឺតៗក្នុងម្លប់ជាងហាលថ្ងៃផ្ទាល់ ដោយជឿថាវាធ្វើឱ្យបន្ទះមិនងាយប្រេះ និងខូចដោយសត្វល្អិត។",
+    },
+  "Leaves are turned once a day so both sides dry at the same rate, avoiding warping.":
+    {
+      en: "Leaves are turned once a day so both sides dry at the same rate, avoiding warping.",
+      km: "ត្រូវបង្វិលស្លឹកម្តងក្នុងមួយថ្ងៃ ដើម្បីឱ្យផ្នែកទាំងសងខាងស្ងួតក្នុងល្បឿនស្មើគ្នា និងជៀសវាងការកោងខូចទ្រង់ទ្រាយ។",
+    },
+  "Weaving and Arranging": {
+    en: "Weaving and Arranging",
+    km: "ការត្បាញ និងរៀបចំស្លឹក",
+  },
+  "Dried leaflets are folded over a central spine and woven into a tight cross pattern, one over another, until no gaps remain for water to pass through. This is the most skill-intensive stage, often taking years to learn by hand.":
+    {
+      en: "Dried leaflets are folded over a central spine and woven into a tight cross pattern, one over another, until no gaps remain for water to pass through. This is the most skill-intensive stage, often taking years to learn by hand.",
+      km: "ស្លឹកតូចៗដែលស្ងួតត្រូវបានបត់លើឆ្អឹងកណ្តាល ហើយត្បាញឆ្លាស់គ្នាយ៉ាងតឹង រហូតគ្មានចន្លោះឱ្យទឹកជ្រាប។ នេះជាដំណាក់កាលដែលត្រូវការជំនាញខ្ពស់បំផុត ហើយជាញឹកញាប់ត្រូវចំណាយពេលជាច្រើនឆ្នាំដើម្បីរៀនដោយអនុវត្តផ្ទាល់។",
+    },
+  "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.":
+    {
+      en: "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.",
+      km: "ការត្បាញឱ្យតឹងជាងនៅគល់បន្ទះនីមួយៗ ជួយការពារទឹកកុំឱ្យដក់នៅកន្លែងដែលជួរដំបូលត្រួតជាន់គ្នា។",
+    },
+  "Attaching the Covering": {
+    en: "Attaching the Covering",
+    km: "ការភ្ជាប់ស្រទាប់គ្របដំបូល",
+  },
+  "Finished panels are lashed to the roof's bamboo frame in overlapping rows, starting at the eaves and working up toward the ridge — the same shedding principle used by shingles the world over.":
+    {
+      en: "Finished panels are lashed to the roof's bamboo frame in overlapping rows, starting at the eaves and working up toward the ridge — the same shedding principle used by shingles the world over.",
+      km: "បន្ទះដែលបានបញ្ចប់ត្រូវបានចងភ្ជាប់ទៅនឹងគ្រោងឫស្សីរបស់ដំបូលជាជួរត្រួតជាន់គ្នា ដោយចាប់ផ្តើមពីចុងដំបូលឡើងទៅកាន់កំពូល។ វាប្រើគោលការណ៍បង្ហូរទឹកដូចនឹងការដាក់ក្បឿងដំបូលនៅទូទាំងពិភពលោក។",
+    },
+  "Consistent overlap between rows matters more than the total number of panels used.":
+    {
+      en: "Consistent overlap between rows matters more than the total number of panels used.",
+      km: "ការត្រួតជាន់គ្នាឱ្យស្មើសាច់រវាងជួរនីមួយៗ សំខាន់ជាងចំនួនបន្ទះសរុបដែលបានប្រើ។",
+    },
+  "Maintaining and Repairing": {
+    en: "Maintaining and Repairing",
+    km: "ការថែទាំ និងជួសជុល",
+  },
+  "A palm-leaf roof is rarely left untouched. Each year before the rains, households check the underside for thin, light-letting spots and weave small patch panels to replace worn sections before the wet season begins.":
+    {
+      en: "A palm-leaf roof is rarely left untouched. Each year before the rains, households check the underside for thin, light-letting spots and weave small patch panels to replace worn sections before the wet season begins.",
+      km: "ដំបូលស្លឹកត្នោតកម្រនឹងមិនត្រូវបានថែទាំឡើយ។ រៀងរាល់ឆ្នាំមុនរដូវភ្លៀង គ្រួសារត្រួតពិនិត្យផ្នែកខាងក្រោមដើម្បីរកកន្លែងស្តើងដែលពន្លឺអាចចាំងកាត់ ហើយត្បាញបន្ទះបំណះតូចៗជំនួសផ្នែកដែលខូច មុនពេលរដូវវស្សាចាប់ផ្តើម។",
+    },
+  "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.":
+    {
+      en: "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.",
+      km: "ការរកមើលចំណុចដែលមានពន្លឺចាំងកាត់ពីខាងក្នុងផ្ទះ លឿន និងអាចទុកចិត្តបានជាងការត្រួតពិនិត្យដំបូលពីខាងក្រៅ។",
+    },
 };
 export function localizeLabel(label, language) {
   var _a, _b;

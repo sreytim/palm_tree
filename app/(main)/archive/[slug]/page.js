@@ -1,23 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getArchiveItemBySlug } from "@/data/entries";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
 import { supabase } from "@/lib/supabase-client";
 import { COLUMNS, toUiEntry } from "@/lib/entry-mapping";
 
 export default function ArchiveEntryPage({ params }) {
-  const { slug } = params;
-  const staticItem = getArchiveItemBySlug(slug);
+  const { slug } = use(params);
   const [lookup, setLookup] = useState(null);
   const { language, t } = useLanguage();
 
   useEffect(() => {
-    if (staticItem) return;
     let active = true;
 
     supabase
@@ -47,13 +44,12 @@ export default function ArchiveEntryPage({ params }) {
     return () => {
       active = false;
     };
-  }, [slug, staticItem]);
+  }, [slug]);
 
   const currentLookup = lookup?.slug === slug ? lookup : null;
-  const databaseItem = currentLookup?.item ?? null;
-  const isLoading = !staticItem && !currentLookup;
+  const item = currentLookup?.item ?? null;
+  const isLoading = !currentLookup;
   const loadFailed = Boolean(currentLookup?.failed);
-  const item = staticItem || databaseItem;
   if (!item) {
     if (isLoading) {
       return (
@@ -81,10 +77,15 @@ export default function ArchiveEntryPage({ params }) {
           {t("draftReviewNotice")}
         </p>
       )}
+      {item.isSample && (
+        <p className="bg-beige-soft px-5 py-3 text-center text-sm text-ink">
+          {t("sampleArchiveEntry")}
+        </p>
+      )}
       <div className="relative h-[46vh] min-h-[320px] w-full sm:h-[56vh]">
         <Image
           src={item.image}
-          alt={item.imageAlt}
+          alt={localizeLabel(item.imageAlt, language)}
           fill
           priority
           sizes="100vw"
@@ -110,17 +111,11 @@ export default function ArchiveEntryPage({ params }) {
       </div>
 
       <div className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
-        <div className="grid grid-cols-1 gap-4 border-b border-beige pb-10 text-sm sm:grid-cols-3">
-          <div className="text-ink-soft">
-            {t("contributor")}: {item.contributor}
+        {item.location && (
+          <div className="border-b border-beige pb-10 text-sm text-ink-soft">
+            {t("location")}: {localizeLabel(item.location, language)}
           </div>
-          <div className="text-ink-soft">
-            {t("date")}: {item.date}
-          </div>
-          <div className="text-ink-soft">
-            {t("location")}: {item.location}
-          </div>
-        </div>
+        )}
 
         <section className="pt-10">
           <h2 className="mb-4 font-display text-2xl font-medium text-ink">

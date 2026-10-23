@@ -11,6 +11,7 @@ import {
 } from "@/lib/contribution-rules";
 
 const EMPTY_ENTRY = {
+  contributor: "",
   title: "",
   description: "",
   category: "",
@@ -123,6 +124,27 @@ export default function ContributionForm() {
       <fieldset disabled={isSubmitting} className="space-y-8 disabled:opacity-80">
         <FieldError message={fieldErrors.form && t(fieldErrors.form)} />
         <section className="space-y-5 rounded-3xl border border-beige bg-cream p-5 sm:p-8">
+          <div>
+            <label htmlFor="contributor" className="font-medium text-ink">
+              {t("contributorName")} *
+            </label>
+            <input
+              id="contributor"
+              value={entry.contributor}
+              onChange={(event) => setField("contributor", event.target.value)}
+              maxLength={80}
+              autoComplete="name"
+              required
+              className={FIELD_CLASS}
+            />
+            <p className="mt-1 text-xs text-ink-soft">
+              {t("contributorNameHint")}
+            </p>
+            <FieldError
+              message={fieldErrors.contributor && t(fieldErrors.contributor)}
+            />
+          </div>
+
           <div>
             <label htmlFor="title" className="font-medium text-ink">
               {t("contributionTitle")} *

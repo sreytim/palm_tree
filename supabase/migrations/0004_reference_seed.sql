@@ -29,7 +29,7 @@ insert into public.people (id, slug, name, role, attribution_label) values
   ('person-02', 'ta-sarun',    'Ta Sarun (sample name)',    'householder',          null),
   ('person-03', 'srey-neang',  'Srey Neang (sample name)',  'weaver',               null),
   ('person-04', 'ta-vibol',    'Ta Vibol (sample name)',    'carpenter',            null),
-  ('person-community-elder',  'community-elder',   null, 'anonymous-contributor', 'Community Elder Interview'),
+  ('person-community-elder',  'community-elder',   null, 'anonymous-contributor', null),
   ('person-family-uncle',     'family-uncle',      null, 'anonymous-contributor', 'Family Interview, Contributor''s Uncle'),
   ('person-household-visit',  'household-visit',   null, 'anonymous-contributor', 'Household Visit and Interview'),
   ('person-sample-archive',   'sample-archive-entry',   null, 'sample', 'Sample Archive Entry'),

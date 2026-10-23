@@ -1,11 +1,13 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X, Leaf } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useLanguage } from "../common/LanguageProvider";
 import LanguageSwitcher from "../common/LanguageSwitcher";
 import { supabase } from "@/lib/supabase-client";
+import { images } from "@/lib/images";
 const links = [
   { href: "/", label: "Home" },
   { href: "/techniques", label: "Techniques" },
@@ -20,6 +22,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [canReview, setCanReview] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
@@ -28,28 +31,64 @@ export default function Navbar() {
   }, []);
   useEffect(() => {
     let mounted = true;
+    const updateSession = async (session) => {
+      const nextUser = session?.user ?? null;
+      if (mounted) {
+        setUser(nextUser);
+        setCanReview(false);
+      }
+      if (!nextUser) return;
+
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", nextUser.id)
+        .maybeSingle();
+      if (error) {
+        console.error("Could not check archive review access:", error);
+        return;
+      }
+      if (mounted) {
+        setCanReview(["editor", "admin"].includes(profile?.role));
+      }
+    };
+
     supabase.auth
       .getSession()
-      .then(({ data: { session }, error }) => {
+      .then(async ({ data: { session }, error }) => {
         if (error) {
           console.error("Could not restore the authentication session:", error);
           return;
         }
-        if (mounted) setUser(session?.user ?? null);
+        await updateSession(session);
       })
       .catch((error) => {
         console.error("Could not restore the authentication session:", error);
       });
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) =>
-      setUser(session?.user ?? null),
-    );
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setCanReview(false);
+      setTimeout(() => {
+        void updateSession(session);
+      }, 0);
+    });
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
   }, []);
+  const visibleLinks = canReview
+    ? [
+        ...links,
+        {
+          href: "/admin/review",
+          label: "reviewSubmissions",
+          translationKey: "reviewSubmissions",
+        },
+      ]
+    : links;
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -77,22 +116,20 @@ export default function Navbar() {
       >
         <Link
           href="/"
-          className="flex items-center gap-2 group"
+          className="flex items-center group"
           aria-label="Traditional Palm-Leaf House Covering Techniques — Home"
         >
-          <span className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-palm text-cream transition-transform duration-300 group-hover:rotate-12">
-            <Leaf size={18} strokeWidth={2} />
-          </span>
-          <span className="font-display text-base sm:text-lg leading-tight text-ink">
-            Palm-Leaf
-            <span className="block text-[0.65rem] sm:text-xs font-mono tracking-[0.15em] uppercase text-ink-soft">
-              {t("houseArchive")}
-            </span>
-          </span>
+          <Image
+            src={images.logo}
+            alt=""
+            loading="eager"
+            sizes="(max-width: 640px) 100px, 140px"
+            className="h-11 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-12"
+          />
         </Link>
 
         <ul className="hidden md:flex items-center gap-1">
-          {links.map((link) => {
+          {visibleLinks.map((link) => {
             const active = pathname === link.href;
             return (
               <li key={link.href}>
@@ -105,7 +142,7 @@ export default function Navbar() {
                       : "text-ink-soft hover:text-ink hover:bg-beige-soft"
                   }`}
                 >
-                  {t(link.label.toLowerCase())}
+                  {t(link.translationKey ?? link.label.toLowerCase())}
                 </Link>
               </li>
             );
@@ -164,7 +201,7 @@ export default function Navbar() {
         className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
       >
         <ul className="px-5 pb-5 pt-1 flex flex-col gap-1 bg-cream/95 backdrop-blur">
-          {links.map((link) => {
+          {visibleLinks.map((link) => {
             const active = pathname === link.href;
             return (
               <li key={link.href}>
@@ -178,7 +215,7 @@ export default function Navbar() {
                       : "text-ink hover:bg-beige-soft"
                   }`}
                 >
-                  {t(link.label.toLowerCase())}
+                  {t(link.translationKey ?? link.label.toLowerCase())}
                 </Link>
               </li>
             );

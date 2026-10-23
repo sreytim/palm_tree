@@ -3,11 +3,11 @@
 -- Source: data/archive.js (8 entries, one statement per entry)
 --
 -- HOW TO RUN
---   1. Run supabase/create-entries.sql first — this inserts into that table.
---   2. Paste this file into the Supabase SQL editor.
---   3. Find-and-replace PASTE-YOUR-UUID-HERE with your user uuid
---      (Dashboard -> Authentication -> Users) — all 8 rows use it.
---   4. Run it. Then check:  select count(*) from entries;   -- expect 8
+--   1. Apply migrations 0001–0008 in order. Migration 0005 creates public.entries.
+--   2. In Supabase Dashboard -> Authentication -> Users, copy your user's UUID.
+--   3. Replace every PASTE-YOUR-UUID-HERE below with that UUID.
+--   4. Paste this file into the Supabase SQL editor and run it.
+--   5. Verify: select count(*) from public.entries; -- expect 8 after a clean seed
 --
 -- The uuid is deliberately not stored here: Lab 6 Part 4 checks that the user
 -- uuid is not exposed in committed files, and this file is committed.
@@ -21,8 +21,7 @@
 --   steps, tips      -> jsonb (array of {title, description} / array of strings)
 --   contributorStory -> contributor_story
 --   isSample         -> is_sample
---   status is set to 'published' explicitly, so the rows stay readable if the
---   read policy is later tightened from "using (true)" to published-only.
+-- status is set to 'published' and the rows remain labeled as samples.
 --   id, created_at and updated_at are omitted, so their defaults apply.
 --
 -- NOT MAPPED — data-file fields with no column in entries:
@@ -41,9 +40,9 @@ values (
   'Before a single leaf touches the frame of a roof, it passes through many hands.',
   'Palm Leaf Preparation',
   '{palm-leaf-houses,palm-leaf-preparation}'::text[],
-  'Community Elder Interview',
+  null,
   'Kampong Speu Province, Cambodia (sample)',
-  'March 2024',
+  null,
   '/palm_leaf_houses.png',
   'Bundles of palm leaves laid out to prepare for house covering',
   'Before a single leaf touches the frame of a roof, it passes through many hands. This entry documents the preparation stage as described by a community elder who learned the technique from her mother in the 1960s. Preparation is considered the foundation of a durable roof — leaves that are poorly chosen or poorly dried will not last a single rainy season.',
@@ -64,9 +63,9 @@ values (
   'The cross-weave is the technique most families in this community used to bind loose leaflets into a single rigid panel strong enough to shed monsoon rain.',
   'Weaving Techniques',
   '{roof-covering,leaf-weaving}'::text[],
-  'Community Elder Interview',
+  null,
   'Takeo Province, Cambodia (sample)',
-  'April 2024',
+  null,
   '/roof_covering.jpg',
   'Detail of a woven palm leaf roofing panel showing the cross pattern',
   'The cross-weave is the technique most families in this community used to bind loose leaflets into a single rigid panel strong enough to shed monsoon rain. This entry breaks the weave into its component folds, as demonstrated by a retired thatcher during a recorded interview.',
@@ -87,9 +86,9 @@ values (
   'A palm-leaf covering is only as good as the frame beneath it.',
   'House Construction',
   '{wall-covering,house-construction}'::text[],
-  'Family Interview, Contributor''s Uncle',
+  null,
   'Kampong Chhnang Province, Cambodia (sample)',
-  'May 2024',
+  null,
   '/wall_covering.jpg',
   'Bamboo frame of a traditional house under construction',
   'A palm-leaf covering is only as good as the frame beneath it. This entry documents how one family in the community describes the traditional timber and bamboo frame used to support a steep, water-shedding roof pitch.',
@@ -110,9 +109,9 @@ values (
   'Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.',
   'Attachment Techniques',
   '{palm-leaf-preparation,roof-covering}'::text[],
-  'Community Elder Interview',
+  null,
   'Kampong Speu Province, Cambodia (sample)',
-  'May 2024',
+  null,
   '/palm_leaf_preparation.jpg',
   'Woven palm leaf panels being tied to a roof frame',
   'Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge, so that each higher row sheds water over the row below it — the same principle used with modern shingles.',
@@ -133,9 +132,9 @@ values (
   'A well-built palm-leaf roof can last several years, but it is rarely left untouched.',
   'Maintenance & Repair',
   '{leaf-weaving,maintenance-repair}'::text[],
-  'Community Elder Interview',
+  null,
   'Takeo Province, Cambodia (sample)',
-  'June 2024',
+  null,
   '/leaf_weaving.jpg',
   'A person repairing a section of a palm leaf roof',
   'A well-built palm-leaf roof can last several years, but it is rarely left untouched. This entry documents the yearly inspection and repair ritual described by a longtime resident, usually carried out in the weeks before the rainy season begins.',
@@ -156,9 +155,9 @@ values (
   'This entry documents a single household''s house as an example of a still-standing, actively maintained palm-leaf roof.',
   'Traditional Houses',
   '{house-construction,traditional-house-types}'::text[],
-  'Household Visit and Interview',
+  null,
   'Kampong Speu Province, Cambodia (sample)',
-  'July 2024',
+  null,
   '/house_construction.jpg',
   'A complete traditional house with a palm leaf roof, raised on wooden stilts',
   'This entry documents a single household''s house as an example of a still-standing, actively maintained palm-leaf roof. The house is raised on stilts, a common feature in the region that keeps the living space above seasonal floodwater and improves airflow beneath the covering.',
@@ -179,9 +178,9 @@ values (
   'Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.',
   'Palm Leaf Preparation',
   '{traditional-house-types,palm-leaf-preparation}'::text[],
-  'Community Elder Interview',
+  null,
   'Kampong Chhnang Province, Cambodia (sample)',
-  'August 2024',
+  null,
   '/traditional_house_types.png',
   'Palm leaf panels resting on a raised drying rack in the shade',
   'Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking. This entry documents that approach.',
@@ -202,9 +201,9 @@ values (
   'The tools involved in this craft are few, simple, and often handmade.',
   'Weaving Techniques',
   '{maintenance-repair,tools}'::text[],
-  'Community Elder Interview',
+  null,
   'Takeo Province, Cambodia (sample)',
-  'August 2024',
+  null,
   '/maintenance_repair.jpeg',
   'A set of traditional hand tools used for palm leaf thatching',
   'The tools involved in this craft are few, simple, and often handmade. This entry documents the small set of tools one contributor still keeps and uses today, each with its own specific role.',

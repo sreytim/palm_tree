@@ -104,6 +104,9 @@ export default function LoginPage() {
               type="email"
               id="email"
               name="email"
+              autoComplete="email"
+              maxLength={254}
+              required
               value={formState.email}
               onChange={handleChange}
               style={{
@@ -138,6 +141,8 @@ export default function LoginPage() {
               type="password"
               id="password"
               name="password"
+              autoComplete="current-password"
+              required
               value={formState.password}
               onChange={handleChange}
               style={{

@@ -1,29 +1,23 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
-import { Leaf } from "lucide-react";
 import { useLanguage } from "../common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
-const categories = [
-  "Palm Leaf Preparation",
-  "Weaving Techniques",
-  "House Construction",
-  "Attachment Techniques",
-  "Maintenance & Repair",
-];
+import { images } from "@/lib/images";
 export default function Footer() {
   const { t, language } = useLanguage();
   const label = (value) => localizeLabel(value, language);
   return (
     <footer className="bg-palm-deep text-cream">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
         <div className="lg:col-span-1">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-cream text-palm-deep">
-              <Leaf size={18} />
-            </span>
-            <span className="font-display text-lg">
-              {label("Palm-Leaf House Archive")}
-            </span>
+          <div className="inline-flex w-fit items-center justify-center rounded-2xl bg-cream p-2.5 mb-4">
+            <Image
+              src={images.logo}
+              alt={t("palmLeafHouseArchive")}
+              sizes="(max-width: 640px) 120px, 160px"
+              className="h-12 w-auto sm:h-14"
+            />
           </div>
           <p className="text-sm text-cream/75 leading-relaxed">
             {t("preservingOne")}
@@ -56,24 +50,6 @@ export default function Footer() {
                 {t("aboutThisArchive")}
               </Link>
             </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="font-mono text-xs tracking-[0.2em] uppercase text-beige mb-4">
-            {t("categories")}
-          </h3>
-          <ul className="space-y-2 text-sm text-cream/80">
-            {categories.map((cat) => (
-              <li key={cat}>
-                <Link
-                  href={`/?category=${encodeURIComponent(cat)}#archive`}
-                  className="hover:text-cream transition-colors"
-                >
-                  {label(cat)}
-                </Link>
-              </li>
-            ))}
           </ul>
         </div>
 

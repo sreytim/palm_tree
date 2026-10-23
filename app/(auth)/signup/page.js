@@ -37,7 +37,7 @@ export default function SignupPage() {
 
       if (signUpError) {
         console.error("Signup failed:", signUpError);
-        setError(t("invalidCredentials"));
+        setError(t("accountCreationFailed"));
       } else if (data.session) {
         router.push(next);
       } else {
@@ -45,7 +45,7 @@ export default function SignupPage() {
       }
     } catch (signUpError) {
       console.error("Signup request failed:", signUpError);
-      setError(t("invalidCredentials"));
+      setError(t("accountCreationFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -112,6 +112,9 @@ export default function SignupPage() {
               type="email"
               id="email"
               name="email"
+              autoComplete="email"
+              maxLength={254}
+              required
               value={formState.email}
               onChange={handleChange}
               style={{
@@ -146,6 +149,9 @@ export default function SignupPage() {
               type="password"
               id="password"
               name="password"
+              autoComplete="new-password"
+              minLength={8}
+              required
               value={formState.password}
               onChange={handleChange}
               style={{

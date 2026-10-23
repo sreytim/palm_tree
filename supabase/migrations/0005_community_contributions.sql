@@ -1,5 +1,6 @@
--- Community members can submit entries as drafts. Editors alone can publish,
--- edit, or remove entries. Public reads are limited to published entries.
+-- Community members can submit entries as drafts and manage their own entries.
+-- Editors can review entries they own; public reads are limited to published
+-- entries.
 
 alter table public.profiles
   alter column role set default 'contributor';
@@ -49,8 +50,11 @@ drop policy if exists entries_public_published on public.entries;
 drop policy if exists entries_owner_read on public.entries;
 drop policy if exists entries_editor_read on public.entries;
 drop policy if exists entries_contributor_insert on public.entries;
+drop policy if exists entries_owner_insert on public.entries;
 drop policy if exists entries_editor_update on public.entries;
 drop policy if exists entries_editor_delete on public.entries;
+drop policy if exists entries_owner_update on public.entries;
+drop policy if exists entries_owner_delete on public.entries;
 
 create policy entries_public_published on public.entries
   for select using (status = 'published');
@@ -63,21 +67,21 @@ create policy entries_editor_read on public.entries
   for select to authenticated
   using (public.is_editor());
 
-create policy entries_contributor_insert on public.entries
+create policy entries_owner_insert on public.entries
   for insert to authenticated
   with check (
     owner = (select auth.uid())
     and (select public.current_profile_role()) in ('contributor','editor','admin')
   );
 
-create policy entries_editor_update on public.entries
+create policy entries_owner_update on public.entries
   for update to authenticated
-  using (public.is_editor())
-  with check (public.is_editor());
+  using (owner = (select auth.uid()))
+  with check (owner = (select auth.uid()));
 
-create policy entries_editor_delete on public.entries
+create policy entries_owner_delete on public.entries
   for delete to authenticated
-  using (public.is_editor());
+  using (owner = (select auth.uid()));
 
 grant select on public.entries to anon, authenticated;
 grant insert, update, delete on public.entries to authenticated;
@@ -101,7 +105,7 @@ begin
     new.status := 'draft';
     new.featured := false;
     new.is_sample := false;
-    new.contributor := 'Community Contributor';
+    new.contributor := btrim(coalesce(new.contributor, ''));
   end if;
 
   if public.current_profile_role() = 'contributor' then
@@ -116,6 +120,9 @@ begin
 
   if char_length(new.title) not between 3 and 120 then
     raise exception 'Invalid contribution title';
+  end if;
+  if char_length(new.contributor) not between 1 and 80 then
+    raise exception 'Invalid contribution display name';
   end if;
   if char_length(new.description) not between 20 and 500 then
     raise exception 'Invalid contribution description';

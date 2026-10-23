@@ -3,6 +3,7 @@
 import Gallery from "@/components/gallery/Gallery";
 import { galleryImages } from "@/data/gallery";
 import { getTopicBySlug } from "@/data/topics";
+import { getPersonById } from "@/data/people";
 import { useLanguage } from "@/components/common/LanguageProvider";
 
 /**
@@ -10,10 +11,12 @@ import { useLanguage } from "@/components/common/LanguageProvider";
  * to the display label here so the client gallery renders the same badge text
  * it always has, from a single source of truth.
  */
-const imagesWithTopicName = galleryImages.map((image) => ({
-  ...image,
-  category: getTopicBySlug(image.topicSlug)?.name ?? image.topicSlug,
-}));
+const imagesWithTopicName = galleryImages
+  .filter((image) => getPersonById(image.personId)?.role !== "sample")
+  .map((image) => ({
+    ...image,
+    category: getTopicBySlug(image.topicSlug)?.name ?? image.topicSlug,
+  }));
 
 export default function GalleryPage() {
   const { t } = useLanguage();
@@ -28,7 +31,13 @@ export default function GalleryPage() {
           {t("gallery")}
         </h1>
       </div>
-      <Gallery images={imagesWithTopicName} />
+      {imagesWithTopicName.length > 0 ? (
+        <Gallery images={imagesWithTopicName} />
+      ) : (
+        <p className="rounded-2xl border border-dashed border-beige px-6 py-12 text-center text-ink-soft">
+          {t("noGalleryImages")}
+        </p>
+      )}
     </main>
   );
 }

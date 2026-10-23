@@ -43,7 +43,6 @@ export const people = [
     slug: "community-elder",
     name: null,
     role: "anonymous-contributor",
-    attributionLabel: "Community Elder Interview",
   },
   {
     id: "person-family-uncle",

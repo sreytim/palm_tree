@@ -2,43 +2,16 @@ import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-session";
 import { validateContribution } from "@/lib/contribution-rules";
+import {
+  MAX_CONTRIBUTION_PHOTO_SIZE,
+  validateContributionPhoto,
+} from "@/lib/photo-validation";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
-const MAX_PHOTO_SIZE = 10 * 1024 * 1024;
 const BUCKET = "photos";
 
 function responseError(message, status) {
   return NextResponse.json({ error: message }, { status });
-}
-
-function detectImageType(bytes) {
-  if (
-    bytes.length >= 3 &&
-    bytes[0] === 0xff &&
-    bytes[1] === 0xd8 &&
-    bytes[2] === 0xff
-  ) {
-    return { mime: "image/jpeg", extension: "jpg" };
-  }
-  if (
-    bytes.length >= 8 &&
-    bytes[0] === 0x89 &&
-    bytes.toString("ascii", 1, 4) === "PNG" &&
-    bytes[4] === 0x0d &&
-    bytes[5] === 0x0a &&
-    bytes[6] === 0x1a &&
-    bytes[7] === 0x0a
-  ) {
-    return { mime: "image/png", extension: "png" };
-  }
-  if (
-    bytes.length >= 12 &&
-    bytes.toString("ascii", 0, 4) === "RIFF" &&
-    bytes.toString("ascii", 8, 12) === "WEBP"
-  ) {
-    return { mime: "image/webp", extension: "webp" };
-  }
-  return null;
 }
 
 function makeSlug(title) {
@@ -67,7 +40,7 @@ export async function POST(request) {
   }
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
-  if (declaredLength > MAX_PHOTO_SIZE + 256 * 1024) {
+  if (declaredLength > MAX_CONTRIBUTION_PHOTO_SIZE + 256 * 1024) {
     return responseError("The photo must be 10 MB or smaller.", 413);
   }
 
@@ -129,7 +102,7 @@ export async function POST(request) {
   if (!(photo instanceof File) || photo.size === 0) {
     return responseError("Choose a photo to upload.", 400);
   }
-  if (photo.size > MAX_PHOTO_SIZE) {
+  if (photo.size > MAX_CONTRIBUTION_PHOTO_SIZE) {
     return responseError("The photo must be 10 MB or smaller.", 413);
   }
 
@@ -140,10 +113,18 @@ export async function POST(request) {
     console.error("Could not read contribution photo:", error);
     return responseError("We couldn't read that photo. Please choose another file.", 400);
   }
-  const detectedType = detectImageType(photoBytes);
-  if (!detectedType || photo.type !== detectedType.mime) {
+  const photoValidation = validateContributionPhoto({
+    mime: photo.type,
+    size: photo.size,
+    bytes: photoBytes,
+  });
+  if (photoValidation.error === "photoSize") {
+    return responseError("The photo must be 10 MB or smaller.", 413);
+  }
+  if (photoValidation.error) {
     return responseError("Choose a valid JPEG, PNG, or WebP photo.", 400);
   }
+  const { detectedType } = photoValidation;
 
   const objectPath = `${user.id}/${randomUUID()}.${detectedType.extension}`;
   let uploadError;
@@ -187,7 +168,7 @@ export async function POST(request) {
         description: value.description,
         category: value.category,
         topic_slugs: value.topicSlugs,
-        contributor: "Community Contributor",
+        contributor: value.contributor,
         location: value.location || null,
         entry_date: value.entryDate || null,
         image_path: publicUrl,

@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SearchBar from "../common/SearchBar";
+import FadeIn from "../common/FadeIn";
 import EntryCard from "./EntryCard";
 import { useLanguage } from "../common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
@@ -61,7 +62,6 @@ export default function ArchiveBrowser({ items, pageSize }) {
         const description = normalize(
           localizeLabel(item.description, language),
         );
-        const contributor = normalize(item.contributor);
         // The archive is bilingual, but the language someone types a query in
         // is not necessarily the language the UI is set to, so both languages
         // of every searchable field are indexed. Topic names are included
@@ -75,7 +75,6 @@ export default function ArchiveBrowser({ items, pageSize }) {
             localizeLabel(item.title, "km"),
             localizeLabel(item.description, "en"),
             localizeLabel(item.description, "km"),
-            item.contributor,
             ...topicsForItem.flatMap((topic) => [
               topic.name,
               localizeLabel(topic.name, "km"),
@@ -93,8 +92,7 @@ export default function ArchiveBrowser({ items, pageSize }) {
             : title.includes(normalizedQuery)
               ? 2
               : 0) +
-          (description.includes(normalizedQuery) ? 1 : 0) +
-          (contributor.includes(normalizedQuery) ? 1 : 0);
+          (description.includes(normalizedQuery) ? 1 : 0);
 
         return { item, matchesQuery, relevance };
       })
@@ -154,8 +152,14 @@ export default function ArchiveBrowser({ items, pageSize }) {
       ) : (
         <>
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visible.map((item) => (
-              <EntryCard key={item.id} item={item} view="grid" />
+            {visible.map((item, index) => (
+              <FadeIn
+                key={item.id}
+                delay={(index % 3) * 80}
+                className="h-full"
+              >
+                <EntryCard item={item} view="grid" />
+              </FadeIn>
             ))}
           </div>
 
