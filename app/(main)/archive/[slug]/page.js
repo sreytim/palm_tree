@@ -68,13 +68,13 @@ export default function ArchiveEntryPage({ params }) {
     notFound();
   }
 
-  const isDraft = item.status === "draft";
+  const isPending = item.status === "pending";
 
   return (
     <article>
-      {isDraft && (
+      {isPending && (
         <p className="bg-beige-soft px-5 py-3 text-center text-sm text-ink">
-          {t("draftReviewNotice")}
+          {t("pendingReviewNotice")}
         </p>
       )}
       {item.isSample && (

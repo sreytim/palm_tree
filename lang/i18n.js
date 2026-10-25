@@ -140,7 +140,7 @@ export const translations = {
     tryAgain: "Try again",
     contributePageTitle: "Share a traditional house entry",
     contributeReviewNotice:
-      "Your entry is saved as a draft for review and will appear in the public archive only after an editor approves it. Do not include private addresses or sensitive information.",
+      "Your entry is waiting for review and will appear in the public archive only after an editor approves it. Do not include private addresses or sensitive information.",
     contributionTitle: "Title",
     contributorName: "Name to credit publicly",
     contributorNameHint:
@@ -199,8 +199,8 @@ export const translations = {
     photoSize: "The photo must be 10 MB or smaller.",
     loadingEntry: "Loading this entry...",
     entryLoadFailed: "We couldn't load this entry. Please try again.",
-    draftReviewNotice:
-      "This is your draft contribution. Only you and the archive editors can see it until it is reviewed and published.",
+    pendingReviewNotice:
+      "This is your pending contribution. Only you and the archive editors can see it until it is reviewed and published.",
     communityArchiveLabel: "Community archive",
     photoArchiveLabel: "Photo archive",
     backToArchive: "Back to Archive",
@@ -425,8 +425,8 @@ export const translations = {
     photoSize: "រូបថតមិនត្រូវធំជាង ១០ MB ទេ។",
     loadingEntry: "កំពុងផ្ទុកកំណត់ត្រានេះ...",
     entryLoadFailed: "មិនអាចផ្ទុកកំណត់ត្រានេះបានទេ។ សូមព្យាយាមម្តងទៀត។",
-    draftReviewNotice:
-      "នេះជាសេចក្តីព្រាងរបស់អ្នក។ មានតែអ្នក និងអ្នកកែសម្រួលបណ្ណសារប៉ុណ្ណោះអាចមើលឃើញ រហូតដល់ពិនិត្យ និងផ្សព្វផ្សាយ។",
+    pendingReviewNotice:
+      "នេះជាសេចក្តីចង់ពិនិត្យរបស់អ្នក។ មានតែអ្នក និងអ្នកកែសម្រួលបណ្ណសារប៉ុណ្ណោះអាចមើលឃើញ រហូតដល់ពិនិត្យ និងផ្សព្វផ្សាយ។",
     communityArchiveLabel: "បណ្ណសារសហគមន៍",
     photoArchiveLabel: "បណ្ណសាររូបភាព",
     backToArchive: "ត្រឡប់ទៅបណ្ណសារ",

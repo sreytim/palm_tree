@@ -177,7 +177,7 @@ export async function POST(request) {
         steps: value.steps,
         tips: value.tips,
         contributor_story: value.contributorStory || null,
-        status: "draft",
+        status: "pending",
       })
       .select("slug")
       .single());
