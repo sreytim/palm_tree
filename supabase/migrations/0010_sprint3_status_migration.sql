@@ -25,6 +25,10 @@ language plpgsql
 security definer
 set search_path = ''
 as $$
+declare
+  step_item jsonb;
+  tip_item jsonb;
+  topic_count integer;
 begin
   if public.current_profile_role() = 'contributor' then
     new.id := gen_random_uuid();
