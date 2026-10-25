@@ -37,7 +37,7 @@ export default async function ReviewPage() {
     .select(
       "id, slug, title, description, category, location, image_path, image_alt, introduction, steps, tips, contributor_story, created_at",
     )
-    .eq("status", "draft")
+    .eq("status", "pending")
     .order("created_at", { ascending: true });
 
   if (entriesError) {

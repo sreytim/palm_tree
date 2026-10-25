@@ -169,11 +169,11 @@ export default function ReviewQueue({ initialEntries }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => reviewEntry(entry, "archived")}
+                  onClick={() => reviewEntry(entry, "returned")}
                   disabled={workingId !== null}
                   className="rounded-full border border-clay px-5 py-2.5 text-sm font-semibold text-clay-deep hover:bg-clay/10 disabled:cursor-wait disabled:opacity-60"
                 >
-                  {t("archiveSubmission")}
+                  {t("returnSubmission")}
                 </button>
               </div>
             </li>

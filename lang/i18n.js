@@ -122,7 +122,7 @@ export const translations = {
     reviewSubmissions: "Review submissions",
     pendingSubmissions: "Pending community submissions",
     reviewSubmissionsHint:
-      "Review each entry and its attached photo. Publishing makes it visible in the public archive; archiving removes it from the review queue without publishing.",
+      "Review each entry and its attached photo. Publishing makes it visible in the public archive; returning sends it back to the contributor for revision.",
     noPendingSubmissions: "There are no submissions waiting for review.",
     locationNotProvided: "No location or date provided",
     viewSubmissionPhoto: "View photo",
@@ -130,7 +130,7 @@ export const translations = {
     submissionDetails: "Read full submission",
     submittedOn: "Submitted",
     publishSubmission: "Publish entry",
-    archiveSubmission: "Archive submission",
+        returnSubmission: "Return to contributor",
     savingReview: "Saving...",
     reviewUpdateFailed: "We couldn't update this submission. Please try again.",
     contributionAuthUnavailable:
@@ -357,6 +357,7 @@ export const translations = {
     submittedOn: "បានដាក់ស្នើ",
     publishSubmission: "ផ្សព្វផ្សាយកំណត់ត្រា",
     archiveSubmission: "ដាក់ក្នុងបណ្ណសារ",
+    returnSubmission: "ដូនការដាក់ស្នើត្រឡប់សហគមន៍",
     savingReview: "កំពុងរក្សាទុក...",
     reviewUpdateFailed: "មិនអាចធ្វើបច្ចុប្បន្នភាពការដាក់ស្នើនេះបានទេ។ សូមព្យាយាមម្ដងទៀត។",
     contributionAuthUnavailable: "មិនអាចពិនិត្យស្ថានភាពចូលគណនីរបស់អ្នកបានទេនៅពេលនេះ។",

@@ -55,7 +55,7 @@ export async function PATCH(request) {
     !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
       input.id,
     ) ||
-    !["published", "archived"].includes(input.status)
+    !["published", "returned"].includes(input.status)
   ) {
     return responseError("Choose a valid submission and review action.", 400);
   }
@@ -66,7 +66,7 @@ export async function PATCH(request) {
       .from("entries")
       .update({ status: input.status })
       .eq("id", input.id)
-      .eq("status", "draft")
+      .eq("status", "pending")
       .select("id")
       .maybeSingle();
   } catch (error) {
