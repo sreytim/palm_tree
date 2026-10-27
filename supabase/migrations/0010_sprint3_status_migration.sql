@@ -147,6 +147,22 @@ begin
 end;
 $$;
 
--- 5. Grants
+-- 5. Update the new-user trigger to explicitly set role = 'contributor'
+--    This ensures any new signup can contribute immediately.
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  insert into public.profiles (id, display_name, role)
+  values (new.id, new.email, 'contributor')
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+-- 6. Grants
 grant select on table public.entries to anon, authenticated;
 grant insert, update, delete on table public.entries to authenticated;
