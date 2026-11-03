@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/common/LanguageProvider";
-import { supabase } from "@/lib/supabase-client";
+import { recoverySupabase } from "@/lib/supabase-recovery-client";
+import {
+  getRecoveryRedirectUrl,
+  parseRecoveryCallback,
+  parseRecoveryTokens,
+} from "@/lib/password-recovery";
 
 function RecoveryPageFrame({ title, children }) {
   return (
@@ -118,10 +123,14 @@ export function ForgotPasswordForm() {
     setIsLoading(true);
 
     try {
-      const redirectTo = new URL("/reset-password", window.location.origin);
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+      const redirectTo = getRecoveryRedirectUrl(window.location.origin);
+      if (!redirectTo) {
+        setError(t("passwordResetRequestFailed"));
+        return;
+      }
+      const { error: resetError } = await recoverySupabase.auth.resetPasswordForEmail(
         email.trim().toLowerCase(),
-        { redirectTo: redirectTo.toString() },
+        { redirectTo },
       );
 
       if (resetError) {
@@ -198,11 +207,9 @@ export function ResetPasswordForm() {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "PASSWORD_RECOVERY" && session) {
-        setRecoveryReady(true);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        // Only mark the link as valid, but do not log the user in yet
         setRecoveryChecked(true);
       }
     });
