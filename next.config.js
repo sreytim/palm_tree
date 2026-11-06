@@ -12,6 +12,7 @@ const supabaseStoragePattern = supabaseUrl
   : null;
 
 const nextConfig = {
+  poweredByHeader: false,
   allowedDevOrigins: [
     "10.10.54.96",
     "10.10.58.176",

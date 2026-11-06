@@ -1,7 +1,21 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getStrayRecoveryRedirect } from "@/lib/password-recovery";
 
 export async function middleware(request: NextRequest) {
+  // A password reset link that Supabase sent to the Site URL (because the
+  // reset page was not an allowed redirect) is forwarded to the reset form
+  // with its one-time credentials, instead of being dropped on the home page.
+  const recoveryTarget = getStrayRecoveryRedirect(
+    request.nextUrl.pathname,
+    request.nextUrl.searchParams,
+    request.cookies.getAll().map(({ name }) => name),
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+  );
+  if (recoveryTarget) {
+    return NextResponse.redirect(new URL(recoveryTarget, request.url));
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(

@@ -14,7 +14,13 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000 in your browser.
+Then open `http://localhost:3000` in a browser **on the computer running
+`npm run dev`**. `localhost` always means the device you are browsing from, so
+that address only answers while the dev server is running on that same machine —
+it cannot be opened from a phone, another laptop, or a GitHub link.
+
+The deployed archive, which works from any device, is
+https://palm-tree-gilt.vercel.app.
 
 ## Authentication Configuration
 
@@ -31,10 +37,38 @@ is intended for browser use; never put a `service_role` key or other secret in
 a `NEXT_PUBLIC_` variable or committed file. `.env.local` is git-ignored.
 Restart `npm run dev` after changing environment variables.
 
-In Supabase Authentication → URL Configuration, set the Site URL to your
-deployed app URL and add the local and deployed app URLs to Redirect URLs, for
-example `http://localhost:3000/**` and `https://your-domain.example/**`. Email
-confirmation links after sign-up must be allowed by this redirect configuration.
+In Supabase Authentication → URL Configuration, configure:
+
+- **Site URL**: `https://palm-tree-gilt.vercel.app`
+- **Redirect URLs**: `https://palm-tree-gilt.vercel.app/**` and
+  `http://localhost:3000/**`
+
+**Site URL** is the single production address. Supabase also uses it as the
+fallback when a `redirectTo` is not allowed, so it must always be the live
+project — never localhost — even while developing.
+
+**Redirect URLs** is an allow list, and it may hold several entries. The reset
+form sends `redirectTo` as `<app origin>/reset-password`, so the origin you open
+the app from has to be on that list: production for real users, and
+`http://localhost:3000/**` for local development against the same project. When
+an address is not allowed, Supabase falls back to the Site URL, and the one-time
+recovery credentials land on the home page instead of the reset form — the link
+then behaves like a login instead of a password reset. Allowlisting localhost
+does not hand a stranger a usable session: the app uses the PKCE flow, so a
+recovery code only works in the browser that requested the reset, because its
+verifier cookie is scoped to the requesting origin. As a safety net,
+`middleware.ts` forwards such a stray recovery link from any page to
+`/reset-password` (keeping its one-time credentials), but the Redirect URLs
+should still be configured so the email points at the reset form directly.
+
+If you would rather keep the production allow list free of localhost, point local
+development at its own Supabase project instead, or remove `http://localhost:3000/**`
+after finishing a round of testing — with it removed, local reset links fall back
+to the production Site URL and cannot be redeemed on localhost, because the PKCE
+verifier cookie lives on `localhost:3000` and not on the production origin.
+
+Email confirmation links after sign-up must be allowed by the same redirect
+configuration.
 
 For Vercel, open the project settings, then Environment Variables. Add
 `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with the
@@ -49,6 +83,58 @@ To create a production build:
 npm run build
 npm run start
 ```
+
+## Password Reset Configuration
+
+In Supabase Authentication → Email Templates → **Reset Password**, pick one of
+the two link styles below. `/reset-password` accepts both.
+
+1. **Default — same browser.** Keep the link as it ships:
+
+   ```html
+   <a href="{{ .ConfirmationURL }}">Reset password</a>
+   ```
+
+   The one-time code is redeemed in the browser that requested the reset, so the
+   link only works in that browser.
+
+2. **Any browser or device.** Replace the link with a token hash link:
+
+   ```html
+   <a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=recovery">Reset password</a>
+   ```
+
+   Use `&` here, not `?`: the Supabase client appends `?sb_flow_id=...` to the
+   `redirectTo` URL before sending it, so `{{ .RedirectTo }}` already carries a
+   query string. `{{ .RedirectTo }}` is the `<app origin>/reset-password` URL
+   sent by the form, so the same template works for localhost and production.
+   (The reset page also tolerates a `?` in that position, so a template written
+   with `?` still resolves, but `&` is the correct separator.)
+
+The reset page always requires a new password before the account can be used
+again, and a reset link never signs the visitor in to the archive.
+
+### Email delivery limits
+
+The built-in Supabase SMTP service only sends a small number of auth emails per
+hour (two by default), and a reset link expires after one hour by default. Both
+are project-level auth settings. While testing, a rate-limited request makes the
+form show the generic "couldn't send a reset link" message — wait for the limit
+to reset, or configure custom SMTP before relying on the flow in production.
+
+### Verify the reset flow locally
+
+1. Run `npm run dev` and open `http://localhost:3000/forgot-password`.
+2. Request a link for an account whose mailbox you can read.
+3. Open the link. The reset form should show the new-password fields, and the
+   one-time parameters should disappear from the address bar once the page has
+   loaded.
+4. Save a new password, then log in at `/login` with it.
+
+If step 3 reports an invalid or expired link, either the redirect URL is not
+allowed (so the credentials were sent to the Site URL) or the link has already
+been used. Open the link in the same browser that requested it when the default
+`{{ .ConfirmationURL }}` template is in use.
 
 ## Project Structure
 

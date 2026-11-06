@@ -36,6 +36,17 @@ test("login shows the English invalid credentials message", () => {
   );
 });
 
+test("both languages label the password visibility toggle", () => {
+  for (const language of ["en", "km"]) {
+    const labels = translations[language];
+    assert.equal(typeof labels.showPassword, "string");
+    assert.equal(typeof labels.hidePassword, "string");
+    assert.notEqual(labels.showPassword, "");
+    assert.notEqual(labels.hidePassword, "");
+    assert.notEqual(labels.showPassword, labels.hidePassword);
+  }
+});
+
 test("safe redirect paths keep their path, query, and hash", () => {
   assert.equal(getSafeRedirectPath("/"), "/");
   assert.equal(getSafeRedirectPath("/archive"), "/archive");

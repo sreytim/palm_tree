@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { recoverySupabase } from "@/lib/supabase-recovery-client";
 import {
@@ -50,38 +51,86 @@ function RecoveryPageFrame({ title, children }) {
   );
 }
 
-function RecoveryField({ id, label, ...inputProps }) {
+const recoveryLabelStyle = {
+  display: "block",
+  fontSize: "14px",
+  fontWeight: "500",
+  color: "#5a4f3a",
+  marginBottom: "6px",
+};
+
+const recoveryInputStyle = {
+  width: "100%",
+  padding: "12px 16px",
+  borderRadius: "8px",
+  border: "1px solid #ddc79c",
+  backgroundColor: "#fffaf0",
+  outline: "none",
+  fontSize: "16px",
+  color: "#2b2417",
+  boxSizing: "border-box",
+};
+
+// Password fields get an eye button so the visitor can check what they typed
+// before saving it. The masked field shows the slashed eye (the password cannot
+// be read); clicking swaps it for the open eye and reveals the text. The button
+// is a real <button type="button">, so it never submits the form, and its label
+// follows the language switcher.
+function RecoveryField({ id, label, type = "text", ...inputProps }) {
+  const { t } = useLanguage();
+  const [isRevealed, setIsRevealed] = useState(false);
+  const isPassword = type === "password";
+  const revealLabel = isRevealed ? t("hidePassword") : t("showPassword");
+
   return (
     <div>
-      <label
-        htmlFor={id}
-        style={{
-          display: "block",
-          fontSize: "14px",
-          fontWeight: "500",
-          color: "#5a4f3a",
-          marginBottom: "6px",
-        }}
-      >
+      <label htmlFor={id} style={recoveryLabelStyle}>
         {label}
       </label>
-      <input
-        id={id}
-        name={id}
-        required
-        style={{
-          width: "100%",
-          padding: "12px 16px",
-          borderRadius: "8px",
-          border: "1px solid #ddc79c",
-          backgroundColor: "#fffaf0",
-          outline: "none",
-          fontSize: "16px",
-          color: "#2b2417",
-          boxSizing: "border-box",
-        }}
-        {...inputProps}
-      />
+      <div style={{ position: "relative" }}>
+        <input
+          id={id}
+          name={id}
+          required
+          type={isPassword && isRevealed ? "text" : type}
+          style={
+            isPassword
+              ? { ...recoveryInputStyle, paddingRight: "48px" }
+              : recoveryInputStyle
+          }
+          {...inputProps}
+        />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setIsRevealed((revealed) => !revealed)}
+            aria-label={revealLabel}
+            aria-pressed={isRevealed}
+            title={revealLabel}
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              height: "100%",
+              width: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              border: "none",
+              background: "none",
+              color: "#5a4f3a",
+              cursor: "pointer",
+            }}
+          >
+            {isRevealed ? (
+              <Eye size={20} aria-hidden="true" />
+            ) : (
+              <EyeOff size={20} aria-hidden="true" />
+            )}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -198,26 +247,96 @@ export function ForgotPasswordForm() {
 
 export function ResetPasswordForm() {
   const { t } = useLanguage();
-  const [recoveryReady, setRecoveryReady] = useState(false);
-  const [recoveryChecked, setRecoveryChecked] = useState(false);
+  // "checking" while the link credentials are redeemed, then either "ready"
+  // (the form that sets a new password) or "invalid".
+  const [linkStatus, setLinkStatus] = useState("checking");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  // React Strict Mode mounts effects twice in development, but a reset code can
+  // only be redeemed once: the second exchange finds no code verifier and
+  // reports a perfectly good link as invalid. The promise is kept on the
+  // instance so both effect runs share one redemption.
+  const redemptionRef = useRef(null);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "PASSWORD_RECOVERY") {
-        // Only mark the link as valid, but do not log the user in yet
-        setRecoveryChecked(true);
+    let cancelled = false;
+
+    // Redeeming the link is what authorises the password change. It happens on
+    // the recovery client, which keeps its session in its own cookie, so the
+    // link never signs the visitor in to the archive.
+    const redeemRecoveryLink = async () => {
+      const { code, flowId, tokenHash, type } = parseRecoveryCallback(
+        window.location.search,
+      );
+      const tokens = parseRecoveryTokens(window.location.hash);
+
+      if (code) {
+        const { error: codeError } =
+          await recoverySupabase.auth.exchangeCodeForSession(
+            code,
+            flowId ? { flowId } : undefined,
+          );
+        if (codeError) {
+          throw codeError;
+        }
+      } else if (tokenHash && type === "recovery") {
+        const { error: verifyError } = await recoverySupabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: "recovery",
+        });
+        if (verifyError) {
+          throw verifyError;
+        }
+      } else if (
+        tokens.accessToken &&
+        tokens.refreshToken &&
+        tokens.type === "recovery"
+      ) {
+        const { error: sessionError } = await recoverySupabase.auth.setSession({
+          access_token: tokens.accessToken,
+          refresh_token: tokens.refreshToken,
+        });
+        if (sessionError) {
+          throw sessionError;
+        }
+      } else {
+        // A reload after a successful redemption has no credentials left in
+        // the address bar; the recovery session in its own cookie keeps the
+        // form open for that case.
+        const { data, error: userError } =
+          await recoverySupabase.auth.getUser();
+        if (userError || !data.user) {
+          throw userError ?? new Error("Recovery session missing");
+        }
       }
-    });
-    const timeout = window.setTimeout(() => setRecoveryChecked(true), 10000);
+
+      // Drop the one-time credentials from the address bar so they are not
+      // kept in history or shared by copying the link.
+      window.history.replaceState({}, "", window.location.pathname);
+    };
+
+    if (!redemptionRef.current) {
+      redemptionRef.current = redeemRecoveryLink();
+    }
+
+    redemptionRef.current
+      .then(() => {
+        if (!cancelled) {
+          setLinkStatus("ready");
+        }
+      })
+      .catch((linkError) => {
+        console.error("Password reset link redemption failed:", linkError);
+        if (!cancelled) {
+          setLinkStatus("invalid");
+        }
+      });
 
     return () => {
-      window.clearTimeout(timeout);
-      subscription.unsubscribe();
+      cancelled = true;
     };
   }, []);
 
@@ -236,7 +355,7 @@ export function ResetPasswordForm() {
 
     setIsLoading(true);
     try {
-      const { error: updateError } = await supabase.auth.updateUser({
+      const { error: updateError } = await recoverySupabase.auth.updateUser({
         password,
       });
 
@@ -244,6 +363,10 @@ export function ResetPasswordForm() {
         console.error("Password update failed:", updateError);
         setError(t("passwordUpdateFailed"));
       } else {
+        // End only the recovery session. The archive session lives under a
+        // different storage key, and the new password still has to be typed at
+        // the login form, so a reset link never doubles as a login.
+        await recoverySupabase.auth.signOut({ scope: "local" });
         setIsComplete(true);
       }
     } catch (updateError) {
@@ -270,27 +393,24 @@ export function ResetPasswordForm() {
             </Link>
           </p>
         </>
-      ) : !recoveryReady ? (
+      ) : linkStatus === "invalid" ? (
         <>
-          <p
-            role={recoveryChecked ? "alert" : "status"}
-            style={{ color: "#5a4f3a", fontSize: "14px" }}
-          >
-            {recoveryChecked
-              ? t("passwordResetLinkInvalid")
-              : t("checkingPasswordResetLink")}
+          <p role="alert" style={{ color: "#5a4f3a", fontSize: "14px" }}>
+            {t("passwordResetLinkInvalid")}
           </p>
-          {recoveryChecked && (
-            <p style={{ marginTop: "24px", textAlign: "center" }}>
-              <Link
-                href="/forgot-password"
-                style={{ color: "#435c34", fontWeight: "600" }}
-              >
-                {t("requestNewResetLink")}
-              </Link>
-            </p>
-          )}
+          <p style={{ marginTop: "24px", textAlign: "center" }}>
+            <Link
+              href="/forgot-password"
+              style={{ color: "#435c34", fontWeight: "600" }}
+            >
+              {t("requestNewResetLink")}
+            </Link>
+          </p>
         </>
+      ) : linkStatus === "checking" ? (
+        <p role="status" style={{ color: "#5a4f3a", fontSize: "14px" }}>
+          {t("checkingPasswordResetLink")}
+        </p>
       ) : (
         <>
           <p
