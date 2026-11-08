@@ -41,11 +41,11 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} ${notoSansKhmer.variable} antialiased bg-cream text-ink`}
+        className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} ${notoSansKhmer.variable} flex min-h-dvh flex-col antialiased bg-cream text-ink`}
       >
         <LanguageProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
           <Footer />
         </LanguageProvider>
       </body>

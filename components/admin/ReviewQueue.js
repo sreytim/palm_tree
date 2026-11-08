@@ -3,27 +3,37 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
+import { MIN_RETURN_NOTE_LENGTH } from "@/lib/submission-status";
 
 export default function ReviewQueue({ initialEntries }) {
   const { t } = useLanguage();
   const router = useRouter();
   const [entries, setEntries] = useState(initialEntries);
+  const [notes, setNotes] = useState({});
   const [workingId, setWorkingId] = useState(null);
   const [error, setError] = useState("");
 
   const reviewEntry = async (entry, status) => {
+    const reviewNote = (notes[entry.id] ?? "").trim();
+
+    // Returning an entry without saying why leaves the author guessing.
+    if (status === "returned" && reviewNote.length < MIN_RETURN_NOTE_LENGTH) {
+      setError(t("reviewNoteRequired"));
+      return;
+    }
+
     setWorkingId(entry.id);
     setError("");
     try {
       const response = await fetch("/api/admin/contributions", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: entry.id, status }),
+        body: JSON.stringify({ id: entry.id, status, reviewNote }),
       });
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
       if (!response.ok) {
         console.error("Could not update submission status:", result);
-        setError(t("reviewUpdateFailed"));
+        setError(result.errorKey ? t(result.errorKey) : t("reviewUpdateFailed"));
         return;
       }
 
@@ -155,6 +165,30 @@ export default function ReviewQueue({ initialEntries }) {
                   </p>
                 </div>
               </details>
+
+              <div className="mt-5">
+                <label
+                  htmlFor={`review-note-${entry.id}`}
+                  className="font-medium text-ink"
+                >
+                  {t("reviewNoteLabel")}
+                </label>
+                <textarea
+                  id={`review-note-${entry.id}`}
+                  value={notes[entry.id] ?? ""}
+                  onChange={(event) =>
+                    setNotes((current) => ({
+                      ...current,
+                      [entry.id]: event.target.value,
+                    }))
+                  }
+                  rows={3}
+                  maxLength={500}
+                  placeholder={t("reviewNotePlaceholder")}
+                  className="mt-1 w-full rounded-xl border border-beige bg-cream px-4 py-3 text-sm text-ink outline-none focus:border-palm focus:ring-2 focus:ring-palm/20"
+                />
+                <p className="mt-1 text-xs text-ink-soft">{t("reviewNoteHint")}</p>
+              </div>
 
               <div className="mt-5 flex flex-wrap gap-3">
                 <button

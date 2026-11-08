@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import AuthShell, {
+  AuthField,
+  authErrorClass,
+  authNoticeClass,
+  authPrimaryButtonClass,
+  authTextLinkClass,
+} from "@/components/auth/AuthShell";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { recoverySupabase } from "@/lib/supabase-recovery-client";
 import {
@@ -12,127 +18,20 @@ import {
 } from "@/lib/password-recovery";
 
 function RecoveryPageFrame({ title, children }) {
+  const { t } = useLanguage();
+
   return (
-    <div
-      style={{
-        backgroundColor: "#f5ecd9",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "16px",
-      }}
-    >
-      <section
-        style={{
-          width: "100%",
-          maxWidth: "400px",
-          padding: "32px",
-          borderRadius: "16px",
-          boxShadow: "0 18px 45px rgba(74,46,23,0.12)",
-          border: "1px solid #ddc79c",
-          backgroundColor: "#f5ecd9",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "30px",
-            fontWeight: "bold",
-            color: "#2b2417",
-            marginBottom: "12px",
-            fontFamily: "var(--font-display)",
-          }}
-        >
-          {title}
-        </h1>
-        {children}
-      </section>
-    </div>
+    <AuthShell eyebrow={t("myAccount")} title={title}>
+      {children}
+    </AuthShell>
   );
 }
 
-const recoveryLabelStyle = {
-  display: "block",
-  fontSize: "14px",
-  fontWeight: "500",
-  color: "#5a4f3a",
-  marginBottom: "6px",
-};
-
-const recoveryInputStyle = {
-  width: "100%",
-  padding: "12px 16px",
-  borderRadius: "8px",
-  border: "1px solid #ddc79c",
-  backgroundColor: "#fffaf0",
-  outline: "none",
-  fontSize: "16px",
-  color: "#2b2417",
-  boxSizing: "border-box",
-};
-
 // Password fields get an eye button so the visitor can check what they typed
-// before saving it. The masked field shows the slashed eye (the password cannot
-// be read); clicking swaps it for the open eye and reveals the text. The button
-// is a real <button type="button">, so it never submits the form, and its label
-// follows the language switcher.
-function RecoveryField({ id, label, type = "text", ...inputProps }) {
-  const { t } = useLanguage();
-  const [isRevealed, setIsRevealed] = useState(false);
-  const isPassword = type === "password";
-  const revealLabel = isRevealed ? t("hidePassword") : t("showPassword");
-
-  return (
-    <div>
-      <label htmlFor={id} style={recoveryLabelStyle}>
-        {label}
-      </label>
-      <div style={{ position: "relative" }}>
-        <input
-          id={id}
-          name={id}
-          required
-          type={isPassword && isRevealed ? "text" : type}
-          style={
-            isPassword
-              ? { ...recoveryInputStyle, paddingRight: "48px" }
-              : recoveryInputStyle
-          }
-          {...inputProps}
-        />
-        {isPassword && (
-          <button
-            type="button"
-            onClick={() => setIsRevealed((revealed) => !revealed)}
-            aria-label={revealLabel}
-            aria-pressed={isRevealed}
-            title={revealLabel}
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              height: "100%",
-              width: "44px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 0,
-              border: "none",
-              background: "none",
-              color: "#5a4f3a",
-              cursor: "pointer",
-            }}
-          >
-            {isRevealed ? (
-              <Eye size={20} aria-hidden="true" />
-            ) : (
-              <EyeOff size={20} aria-hidden="true" />
-            )}
-          </button>
-        )}
-      </div>
-    </div>
-  );
+// before saving it. The shared auth field owns that behaviour, so the recovery
+// pages offer exactly the same controls as the sign-in form.
+function RecoveryField(props) {
+  return <AuthField required {...props} />;
 }
 
 function RecoverySubmitButton({ children, disabled }) {
@@ -140,18 +39,7 @@ function RecoverySubmitButton({ children, disabled }) {
     <button
       type="submit"
       disabled={disabled}
-      style={{
-        width: "100%",
-        padding: "12px",
-        borderRadius: "8px",
-        backgroundColor: "#435c34",
-        color: "#f5ecd9",
-        fontWeight: "600",
-        border: "none",
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.5 : 1,
-        fontSize: "16px",
-      }}
+      className={authPrimaryButtonClass}
     >
       {children}
     </button>
@@ -198,12 +86,12 @@ export function ForgotPasswordForm() {
 
   return (
     <RecoveryPageFrame title={t("forgotPassword")}>
-      <p style={{ color: "#5a4f3a", fontSize: "14px", marginBottom: "24px" }}>
+      <p className="text-sm leading-relaxed text-ink-soft">
         {t("forgotPasswordInstructions")}
       </p>
       <form
         onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+        className="flex flex-col gap-5"
       >
         <RecoveryField
           id="email"
@@ -216,12 +104,12 @@ export function ForgotPasswordForm() {
           placeholder={t("enterEmail")}
         />
         {error && (
-          <p role="alert" style={{ color: "#7e3f21", fontSize: "14px" }}>
+          <p role="alert" className={authErrorClass}>
             {error}
           </p>
         )}
         {message && (
-          <p role="status" style={{ color: "#435c34", fontSize: "14px" }}>
+          <p role="status" className={authNoticeClass}>
             {message}
           </p>
         )}
@@ -229,15 +117,8 @@ export function ForgotPasswordForm() {
           {isLoading ? t("sendingResetEmail") : t("sendResetEmail")}
         </RecoverySubmitButton>
       </form>
-      <p
-        style={{
-          color: "#5a4f3a",
-          fontSize: "14px",
-          marginTop: "24px",
-          textAlign: "center",
-        }}
-      >
-        <Link href="/login" style={{ color: "#435c34", fontWeight: "600" }}>
+      <p className="mt-6 text-center text-sm text-ink-soft">
+        <Link href="/login" className={authTextLinkClass}>
           {t("backToLogin")}
         </Link>
       </p>
@@ -381,13 +262,13 @@ export function ResetPasswordForm() {
     <RecoveryPageFrame title={t("resetPassword")}>
       {isComplete ? (
         <>
-          <p role="status" style={{ color: "#435c34", fontSize: "14px" }}>
+          <p role="status" className={authNoticeClass}>
             {t("passwordUpdated")}
           </p>
-          <p style={{ marginTop: "24px", textAlign: "center" }}>
+          <p className="mt-6 text-center">
             <Link
               href="/login"
-              style={{ color: "#435c34", fontWeight: "600" }}
+              className={authTextLinkClass}
             >
               {t("backToLogin")}
             </Link>
@@ -395,32 +276,32 @@ export function ResetPasswordForm() {
         </>
       ) : linkStatus === "invalid" ? (
         <>
-          <p role="alert" style={{ color: "#5a4f3a", fontSize: "14px" }}>
+          <p role="alert" className="text-sm leading-relaxed text-ink-soft">
             {t("passwordResetLinkInvalid")}
           </p>
-          <p style={{ marginTop: "24px", textAlign: "center" }}>
+          <p className="mt-6 text-center">
             <Link
               href="/forgot-password"
-              style={{ color: "#435c34", fontWeight: "600" }}
+              className={authTextLinkClass}
             >
               {t("requestNewResetLink")}
             </Link>
           </p>
         </>
       ) : linkStatus === "checking" ? (
-        <p role="status" style={{ color: "#5a4f3a", fontSize: "14px" }}>
+        <p role="status" className="text-sm leading-relaxed text-ink-soft">
           {t("checkingPasswordResetLink")}
         </p>
       ) : (
         <>
           <p
-            style={{ color: "#5a4f3a", fontSize: "14px", marginBottom: "24px" }}
+            className="text-sm leading-relaxed text-ink-soft"
           >
             {t("chooseNewPassword")}
           </p>
           <form
             onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            className="flex flex-col gap-5"
           >
             <RecoveryField
               id="new-password"
@@ -443,7 +324,7 @@ export function ResetPasswordForm() {
               placeholder={t("confirmNewPassword")}
             />
             {error && (
-              <p role="alert" style={{ color: "#7e3f21", fontSize: "14px" }}>
+              <p role="alert" className={authErrorClass}>
                 {error}
               </p>
             )}

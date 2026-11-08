@@ -1,22 +1,38 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-session";
+import {
+  isSameOriginRequest,
+  ORIGIN_MISMATCH_MESSAGE,
+} from "@/lib/request-origin";
+import {
+  canModerate,
+  canModerateTransition,
+  validateReviewAction,
+} from "@/lib/submission-status";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
-function responseError(message, status) {
-  return NextResponse.json({ error: message }, { status });
+function responseError(message, status, errorKey) {
+  return NextResponse.json(
+    errorKey ? { error: message, errorKey } : { error: message },
+    { status },
+  );
 }
 
+/**
+ * Review a community submission.
+ *
+ * Body: `{ id, status?, reviewNote?, featured? }`
+ *   status    'published' | 'returned' | 'pending' (admin only)
+ *   reviewNote required when returning, so the author learns what to fix
+ *   featured  admin only; a highlight on the public archive
+ *
+ * The database enforces the same rules (migration 0012): only the archive
+ * owner may touch status/featured/review_*, and an owner may only move their
+ * own returned entry back to pending by editing it.
+ */
 export async function PATCH(request) {
-  const requestUrl = new URL(request.url);
-  const host =
-    request.headers.get("x-forwarded-host") || request.headers.get("host");
-  const forwardedProtocol = request.headers.get("x-forwarded-proto");
-  const protocol = forwardedProtocol
-    ? forwardedProtocol.split(",")[0].trim()
-    : requestUrl.protocol.slice(0, -1);
-  const expectedOrigin = host ? `${protocol}://${host}` : requestUrl.origin;
-  if (request.headers.get("origin") !== expectedOrigin) {
-    return responseError("Request could not be verified. Please reload and try again.", 403);
+  if (!isSameOriginRequest(request)) {
+    return responseError(ORIGIN_MISMATCH_MESSAGE, 403);
   }
 
   const supabase = await createSupabaseServerClient();
@@ -38,8 +54,14 @@ export async function PATCH(request) {
     console.error("Could not verify submission review role:", profileError);
     return responseError("We couldn't verify your review permissions.", 500);
   }
-  if (!["editor", "admin"].includes(profile?.role)) {
-    return responseError("Only archive editors can review submissions.", 403);
+
+  const role = profile?.role ?? null;
+  if (!canModerate(role)) {
+    return responseError(
+      "Only the archive owner can approve or return an entry.",
+      403,
+      "reviewNotAllowed",
+    );
   }
 
   let input;
@@ -50,37 +72,77 @@ export async function PATCH(request) {
     return responseError("The review request could not be read.", 400);
   }
 
-  if (
-    typeof input?.id !== "string" ||
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      input.id,
-    ) ||
-    !["published", "returned"].includes(input.status)
-  ) {
-    return responseError("Choose a valid submission and review action.", 400);
+  const { value, errors } = validateReviewAction(input);
+  if (Object.keys(errors).length > 0) {
+    return NextResponse.json(
+      { error: "Please review the request.", fieldErrors: errors },
+      { status: 400 },
+    );
   }
 
-  let result;
-  try {
-    result = await supabase
-      .from("entries")
-      .update({ status: input.status })
-      .eq("id", input.id)
-      .eq("status", "pending")
-      .select("id")
-      .maybeSingle();
-  } catch (error) {
-    console.error("Submission status update request failed:", error);
+  const { data: entry, error: entryError } = await supabase
+    .from("entries")
+    .select("id, status")
+    .eq("id", value.id)
+    .maybeSingle();
+
+  if (entryError) {
+    console.error("Could not load the submission being reviewed:", entryError);
+    return responseError("We couldn't load this submission. Please try again.", 500);
+  }
+  if (!entry) {
+    return responseError("This submission could not be found.", 404);
+  }
+
+  const update = {};
+
+  if (value.status) {
+    if (!canModerateTransition(entry.status, value.status, role)) {
+      return responseError(
+        "This submission has already moved on. Reload the page to see its current status.",
+        409,
+        "reviewStaleSubmission",
+      );
+    }
+
+    update.status = value.status;
+    update.review_note = value.reviewNote === "" ? null : value.reviewNote;
+    update.reviewed_at = new Date().toISOString();
+    update.reviewed_by = user.id;
+  }
+
+  // Featuring belongs to the same owner-only control as approving.
+  if (value.featured !== undefined) {
+    update.featured = value.featured;
+  }
+
+  const { data: saved, error: updateError } = await supabase
+    .from("entries")
+    .update(update)
+    .eq("id", value.id)
+    .select("id, status, review_note, reviewed_at")
+    .maybeSingle();
+
+  if (updateError) {
+    console.error("Could not update submission status:", updateError);
+    if (updateError.code === "42501") {
+      return responseError(
+        "Only archive editors can change this submission.",
+        403,
+        "reviewNotAllowed",
+      );
+    }
+
     return responseError("We couldn't update this submission. Please try again.", 500);
   }
-
-  if (result.error) {
-    console.error("Could not update submission status:", result.error);
-    return responseError("We couldn't update this submission. Please try again.", 500);
-  }
-  if (!result.data) {
-    return responseError("This submission has already been reviewed.", 409);
+  if (!saved) {
+    return responseError("This submission could not be updated.", 409);
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({
+    success: true,
+    status: saved.status,
+    reviewNote: saved.review_note ?? null,
+    reviewedAt: saved.reviewed_at ?? null,
+  });
 }

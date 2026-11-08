@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { supabase } from "@/lib/supabase-client";
 import { getSafeRedirectPath } from "@/lib/safe-redirect";
+import AuthShell, {
+  AuthField,
+  authErrorClass,
+  authFieldClass,
+  authLabelClass,
+  authPrimaryButtonClass,
+  authTextLinkClass,
+} from "@/components/auth/AuthShell";
 
 export default function LoginPage() {
   const { t } = useLanguage();
@@ -51,160 +59,70 @@ export default function LoginPage() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#f5ecd9",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "16px",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "400px",
-          padding: "32px",
-          borderRadius: "16px",
-          boxShadow: "0 18px 45px rgba(74,46,23,0.12)",
-          border: "1px solid #ddc79c",
-          backgroundColor: "#f5ecd9",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "30px",
-            fontWeight: "bold",
-            color: "#2b2417",
-            marginBottom: "24px",
-            fontFamily: "var(--font-display)",
-          }}
-        >
-          {t("logIn")}
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-        >
-          <div>
-            <label
-              htmlFor="email"
-              style={{
-                display: "block",
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "#5a4f3a",
-                marginBottom: "6px",
-              }}
-            >
-              {t("email")}
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              autoComplete="email"
-              maxLength={254}
-              required
-              value={formState.email}
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                borderRadius: "8px",
-                border: "1px solid #ddc79c",
-                backgroundColor: "#fffaf0",
-                outline: "none",
-                fontSize: "16px",
-                color: "#2b2417",
-                boxSizing: "border-box",
-              }}
-              placeholder={t("enterEmail")}
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              style={{
-                display: "block",
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "#5a4f3a",
-                marginBottom: "6px",
-              }}
-            >
-              {t("password")}
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              autoComplete="current-password"
-              required
-              value={formState.password}
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                borderRadius: "8px",
-                border: "1px solid #ddc79c",
-                backgroundColor: "#fffaf0",
-                outline: "none",
-                fontSize: "16px",
-                color: "#2b2417",
-                boxSizing: "border-box",
-              }}
-              placeholder={t("enterPassword")}
-            />
-            <Link
-              href="/forgot-password"
-              className="mt-2 inline-block text-sm font-medium text-[#435c34] hover:underline"
-            >
-              {t("forgotPassword")}
-            </Link>
-          </div>
-
-          {error && (
-            <p role="alert" style={{ color: "#7e3f21", fontSize: "14px" }}>
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "8px",
-              backgroundColor: "#435c34",
-              color: "#f5ecd9",
-              fontWeight: "600",
-              border: "none",
-              cursor: isLoading ? "not-allowed" : "pointer",
-              opacity: isLoading ? 0.5 : 1,
-              fontSize: "16px",
-            }}
-          >
-            {isLoading ? t("loggingIn") : t("logIn")}
-          </button>
-        </form>
-        <p
-          style={{
-            color: "#5a4f3a",
-            fontSize: "14px",
-            marginTop: "24px",
-            textAlign: "center",
-          }}
-        >
+    <AuthShell
+      eyebrow={t("myAccount")}
+      title={t("logIn")}
+      footer={
+        <>
           {t("needAnAccount")}{" "}
-          <Link href="/signup" style={{ color: "#435c34", fontWeight: "600" }}>
+          <Link href="/signup" className={authTextLinkClass}>
             {t("signUp")}
           </Link>
-        </p>
-      </div>
-    </div>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <div>
+          <label htmlFor="email" className={authLabelClass}>
+            {t("email")}
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autoComplete="email"
+            maxLength={254}
+            required
+            value={formState.email}
+            onChange={handleChange}
+            className={authFieldClass}
+            placeholder={t("enterEmail")}
+          />
+        </div>
+
+        <div>
+          <AuthField
+            id="password"
+            label={t("password")}
+            type="password"
+            autoComplete="current-password"
+            required
+            value={formState.password}
+            onChange={handleChange}
+            placeholder={t("enterPassword")}
+          />
+          <Link
+            href="/forgot-password"
+            className="mt-2 inline-block text-sm font-medium text-palm-deep hover:underline"
+          >
+            {t("forgotPassword")}
+          </Link>
+        </div>
+
+        {error && (
+          <p role="alert" className={authErrorClass}>
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={authPrimaryButtonClass}
+        >
+          {isLoading ? t("loggingIn") : t("logIn")}
+        </button>
+      </form>
+    </AuthShell>
   );
 }

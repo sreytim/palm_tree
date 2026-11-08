@@ -189,20 +189,186 @@ before using the Vercel URL for the lab submission.
 
 ## Community Contributions
 
-Community members sign in, submit an entry and photo, and the entry is saved as
-a draft. Editors and admins can review drafts at `/admin/review`, preview the
-entry, then publish it to the public archive or archive it without publishing.
-The review page is part of the same site; it is not a separate admin portal.
+Any visitor can create an account and submit an entry with a photo. Every new
+account starts as a `contributor`, and a submitted entry is stored as
+`pending`: it is visible only to its author and the archive team until it is
+reviewed. The workflow is:
 
-Apply migrations `0001_schema.sql` through `0009_owner_entry_write_policies.sql`
-in order to the Supabase project used by the app. Migration 0005 creates
+| Status      | Who can see it          | What happens next                                        |
+| ----------- | ----------------------- | -------------------------------------------------------- |
+| `pending`   | author + archive owner  | the owner publishes it, or returns it with a note          |
+| `published` | everyone                | live in `/archive`; only the archive owner can change it   |
+| `returned`  | author + archive owner  | the author fixes it, saving sends it back to `pending`     |
+
+Screens:
+
+- `/contribute` – the submission form.
+- `/my-submissions` – the author's own entries with their status, the owner's
+  note for a returned entry, an edit form, and a withdraw action.
+- `/admin/review` – the pending queue with an approve / return-with-note action
+  (archive owner only).
+- `/admin/entries` – every entry, searchable and filterable. The archive owner
+  publishes, returns, features and deletes; editors may correct an entry's
+  text but none of the moderation buttons are shown to them.
+- `/admin/users` – account roles (admin only).
+
+The header keeps the public links (Home, Techniques, About) and, once signed in,
+Contribute an entry and My submissions in the main row. The review queue, the
+entry manager and account management live in the account menu (the avatar and
+e-mail button on wide screens, the "Archive team" block in the mobile drawer), so
+the navigation never needs a second line.
+
+### The archive owner (super admin)
+
+Super admin access is granted by e-mail through the `public.super_admins` table
+created in migration `0012_community_contributor_workflow.sql`. It is seeded
+with `sreytimt@gmail.com`, so that account becomes `admin` at sign-up, and an
+account that already signed up is promoted by the migration itself. The table
+has Row Level Security enabled and no policy, so the API roles cannot read it.
+
+Rules the database enforces, not just the UI:
+
+- a contributor may edit or withdraw only their own `pending` or `returned`
+  entries; a `published` entry is locked to them;
+- `status`, `featured`, `is_sample` and the review columns belong to the archive
+  owner alone (editors can edit text, never publish), and a return must carry a
+  note;
+- content is validated on insert **and** update, and one account may hold at
+  most five `pending` submissions at a time;
+- only an admin can change a profile role, and the owner account can never be
+  demoted — not even by another admin.
+
+Apply migrations `0001_schema.sql` through
+`0012_community_contributor_workflow.sql` in order to the Supabase project used
+by the app (migration 0012 is idempotent, so re-running it repairs a policy set
+that was edited by hand in the dashboard). Migration 0005 creates
 `public.entries`, including `owner uuid not null references auth.users(id)`,
 and enables contribution policies. Migrations 0006–0007 clear placeholder
 attributions and harden sample/contribution data. Migration 0008 allows
 anonymous reads of published entries (including explicitly labeled sample
 entries), while revoking anonymous insert, update, and delete privileges.
-Migration 0009 replaces editor-wide entry writes with owner-scoped insert,
-update, and delete policies.
+Migration 0009 replaced editor-wide entry writes with owner-scoped insert,
+update, and delete policies. Migration 0012 restores owner-only review powers
+(editors keep text editing but lose delete and moderation), adds the
+review-note columns, the super-admin allow list, the pending cap, and the admin
+policies.
+
+### Applying migration 0012 with psql
+
+A local `psql` is the most reliable way to apply a long script; it stops at the
+first failing statement and shows the error instead of silently rolling back.
+
+```bash
+printf 'DB password: '; read -r -s PGPASSWORD; echo
+PGPASSWORD="$PGPASSWORD" psql "host=db.<project-ref>.supabase.co port=5432 dbname=postgres user=postgres sslmode=require" \
+  --single-transaction -v ON_ERROR_STOP=1 \
+  -f supabase/migrations/0012_community_contributor_workflow.sql
+```
+
+Take the `host=` and `user=` values from the dashboard's **Connect** panel when
+the direct host is not reachable (use the session pooler instead). The database
+password is typed invisibly and never written to a file; the app itself only
+ever uses the publishable key, so resetting that password does not affect the
+deployment.
+
+`supabase/repair-profile-roles.sql` is a standalone, tiny version of the
+role/profile repair that 0012 performs, for the case where an existing account
+still sees "your account does not yet have contributor access" (its role is
+still the original `reader`). Applying 0012 makes it unnecessary.
+
+### Applying migration 0012 with the SQL editor
+
+1. Open the Supabase dashboard → **SQL Editor** → **New query**.
+2. Paste the whole of
+   `supabase/migrations/0012_community_contributor_workflow.sql` and run it.
+   It is safe to run again on the same project.
+3. Check the result with:
+
+   ```sql
+   -- the owner account should now be admin
+   select p.role, u.email
+   from public.profiles p
+   join auth.users u on u.id = p.id
+   where u.email = 'sreytimt@gmail.com';
+
+   -- pending submissions waiting for review
+   select id, title, status, created_at from public.entries
+   where status = 'pending'
+   order by created_at;
+   ```
+
+4. Sign out and back in so the new role reaches the navigation bar.
+
+If you ever lock yourself out, sign in as the owner and set the role back with
+`update public.profiles set role = 'admin' where id = '<uuid>'`; the
+owner-protection trigger only blocks changes made through the API.
+
+### After applying 0012
+
+`Success. No rows returned` is the expected result — the script only defines
+columns, policies, triggers and functions. Then:
+
+1. **Sign out and sign in again** on the site, so the navbar re-reads your role
+   and shows the management links.
+2. **The owner account must exist as an auth user.** If the address in
+   `public.super_admins` has never signed up, sign up with it once: the signup
+   trigger creates the profile as `admin`. If you would rather promote a
+   different account you already use:
+
+   ```sql
+   insert into public.super_admins (email) values ('you@example.com')
+     on conflict (email) do nothing;
+
+   update public.profiles p
+   set role = 'admin'
+   from auth.users u
+   where p.id = u.id and lower(u.email) = 'you@example.com';
+   ```
+
+3. **Open `/contribute`** — every signed-in account is a `contributor` now, so
+   the form should appear. If it still says "your account does not yet have
+   contributor access", run `supabase/repair-profile-roles.sql`.
+4. Quick database check (expect `3 / 10 / 10`):
+
+   ```sql
+   select
+     (select count(*) from information_schema.columns
+        where table_schema = 'public' and table_name = 'entries'
+          and column_name like 'review%')                     as review_columns,
+     (select count(*) from pg_policies
+        where schemaname = 'public' and tablename = 'entries') as entry_policies,
+     (select count(*) from pg_policies
+        where schemaname = 'public' and tablename = 'entries'
+          and policyname like 'entries_%')                    as named_policies;
+   ```
+
+5. Prove the public boundary from outside the app: an anonymous request for
+   pending rows must come back empty.
+
+   ```bash
+   curl -s "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/entries?select=slug&status=eq.pending" \
+     -H "apikey: $NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+   # -> []
+   ```
+
+### Verification
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+Then, with two real accounts (one contributor, one editor or the owner):
+
+1. Submit an entry as the contributor: it appears on `/my-submissions` as
+   **pending review** and is not in `/archive`.
+2. Approve it in `/admin/review` (or `/admin/entries`): the entry appears in
+   `/archive` for anonymous visitors, and `/my-submissions` shows **published**.
+3. Return another submission with a note: the author sees the note and can
+   revise it; saving puts it back into the queue as **pending**.
+4. Try to edit or withdraw a published entry as the contributor: the action is
+   refused, and the database returns 403 if the request is replayed by hand.
 
 To migrate the existing archive examples, open
 `supabase/seed-entries.sql`, replace each `PASTE-YOUR-UUID-HERE` with your user
@@ -213,20 +379,30 @@ and published, so the public archive can display them with their sample labels.
 The app reads the published entries and their searchable text directly from
 Supabase; it no longer falls back to `data/archive.js` for the archive listing.
 
+`/archive` searches titles, descriptions and topic names as you type. The
+category dropdown to the right of the search box filters that same list, using
+the six categories the contribution form offers and only the ones the archive
+actually contains. The view is shareable:
+`/archive?category=Weaving%20Techniques` opens already filtered, and picking a
+category keeps the address bar in step.
+
 Row Level Security remains enabled on `public.entries`. Anonymous users can
 select only published rows; the `anon` and `public` roles have no insert,
 update, or delete table privileges. Authenticated contributors, editors, and
-admins may insert only rows whose `owner` is their own `auth.uid()`. Owners may
-update or delete only rows whose owner remains their own `auth.uid()`; UPDATE
-checks ownership both before and after the change, preventing ownership
-transfer. A database trigger reserves `status`, `is_sample`, and `featured`
-changes to editors so owners cannot self-publish a draft or unmark a sample.
-Editors cannot bypass ownership for writes. Keep the publishable key in the
-client; do not expose a service-role key or disable RLS.
+admins may insert only rows whose `owner` is their own `auth.uid()`.
+Contributors may update or delete only their own `pending`/`returned` rows;
+UPDATE checks ownership both before and after the change, preventing ownership
+transfer. Editors may update any row (that is what reviewing means) and delete
+unapproved ones; admins may update or delete any row, including published
+entries. A database trigger reserves `status`, `is_sample`, `featured` and the
+review columns to the archive owner, so neither a contributor nor an editor can
+self-publish an entry or unmark a sample. Keep the publishable key in the client; do not expose a
+service-role key or disable RLS.
 
-Grant editorial access only to trusted archive team members by setting their
-profile role to `editor` (or `admin`) through the Supabase dashboard. These roles
-can review submissions; public visitors and ordinary contributors cannot.
+Grant access only to trusted archive team members: sign in as the archive owner
+and set their profile role at `/admin/users`. An `editor` can open the entry
+manager and correct text; only an `admin` (the owner) can approve, return,
+feature or delete.
 
 ## Sprint 2 Verification
 

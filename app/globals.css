@@ -101,22 +101,21 @@ html[lang="km"] h4 {
   color: var(--cream);
 }
 
-.auth-actions button,
-.auth-actions a {
-  min-height: 2.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
+/* The header row never wraps: pills keep their own padding and the language
+   switcher stays legible on the narrowest phones. */
+.language-switcher button {
+  line-height: 1.1;
 }
 
 @media (max-width: 420px) {
-  .header-actions {
-    gap: 0.35rem;
+  .language-switcher {
+    padding: 0.1rem;
   }
 
   .language-switcher button {
-    padding-inline: 0.5rem;
+    min-height: 1.85rem;
+    padding-inline: 0.45rem;
+    font-size: 0.63rem;
   }
 }
 

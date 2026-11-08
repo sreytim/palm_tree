@@ -15,8 +15,14 @@ export const translations = {
     clearSearch: "Clear search",
     filterByCategory: "Filter archive by category",
     all: "All",
+    allCategories: "All categories",
+
     entriesFound: "entries found",
     entryFound: "entry found",
+    noCategoryResultsTitle: "No entries in this category yet",
+    noCategoryResultsHint:
+      "Try another category, or clear the filter to browse the whole archive.",
+    showAllCategories: "Show all categories",
     noResultsTitle: "No results found for your search",
     noResultsPrompt:
       "Try using a different search term, or explore traditional knowledge related to:",
@@ -53,6 +59,10 @@ export const translations = {
       "Built with and for the community members who shared their knowledge, experience, and time.",
     closeMenu: "Close menu",
     openMenu: "Open menu",
+    mainNavigation: "Main navigation",
+    myAccount: "My account",
+    accountMenu: "Account menu",
+    signedInAs: "Signed in as",
     sampleEntry: "Sample Entry",
     chooseLanguage: "Choose language",
     logOut: "Log out",
@@ -121,7 +131,7 @@ export const translations = {
       "We couldn't load submissions. Please reload and try again.",
     editorAccessRequired: "Editor access required",
     editorAccessRequiredHint:
-      "Only archive editors can review and publish community submissions.",
+      "Only the archive team can open the entry manager.",
     reviewSubmissions: "Review submissions",
     pendingSubmissions: "Pending community submissions",
     reviewSubmissionsHint:
@@ -143,7 +153,7 @@ export const translations = {
     tryAgain: "Try again",
     contributePageTitle: "Share a traditional house entry",
     contributeReviewNotice:
-      "Your entry is waiting for review and will appear in the public archive only after an editor approves it. Do not include private addresses or sensitive information.",
+      "Your entry is waiting for review and will appear in the public archive only after the archive owner approves it. Do not include private addresses or sensitive information.",
     contributionTitle: "Title",
     contributorName: "Name to credit publicly",
     contributorNameHint:
@@ -203,7 +213,7 @@ export const translations = {
     loadingEntry: "Loading this entry...",
     entryLoadFailed: "We couldn't load this entry. Please try again.",
     pendingReviewNotice:
-      "This is your pending contribution. Only you and the archive editors can see it until it is reviewed and published.",
+      "This is your pending contribution. Only you and the archive owner can see it until it is reviewed and published.",
     communityArchiveLabel: "Community archive",
     photoArchiveLabel: "Photo archive",
     backToArchive: "Back to Archive",
@@ -229,6 +239,119 @@ export const translations = {
     galleryPageTitle: "Gallery",
     noGalleryImages: "Community photographs will appear here as they are reviewed and added.",
     chooseLanguageLabel: "Choose language",
+    // Community contributor workflow
+    mySubmissions: "My submissions",
+    mySubmissionsHint:
+      "Every entry you submit appears here with its review status. Only you and the archive team can see a submission until it is approved.",
+    mySubmissionsEmpty: "You have not submitted an entry yet",
+    mySubmissionsEmptyHint:
+      "Share a traditional house entry and follow its progress from this page.",
+    mySubmissionsLoadFailed:
+      "We couldn't load your submissions right now. Reload the page to try again.",
+    mySubmissionsSignInTitle: "Sign in to see your submissions",
+    mySubmissionsSignInHint:
+      "Log in with the account you used to submit an entry to follow its review status.",
+    submissionReceived:
+      "Thank you. Your entry is in the review queue, and its status will change here once an editor has read it.",
+    submissionUpdated:
+      "Your changes are saved and the entry has gone back into the review queue.",
+    statusPending: "Pending review",
+    statusPublished: "Published",
+    statusReturned: "Returned",
+    statusPendingHint:
+      "The archive owner is reviewing this entry. You can keep correcting it, or withdraw it while it waits.",
+    statusPublishedHint:
+      "This entry is published in the public archive. Contact the archive team if it needs a correction.",
+    statusReturnedHint:
+      "The archive owner asked for changes. Read the note below, revise the entry, and it returns to the review queue.",
+    viewPublishedEntry: "View published entry",
+    editSubmission: "Edit submission",
+    editSubmissionHint:
+      "Update the details and save your changes. A returned entry goes back into the review queue automatically.",
+    reviseAndResubmit: "Revise and resubmit",
+    withdrawSubmission: "Withdraw",
+    withdrawingSubmission: "Withdrawing...",
+    withdrawConfirm:
+      "Withdraw this submission? It is removed from the review queue and its photo is deleted.",
+    withdrawFailed: "We couldn't withdraw this submission. Please try again.",
+    reviewNoteLabel: "Review note",
+    reviewNotePlaceholder:
+      "Explain what needs to change before this entry can be published.",
+    reviewNoteHint:
+      "The author sees this note. It is required when you return an entry (at least 10 characters).",
+    reviewNoteRequired:
+      "Write a short note explaining what needs to change before returning this entry.",
+    reviewNoteLength: "The review note must be 500 characters or fewer.",
+    reviewInvalidId: "Choose a valid submission.",
+    reviewInvalidStatus: "Choose a valid review action.",
+    reviewStaleSubmission:
+      "This submission has already been reviewed. Reload the page to see its current status.",
+    reviewNotAllowed: "Only the archive owner can do that.",
+    returnedNoticeTitle: "The archive owner asked for changes",
+    returnedNoticeNoNote:
+      "No note was left with this return. Contact the archive team if you are unsure what to change.",
+    returnedNoticeResubmit:
+      "Save your changes to send the entry back into the review queue.",
+    photoReplaceHint:
+      "Optional: choose a new photo to replace the current one. JPEG, PNG, or WebP, up to 10 MB.",
+    saveSubmissionChanges: "Save changes",
+    savingSubmissionChanges: "Saving...",
+    contributionLimitReached:
+      "You already have the maximum number of submissions waiting for review. Wait for a decision or withdraw one first.",
+    contributionNotAllowed:
+      "Your account cannot change this entry. Please contact the archive team.",
+    contributionNotEditable:
+      "This entry can no longer be edited. Published entries are managed by the archive team.",
+    contributionNotDeletable:
+      "A published entry cannot be withdrawn. Please contact the archive team.",
+    returnedPreviewNotice:
+      "This entry was returned for changes, so it is not published. Only you and the archive team can see it.",
+
+    adminArea: "Archive team",
+    manageEntries: "Manage entries",
+    manageEntriesHint:
+      "Search every submission, then publish, return, feature, or delete it. Published entries are visible in the public archive.",
+    editEntry: "Edit entry",
+    editEntryHint:
+      "Correct this entry's details. Changes to a published entry are visible immediately.",
+    searchEntries: "Search entries by title, contributor, or category",
+    allStatuses: "All",
+    entriesShown: "entries shown",
+    noEntriesMatch: "No entries match this search.",
+    featuredLabel: "Featured",
+    featureEntry: "Feature",
+    unfeatureEntry: "Remove feature",
+    deleteEntry: "Delete",
+    deleteEntryConfirm:
+      "Delete this entry permanently? The submission and its photo cannot be restored.",
+    deleteEntryFailed: "We couldn't delete this entry. Please try again.",
+    manageAccounts: "Manage accounts",
+    manageAccountsHint:
+      "Every account starts as a community contributor and can submit entries. Editors review submissions; admins can also manage entries and account roles.",
+    noAccounts: "No accounts yet.",
+    accountWithoutName: "Account without a name",
+    yourAccount: "your account",
+    currentRole: "Current role",
+    userRole: "Account role",
+    saveRole: "Save role",
+    savingRole: "Saving...",
+    roleUpdated: "The account role has been updated.",
+    roleUpdateFailed: "We couldn't update this account. Please try again.",
+    roleNotAllowed: "Only the archive owner can change account roles.",
+    roleSelfChange:
+      "You cannot change your own role. Ask another admin to do it.",
+    roleOwnerNote:
+      "The archive owner account configured in Supabase can never be demoted, even by another admin.",
+    roleReader: "Reader",
+    roleContributor: "Contributor",
+    roleEditor: "Editor",
+    roleAdmin: "Admin",
+    editorContentOnlyHint:
+      "As an editor you can correct this entry's text. Approving, returning, featuring and deleting are reserved for the archive owner.",
+    adminAccessRequired: "Admin access required",
+    adminAccessRequiredHint:
+      "Only the archive owner can approve submissions and manage accounts.",
+
   },
   km: {
     home: "ទំព័រដើម",
@@ -246,8 +369,14 @@ export const translations = {
     clearSearch: "សម្អាតការស្វែងរក",
     filterByCategory: "ត្រងបណ្ណសារតាមប្រភេទ",
     all: "ទាំងអស់",
+    allCategories: "ប្រភេទទាំងអស់",
+
     entriesFound: "កំណត់ត្រាត្រូវបានរកឃើញ",
     entryFound: "កំណត់ត្រាត្រូវបានរកឃើញ",
+    noCategoryResultsTitle: "មិនទាន់មានកំណត់ត្រាក្នុងប្រភេទនេះទេ",
+    noCategoryResultsHint:
+      "សូមជ្រើសរើសប្រភេទផ្សេងទៀត ឬលុបការត្រងចេញដើម្បីមើលបណ្ណសារទាំងមូល។",
+    showAllCategories: "បង្ហាញប្រភេទទាំងអស់",
     noResultsTitle: "មិនទាន់មានលទ្ធផលសម្រាប់ការស្វែងរកនេះទេ",
     noResultsPrompt:
       "សាកល្បងប្រើពាក្យស្វែងរកផ្សេងទៀត ឬស្វែងយល់អំពីចំណេះដឹងប្រពៃណីទាក់ទងនឹង៖",
@@ -282,6 +411,10 @@ export const translations = {
       "បង្កើតជាមួយ និងសម្រាប់សមាជិកសហគមន៍ ដែលបានចែករំលែកចំណេះដឹង បទពិសោធន៍ និងពេលវេលារបស់ពួកគេ។",
     closeMenu: "បិទម៉ឺនុយ",
     openMenu: "បើកម៉ឺនុយ",
+    mainNavigation: "ការរុករកសំខាន់",
+    myAccount: "គណនីរបស់ខ្ញុំ",
+    accountMenu: "ម៉ឺនុយគណនី",
+    signedInAs: "ចូលប្រើជា",
     sampleEntry: "កំណត់ត្រាគំរូ",
     chooseLanguage: "ជ្រើសរើសភាសា",
     logOut: "ចាកចេញ",
@@ -350,7 +483,7 @@ export const translations = {
       "យើងមិនអាចផ្ទុកការដាក់ស្នើបានទេ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយព្យាយាមម្ដងទៀត។",
     editorAccessRequired: "ត្រូវការសិទ្ធិអ្នកកែសម្រួល",
     editorAccessRequiredHint:
-      "មានតែអ្នកកែសម្រួលបណ្ណសារប៉ុណ្ណោះដែលអាចពិនិត្យ និងផ្សព្វផ្សាយការដាក់ស្នើពីសហគមន៍បាន។",
+      "មានតែក្រុមការងារបណ្ណសារប៉ុណ្ណោះដែលអាចបើកការគ្រប់គ្រងកំណត់ត្រាបាន។",
     reviewSubmissions: "ពិនិត្យការដាក់ស្នើ",
     pendingSubmissions: "ការដាក់ស្នើពីសហគមន៍ដែលរង់ចាំ",
     reviewSubmissionsHint:
@@ -372,7 +505,7 @@ export const translations = {
     tryAgain: "ព្យាយាមម្តងទៀត",
     contributePageTitle: "ចែករំលែកកំណត់ត្រាអំពីផ្ទះប្រពៃណី",
     contributeReviewNotice:
-      "កំណត់ត្រារបស់អ្នកនឹងត្រូវរក្សាទុកជាសេចក្តីព្រាងសម្រាប់ពិនិត្យ ហើយនឹងបង្ហាញជាសាធារណៈតែបន្ទាប់ពីអ្នកកែសម្រួលអនុម័តប៉ុណ្ណោះ។ កុំបញ្ចូលអាសយដ្ឋានឯកជន ឬព័ត៌មានរសើប។",
+      "កំណត់ត្រារបស់អ្នកនឹងត្រូវរក្សាទុកជាសេចក្តីព្រាងសម្រាប់ពិនិត្យ ហើយនឹងបង្ហាញជាសាធារណៈតែបន្ទាប់ពីម្ចាស់បណ្ណសារអនុម័តប៉ុណ្ណោះ។ កុំបញ្ចូលអាសយដ្ឋានឯកជន ឬព័ត៌មានរសើប។",
     contributionTitle: "ចំណងជើង",
     contributorName: "ឈ្មោះសម្រាប់បង្ហាញជាសាធារណៈ",
     contributorNameHint:
@@ -432,7 +565,7 @@ export const translations = {
     loadingEntry: "កំពុងផ្ទុកកំណត់ត្រានេះ...",
     entryLoadFailed: "មិនអាចផ្ទុកកំណត់ត្រានេះបានទេ។ សូមព្យាយាមម្តងទៀត។",
     pendingReviewNotice:
-      "នេះជាសេចក្តីចង់ពិនិត្យរបស់អ្នក។ មានតែអ្នក និងអ្នកកែសម្រួលបណ្ណសារប៉ុណ្ណោះអាចមើលឃើញ រហូតដល់ពិនិត្យ និងផ្សព្វផ្សាយ។",
+      "នេះជាសេចក្តីចង់ពិនិត្យរបស់អ្នក។ មានតែអ្នក និងម្ចាស់បណ្ណសារប៉ុណ្ណោះអាចមើលឃើញ រហូតដល់ពិនិត្យ និងផ្សព្វផ្សាយ។",
     communityArchiveLabel: "បណ្ណសារសហគមន៍",
     photoArchiveLabel: "បណ្ណសាររូបភាព",
     backToArchive: "ត្រឡប់ទៅបណ្ណសារ",
@@ -458,6 +591,118 @@ export const translations = {
     galleryPageTitle: "វិចិត្រសាល",
     noGalleryImages: "រូបថតសហគមន៍នឹងបង្ហាញនៅទីនេះ នៅពេលដែលរូបថតទាំងនោះត្រូវបានពិនិត្យ និងបន្ថែម។",
     chooseLanguageLabel: "ជ្រើសរើសភាសា",
+    // Community contributor workflow
+    mySubmissions: "ការដាក់ស្នើរបស់ខ្ញុំ",
+    mySubmissionsHint:
+      "រាល់កំណត់ត្រាដែលអ្នកដាក់ស្នើនឹងបង្ហាញនៅទីនេះ ជាមួយស្ថានភាពពិនិត្យ។ មានតែអ្នក និងក្រុមការងារបណ្ណសារប៉ុណ្ណោះដែលអាចមើលឃើញ រហូតដល់វាត្រូវបានអនុម័ត។",
+    mySubmissionsEmpty: "អ្នកមិនទាន់បានដាក់ស្នើកំណត់ត្រានៅឡើយទេ",
+    mySubmissionsEmptyHint:
+      "ចែករំលែកកំណត់ត្រាអំពីផ្ទះប្រពៃណី ហើយតាមដានវឌ្ឍនភាពរបស់វាពីទំព័រនេះ។",
+    mySubmissionsLoadFailed:
+      "មិនអាចផ្ទុកការដាក់ស្នើរបស់អ្នកបានទេនៅពេលនេះ។ សូមផ្ទុកទំព័រឡើងវិញ។",
+    mySubmissionsSignInTitle: "ចូលគណនីដើម្បីមើលការដាក់ស្នើរបស់អ្នក",
+    mySubmissionsSignInHint:
+      "ចូលគណនីដែលអ្នកបានប្រើសម្រាប់ដាក់ស្នើ ដើម្បីតាមដានស្ថានភាពពិនិត្យ។",
+    submissionReceived:
+      "សូមអរគុណ។ កំណត់ត្រារបស់អ្នកស្ថិតក្នុងបញ្ជីរង់ចាំពិនិត្យ ហើយស្ថានភាពនឹងផ្លាស់ប្តូរនៅទីនេះ បន្ទាប់ពីអ្នកកែសម្រួលបានអាន។",
+    submissionUpdated:
+      "ការកែប្រែរបស់អ្នកត្រូវបានរក្សាទុក ហើយកំណត់ត្រាបានត្រឡប់ទៅបញ្ជីរង់ចាំពិនិត្យវិញ។",
+    statusPending: "រង់ចាំពិនិត្យ",
+    statusPublished: "បានផ្សព្វផ្សាយ",
+    statusReturned: "បានដាក់ត្រឡប់",
+    statusPendingHint:
+      "ម្ចាស់បណ្ណសារកំពុងពិនិត្យកំណត់ត្រានេះ។ អ្នកអាចបន្តកែ ឬដកវាចេញនៅពេលរង់ចាំ។",
+    statusPublishedHint:
+      "កំណត់ត្រានេះបានផ្សព្វផ្សាយក្នុងបណ្ណសារសាធារណៈ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ ប្រសិនបើត្រូវកែ។",
+    statusReturnedHint:
+      "ម្ចាស់បណ្ណសារបានស្នើឱ្យកែប្រែ។ សូមអានកំណត់សម្គាល់ខាងក្រោម កែកំណត់ត្រា ហើយវានឹងត្រឡប់ទៅបញ្ជីរង់ចាំវិញ។",
+    viewPublishedEntry: "មើលកំណត់ត្រាដែលបានផ្សព្វផ្សាយ",
+    editSubmission: "កែការដាក់ស្នើ",
+    editSubmissionHint:
+      "កែព័ត៌មាន ហើយរក្សាទុកការផ្លាស់ប្តូរ។ កំណត់ត្រាដែលត្រូវដាក់ត្រឡប់នឹងត្រឡប់ទៅបញ្ជីរង់ចាំដោយស្វ័យប្រវត្តិ។",
+    reviseAndResubmit: "កែ ហើយដាក់ស្នើឡើងវិញ",
+    withdrawSubmission: "ដកចេញ",
+    withdrawingSubmission: "កំពុងដកចេញ...",
+    withdrawConfirm:
+      "ដកការដាក់ស្នើនេះមែនទេ? វានឹងចេញពីបញ្ជីរង់ចាំ ហើយរូបថតនឹងត្រូវលុប។",
+    withdrawFailed: "មិនអាចដកការដាក់ស្នើនេះបានទេ។ សូមព្យាយាមម្ដងទៀត។",
+    reviewNoteLabel: "កំណត់សម្គាល់ពិនិត្យ",
+    reviewNotePlaceholder:
+      "ពន្យល់អំពីអ្វីដែលត្រូវកែ មុនពេលកំណត់ត្រានេះអាចផ្សព្វផ្សាយបាន។",
+    reviewNoteHint:
+      "អ្នកនិពន្ធមើលឃើញកំណត់សម្គាល់នេះ។ ត្រូវបញ្ចូលពេលដាក់កំណត់ត្រាត្រឡប់វិញ (យ៉ាងតិច ១០ តួអក្សរ)។",
+    reviewNoteRequired:
+      "សរសេរកំណត់សម្គាល់ខ្លី ដោយពន្យល់អំពីអ្វីដែលត្រូវកែ មុននឹងដាក់កំណត់ត្រាត្រឡប់វិញ។",
+    reviewNoteLength: "កំណត់សម្គាល់មិនត្រូវលើស ៥០០ តួអក្សរទេ។",
+    reviewInvalidId: "សូមជ្រើសរើសការដាក់ស្នើត្រឹមត្រូវ។",
+    reviewInvalidStatus: "សូមជ្រើសរើសសកម្មភាពពិនិត្យត្រឹមត្រូវ។",
+    reviewStaleSubmission:
+      "ការដាក់ស្នើនេះត្រូវបានពិនិត្យរួចហើយ។ សូមផ្ទុកទំព័រឡើងវិញ ដើម្បីមើលស្ថានភាពបច្ចុប្បន្ន។",
+    reviewNotAllowed: "មានតែម្ចាស់បណ្ណសារប៉ុណ្ណោះដែលអាចធ្វើបាន។",
+    returnedNoticeTitle: "ម្ចាស់បណ្ណសារបានស្នើឱ្យកែប្រែ",
+    returnedNoticeNoNote:
+      "មិនមានកំណត់សម្គាល់ជាមួយការដាក់ត្រឡប់នេះទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ ប្រសិនបើមិនច្បាស់អំពីអ្វីត្រូវកែ។",
+    returnedNoticeResubmit:
+      "រក្សាទុកការផ្លាស់ប្តូរ ដើម្បីដាក់កំណត់ត្រាត្រឡប់ទៅបញ្ជីរង់ចាំវិញ។",
+    photoReplaceHint:
+      "ជាជម្រើស៖ ជ្រើសរូបថតថ្មីដើម្បីជំនួសរូបបច្ចុប្បន្ន។ JPEG, PNG ឬ WebP រហូតដល់ ១០ MB។",
+    saveSubmissionChanges: "រក្សាទុកការផ្លាស់ប្តូរ",
+    savingSubmissionChanges: "កំពុងរក្សាទុក...",
+    contributionLimitReached:
+      "អ្នកមានការដាក់ស្នើរង់ចាំពិនិត្យពេញចំនួនអតិបរមាហើយ។ សូមរង់ចាំការសម្រេច ឬដកមួយចេញជាមុន។",
+    contributionNotAllowed:
+      "គណនីរបស់អ្នកមិនអាចផ្លាស់ប្តូរកំណត់ត្រានេះបានទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ។",
+    contributionNotEditable:
+      "កំណត់ត្រានេះមិនអាចកែបានទៀតទេ។ កំណត់ត្រាដែលផ្សព្វផ្សាយហើយ គ្រប់គ្រងដោយក្រុមការងារបណ្ណសារ។",
+    contributionNotDeletable:
+      "កំណត់ត្រាដែលផ្សព្វផ្សាយហើយមិនអាចដកចេញបានទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ។",
+    returnedPreviewNotice:
+      "កំណត់ត្រានេះត្រូវបានដាក់ត្រឡប់ដើម្បីកែប្រែ ដូច្នេះវាមិនទាន់ផ្សព្វផ្សាយទេ។ មានតែអ្នក និងក្រុមការងារបណ្ណសារប៉ុណ្ណោះដែលអាចមើលឃើញ។",
+    adminArea: "ក្រុមការងារបណ្ណសារ",
+    manageEntries: "គ្រប់គ្រងកំណត់ត្រា",
+    manageEntriesHint:
+      "ស្វែងរកការដាក់ស្នើទាំងអស់ រួចផ្សព្វផ្សាយ ដាក់ត្រឡប់ ធ្វើឱ្យលេចធ្លោ ឬលុប។ កំណត់ត្រាដែលផ្សព្វផ្សាយហើយបង្ហាញក្នុងបណ្ណសារសាធារណៈ។",
+    editEntry: "កែកំណត់ត្រា",
+    editEntryHint:
+      "កែព័ត៌មាននៃកំណត់ត្រានេះ។ ការផ្លាស់ប្តូរលើកំណត់ត្រាដែលផ្សព្វផ្សាយហើយ បង្ហាញភ្លាមៗ។",
+    searchEntries: "ស្វែងរកតាមចំណងជើង អ្នករួមចំណែក ឬប្រភេទ",
+    allStatuses: "ទាំងអស់",
+    entriesShown: "កំណត់ត្រាបង្ហាញ",
+    noEntriesMatch: "គ្មានកំណត់ត្រាត្រូវនឹងការស្វែងរកនេះទេ។",
+    featuredLabel: "លេចធ្លោ",
+    featureEntry: "ធ្វើឱ្យលេចធ្លោ",
+    unfeatureEntry: "ដកចេញពីលេចធ្លោ",
+    deleteEntry: "លុប",
+    deleteEntryConfirm:
+      "លុបកំណត់ត្រានេះជាអចិន្ត្រៃយ៍មែនទេ? ការដាក់ស្នើ និងរូបថតមិនអាចសង្គ្រោះវិញបានទេ។",
+    deleteEntryFailed: "មិនអាចលុបកំណត់ត្រានេះបានទេ។ សូមព្យាយាមម្ដងទៀត។",
+    manageAccounts: "គ្រប់គ្រងគណនី",
+    manageAccountsHint:
+      "គណនីទាំងអស់ចាប់ផ្តើមជាអ្នកចូលរួមសហគមន៍ ហើយអាចដាក់ស្នើកំណត់ត្រា។ អ្នកកែសម្រួលពិនិត្យការដាក់ស្នើ។ អ្នកគ្រប់គ្រងក៏អាចគ្រប់គ្រងកំណត់ត្រា និងតួនាទីបានផងដែរ។",
+    noAccounts: "មិនទាន់មានគណនីទេ។",
+    accountWithoutName: "គណនីគ្មានឈ្មោះ",
+    yourAccount: "គណនីរបស់អ្នក",
+    currentRole: "តួនាទីបច្ចុប្បន្ន",
+    userRole: "តួនាទីគណនី",
+    saveRole: "រក្សាទុកតួនាទី",
+    savingRole: "កំពុងរក្សាទុក...",
+    roleUpdated: "តួនាទីគណនីត្រូវបានធ្វើបច្ចុប្បន្នភាព។",
+    roleUpdateFailed: "មិនអាចធ្វើបច្ចុប្បន្នភាពគណនីនេះបានទេ។ សូមព្យាយាមម្ដងទៀត។",
+    roleNotAllowed: "មានតែម្ចាស់បណ្ណសារប៉ុណ្ណោះដែលអាចផ្លាស់ប្តូរតួនាទីគណនីបាន។",
+    roleSelfChange:
+      "អ្នកមិនអាចផ្លាស់ប្តូរតួនាទីខ្លួនឯងបានទេ។ សូមឱ្យអ្នកគ្រប់គ្រងផ្សេងទៀតធ្វើវា។",
+    roleOwnerNote:
+      "គណនីម្ចាស់បណ្ណសារដែលបានកំណត់ក្នុង Supabase មិនអាចដកតួនាទីបានឡើយ ទោះដោយអ្នកគ្រប់គ្រងផ្សេងក៏ដោយ។",
+    roleReader: "អ្នកអាន",
+    roleContributor: "អ្នកចូលរួម",
+    roleEditor: "អ្នកកែសម្រួល",
+    roleAdmin: "អ្នកគ្រប់គ្រង",
+    editorContentOnlyHint:
+      "ក្នុងនាមជាអ្នកកែសម្រួល អ្នកអាចកែអត្ថបទនៃកំណត់ត្រានេះបាន។ ការអនុម័ត ការដាក់ត្រឡប់ ការធ្វើឱ្យលេចធ្លោ និងការលុប ត្រូវបានប្រគល់ជូនម្ចាស់បណ្ណសារប៉ុណ្ណោះ។",
+    adminAccessRequired: "ត្រូវការសិទ្ធិអ្នកគ្រប់គ្រង",
+    adminAccessRequiredHint:
+      "មានតែម្ចាស់បណ្ណសារប៉ុណ្ណោះដែលអាចអនុម័តការដាក់ស្នើ និងគ្រប់គ្រងគណនីបាន។",
+
   },
 };
 export const localizedLabels = {

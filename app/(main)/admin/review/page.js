@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import ReviewQueue from "@/components/admin/ReviewQueue";
 import ReviewStatusMessage from "@/components/admin/ReviewStatusMessage";
 import { getCurrentUser } from "@/lib/auth-session";
+import { canModerate } from "@/lib/submission-status";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
 export default async function ReviewPage() {
@@ -28,8 +29,8 @@ export default async function ReviewPage() {
     return <ReviewStatusMessage message="reviewPermissionUnavailable" />;
   }
 
-  if (!["editor", "admin"].includes(profile?.role)) {
-    return <ReviewStatusMessage message="editorAccessRequired" />;
+  if (!canModerate(profile?.role)) {
+    return <ReviewStatusMessage message="adminAccessRequired" />;
   }
 
   const { data: entries, error: entriesError } = await supabase

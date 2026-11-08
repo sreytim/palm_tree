@@ -83,6 +83,12 @@ export default function ContributionPageContent({
         <p className="mt-4 max-w-3xl leading-relaxed text-ink-soft">
           {t("contributeReviewNotice")}
         </p>
+        <Link
+          href="/my-submissions"
+          className="mt-4 inline-flex rounded-full border border-palm px-5 py-2 text-sm font-semibold text-palm-deep hover:bg-beige-soft"
+        >
+          {t("mySubmissions")}
+        </Link>
       </div>
       <ContributionForm />
     </section>

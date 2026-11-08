@@ -69,12 +69,18 @@ export default function ArchiveEntryPage({ params }) {
   }
 
   const isPending = item.status === "pending";
+  const isReturned = item.status === "returned";
 
   return (
     <article>
       {isPending && (
         <p className="bg-beige-soft px-5 py-3 text-center text-sm text-ink">
           {t("pendingReviewNotice")}
+        </p>
+      )}
+      {isReturned && (
+        <p className="bg-clay/15 px-5 py-3 text-center text-sm text-clay-deep">
+          {t("returnedPreviewNotice")}
         </p>
       )}
       {item.isSample && (

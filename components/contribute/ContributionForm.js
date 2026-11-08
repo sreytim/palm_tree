@@ -36,10 +36,18 @@ function FieldError({ message }) {
   ) : null;
 }
 
-export default function ContributionForm() {
+export default function ContributionForm({
+  entryId = null,
+  initialEntry = null,
+  redirectTo = "/my-submissions",
+} = {}) {
   const { language, t } = useLanguage();
   const router = useRouter();
-  const [entry, setEntry] = useState(EMPTY_ENTRY);
+  const isEditing = Boolean(entryId);
+  const [entry, setEntry] = useState(() => ({
+    ...EMPTY_ENTRY,
+    ...(initialEntry ?? {}),
+  }));
   const [photo, setPhoto] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState("");
@@ -66,11 +74,14 @@ export default function ContributionForm() {
 
     const validation = validateContribution(entry);
     const nextErrors = { ...validation.errors };
-    if (!photo) {
+    if (!photo && !isEditing) {
       nextErrors.photo = "photoRequired";
-    } else if (!["image/jpeg", "image/png", "image/webp"].includes(photo.type)) {
+    } else if (
+      photo &&
+      !["image/jpeg", "image/png", "image/webp"].includes(photo.type)
+    ) {
       nextErrors.photo = "photoType";
-    } else if (photo.size > 10 * 1024 * 1024) {
+    } else if (photo && photo.size > 10 * 1024 * 1024) {
       nextErrors.photo = "photoSize";
     }
 
@@ -83,11 +94,19 @@ export default function ContributionForm() {
     try {
       const payload = new FormData();
       payload.set("entry", JSON.stringify(validation.value));
-      payload.set("photo", photo);
-      const response = await fetch("/api/contributions", {
-        method: "POST",
-        body: payload,
-      });
+      if (photo) {
+        payload.set("photo", photo);
+      }
+
+      const response = await fetch(
+        isEditing
+          ? `/api/entries/${encodeURIComponent(entryId)}`
+          : "/api/contributions",
+        {
+          method: isEditing ? "PATCH" : "POST",
+          body: payload,
+        },
+      );
 
       let result;
       try {
@@ -103,6 +122,8 @@ export default function ContributionForm() {
           setFormError(t("contributionSessionExpired"));
         } else if (result.fieldErrors) {
           setFieldErrors(result.fieldErrors);
+        } else if (result.errorKey) {
+          setFormError(t(result.errorKey));
         } else {
           console.error("Contribution submission failed:", result);
           setFormError(t("contributionSubmitFailed"));
@@ -110,7 +131,10 @@ export default function ContributionForm() {
         return;
       }
 
-      router.push(`/archive/${encodeURIComponent(result.slug)}`);
+      router.push(
+        `${redirectTo}?${isEditing ? "updated" : "submitted"}=1`,
+      );
+      router.refresh();
     } catch (error) {
       console.error("Contribution request failed:", error);
       setFormError(t("contributionSubmitFailed"));
@@ -294,7 +318,7 @@ export default function ContributionForm() {
         </section>
 
         <section className="space-y-5 rounded-3xl border border-beige bg-cream p-5 sm:p-8">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="font-display text-xl font-medium text-ink">
                 {t("contributionSteps")}
@@ -372,7 +396,7 @@ export default function ContributionForm() {
           <FieldError message={fieldErrors.steps && t(fieldErrors.steps)} />
 
           <div className="border-t border-beige pt-5">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h2 className="font-display text-xl font-medium text-ink">
                   {t("contributionTips")}
@@ -455,13 +479,13 @@ export default function ContributionForm() {
         <section className="space-y-5 rounded-3xl border border-beige bg-cream p-5 sm:p-8">
           <div>
             <label htmlFor="photo" className="font-medium text-ink">
-              {t("contributionPhoto")} *
+              {t("contributionPhoto")} {isEditing ? "" : "*"}
             </label>
             <input
               id="photo"
               type="file"
               accept="image/jpeg,image/png,image/webp"
-              required
+              required={!isEditing}
               onChange={(event) => {
                 setPhoto(event.target.files?.[0] ?? null);
                 setFieldErrors((current) => ({
@@ -472,7 +496,7 @@ export default function ContributionForm() {
               className={`${FIELD_CLASS} file:mr-4 file:rounded-full file:border-0 file:bg-beige-soft file:px-4 file:py-2 file:font-medium file:text-ink`}
             />
             <p className="mt-1 text-sm text-ink-soft">
-              {t("photoUploadRules")}
+              {isEditing ? t("photoReplaceHint") : t("photoUploadRules")}
             </p>
             <FieldError message={fieldErrors.photo && t(fieldErrors.photo)} />
           </div>
@@ -515,7 +539,9 @@ export default function ContributionForm() {
         disabled={isSubmitting}
         className="w-full rounded-full bg-palm px-6 py-4 font-semibold text-cream transition-colors hover:bg-palm-deep disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        {isSubmitting ? t("submittingContribution") : t("submitContribution")}
+        {isSubmitting
+          ? t(isEditing ? "savingSubmissionChanges" : "submittingContribution")
+          : t(isEditing ? "saveSubmissionChanges" : "submitContribution")}
       </button>
     </form>
   );

@@ -6,13 +6,21 @@ import {
   MAX_CONTRIBUTION_PHOTO_SIZE,
   validateContributionPhoto,
 } from "@/lib/photo-validation";
+import {
+  isSameOriginRequest,
+  ORIGIN_MISMATCH_MESSAGE,
+} from "@/lib/request-origin";
+import { describeContributionWriteError } from "@/lib/contribution-errors";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
 const BUCKET = "photos";
 
-function responseError(message, status) {
-  return NextResponse.json({ error: message }, { status });
+function responseError(message, status, errorKey) {
+  return NextResponse.json(errorKey ? { error: message, errorKey } : { error: message }, {
+    status,
+  });
 }
+
 
 function makeSlug(title) {
   const base =
@@ -27,16 +35,8 @@ function makeSlug(title) {
 }
 
 export async function POST(request) {
-  const requestUrl = new URL(request.url);
-  const host =
-    request.headers.get("x-forwarded-host") || request.headers.get("host");
-  const forwardedProtocol = request.headers.get("x-forwarded-proto");
-  const protocol = forwardedProtocol
-    ? forwardedProtocol.split(",")[0].trim()
-    : requestUrl.protocol.slice(0, -1);
-  const expectedOrigin = host ? `${protocol}://${host}` : requestUrl.origin;
-  if (request.headers.get("origin") !== expectedOrigin) {
-    return responseError("Request could not be verified. Please reload and try again.", 403);
+  if (!isSameOriginRequest(request)) {
+    return responseError(ORIGIN_MISMATCH_MESSAGE, 403);
   }
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
@@ -179,14 +179,13 @@ export async function POST(request) {
         contributor_story: value.contributorStory || null,
         status: "pending",
       })
-      .select("slug")
+      .select("id, slug, status")
       .single());
   } catch (insertRequestError) {
     insertError = insertRequestError;
   }
 
   if (insertError) {
-    console.error("Could not save contribution entry:", insertError);
     try {
       const { error: cleanupError } = await supabase.storage
         .from(BUCKET)
@@ -197,11 +196,15 @@ export async function POST(request) {
     } catch (cleanupError) {
       console.error("Could not clean up unlinked contribution photo:", cleanupError);
     }
-    return responseError(
-      "The photo uploaded, but we couldn't save your entry. Please try submitting again.",
-      500,
-    );
+
+    const failure = describeContributionWriteError(insertError);
+    return responseError(failure.message, failure.status, failure.errorKey);
   }
 
-  return NextResponse.json({ slug: entry.slug }, { status: 201 });
+  // The entry is stored as 'pending'; the contributor follows it on
+  // /my-submissions until an editor publishes or returns it.
+  return NextResponse.json(
+    { id: entry.id, slug: entry.slug, status: entry.status },
+    { status: 201 },
+  );
 }

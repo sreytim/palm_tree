@@ -3,11 +3,18 @@ import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SearchBar from "../common/SearchBar";
+import CategoryFilter from "./CategoryFilter";
 import FadeIn from "../common/FadeIn";
 import EntryCard from "./EntryCard";
 import { useLanguage } from "../common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
 import { getTopicBySlug } from "@/data/topics";
+import {
+  ALL_CATEGORIES,
+  buildCategoryOptions,
+  matchesCategory,
+  resolveActiveCategory,
+} from "@/lib/archive-categories";
 import { paginate, pageNumbers } from "@/lib/pagination";
 import { useResponsivePageSize } from "@/lib/use-responsive-page-size";
 
@@ -27,7 +34,9 @@ const normalize = (value) =>
 export default function ArchiveBrowser({ items, pageSize }) {
   const { language, t } = useLanguage();
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category");
+  const [category, setCategory] = useState(
+    () => searchParams.get("category") ?? ALL_CATEGORIES,
+  );
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const listTopRef = useRef(null);
@@ -44,6 +53,16 @@ export default function ArchiveBrowser({ items, pageSize }) {
   // Nothing else is needed when the size changes: `paginate` clamps the page
   // number, so crossing the breakpoint can never strand the list on a page that
   // no longer exists.
+
+  // Chips are built from the categories the entries actually use, ordered
+  // like the contribution form, so a contributor recognises the list they
+  // chose from and no chip can lead to an empty page of its own accord.
+  const categoryOptions = useMemo(() => buildCategoryOptions(items), [items]);
+
+  // A category from the address bar that no longer matches anything shows
+  // everything rather than an unexplained empty page.
+  const activeCategory = resolveActiveCategory(category, categoryOptions);
+
   const suggestions = [
     { label: "suggestionPalmLeafHouses", search: "Palm-Leaf Houses" },
     { label: "suggestionRoofCovering", search: "Roof Covering" },
@@ -97,15 +116,11 @@ export default function ArchiveBrowser({ items, pageSize }) {
         return { item, matchesQuery, relevance };
       })
       .filter(({ item, matchesQuery }) => {
-        const matchesCategory =
-          initialCategory === null ||
-          initialCategory === "All" ||
-          item.category === initialCategory;
-        return matchesCategory && matchesQuery;
+        return matchesCategory(item, activeCategory) && matchesQuery;
       })
       .sort((first, second) => second.relevance - first.relevance)
       .map(({ item }) => item);
-  }, [items, initialCategory, language, query]);
+  }, [items, activeCategory, language, query]);
 
   // Pagination applies to the filtered set, so search results paginate too.
   // `paginate` clamps the page number, which means a shrinking result set (for
@@ -122,32 +137,82 @@ export default function ArchiveBrowser({ items, pageSize }) {
     listTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const changeCategory = (next) => {
+    setCategory(next);
+    setPage(1);
+    // Keep the address bar shareable without a server round trip, so a
+    // filtered view can be bookmarked or sent to someone else.
+    const params = new URLSearchParams(window.location.search);
+    if (next === ALL_CATEGORIES) {
+      params.delete("category");
+    } else {
+      params.set("category", next);
+    }
+    const queryString = params.toString();
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${queryString ? `?${queryString}` : ""}`,
+    );
+  };
+
+  const hasQuery = normalize(query).length > 0;
+
   return (
     <div ref={listTopRef}>
-      <div className="w-full">
-        <SearchBar value={query} onChange={setQuery} />
+      {/* Search and the category dropdown share one row; on phones the
+          dropdown drops below the field so neither control gets squashed. */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="w-full sm:flex-1">
+          <SearchBar
+            value={query}
+            onChange={(value) => {
+              setQuery(value);
+              setPage(1);
+            }}
+          />
+        </div>
+
+        {categoryOptions.length > 0 && (
+          <CategoryFilter
+            categories={categoryOptions}
+            active={activeCategory}
+            onChange={changeCategory}
+          />
+        )}
       </div>
 
       {filtered.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-beige px-6 py-12 text-center">
           <p className="font-display text-xl font-medium text-ink">
-            {t("noResultsTitle")}
+            {hasQuery ? t("noResultsTitle") : t("noCategoryResultsTitle")}
           </p>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft">
-            {t("noResultsPrompt")}
+            {hasQuery ? t("noResultsPrompt") : t("noCategoryResultsHint")}
           </p>
-          <div className="mx-auto mt-5 flex max-w-3xl flex-wrap justify-center gap-2">
-            {suggestions.map((suggestion) => (
-              <button
-                key={suggestion.search}
-                type="button"
-                onClick={() => setQuery(t(suggestion.label))}
-                className="rounded-full border border-beige bg-cream px-4 py-2 text-sm text-ink-soft transition-colors hover:border-palm hover:text-palm-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-palm focus-visible:ring-offset-2"
-              >
-                {t(suggestion.label)}
-              </button>
-            ))}
-          </div>
+          {!hasQuery && (
+            <button
+              type="button"
+              onClick={() => changeCategory(ALL_CATEGORIES)}
+              className="mt-5 inline-flex rounded-full border border-palm px-5 py-2.5 text-sm font-semibold text-palm-deep transition-colors hover:bg-beige-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-palm focus-visible:ring-offset-2"
+            >
+              {t("showAllCategories")}
+            </button>
+          )}
+          {hasQuery && (
+            <div className="mx-auto mt-5 flex max-w-3xl flex-wrap justify-center gap-2">
+              {suggestions.map((suggestion) => (
+                <button
+                  key={suggestion.search}
+                  type="button"
+                  onClick={() => setQuery(t(suggestion.label))}
+                  className="rounded-full border border-beige bg-cream px-4 py-2 text-sm text-ink-soft transition-colors hover:border-palm hover:text-palm-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-palm focus-visible:ring-offset-2"
+                >
+                  {t(suggestion.label)}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <>
