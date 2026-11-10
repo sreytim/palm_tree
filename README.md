@@ -239,19 +239,21 @@ Rules the database enforces, not just the UI:
   demoted — not even by another admin.
 
 Apply migrations `0001_schema.sql` through
-`0012_community_contributor_workflow.sql` in order to the Supabase project used
+`0013_remove_sample_location_markers.sql` in order to the Supabase project used
 by the app (migration 0012 is idempotent, so re-running it repairs a policy set
 that was edited by hand in the dashboard). Migration 0005 creates
 `public.entries`, including `owner uuid not null references auth.users(id)`,
 and enables contribution policies. Migrations 0006–0007 clear placeholder
 attributions and harden sample/contribution data. Migration 0008 allows
-anonymous reads of published entries (including explicitly labeled sample
-entries), while revoking anonymous insert, update, and delete privileges.
+anonymous reads of published entries (including the seeded example rows),
+while revoking anonymous insert, update, and delete privileges.
 Migration 0009 replaced editor-wide entry writes with owner-scoped insert,
 update, and delete policies. Migration 0012 restores owner-only review powers
 (editors keep text editing but lose delete and moderation), adds the
 review-note columns, the super-admin allow list, the pending cap, and the admin
-policies.
+policies. Migration 0013 removes the leftover "(sample)" markers that the seeded
+rows carried inside their location text and contributor stories, so a project
+seeded before it stops showing them once it is applied.
 
 ### Applying migration 0012 with psql
 
@@ -270,6 +272,10 @@ the direct host is not reachable (use the session pooler instead). The database
 password is typed invisibly and never written to a file; the app itself only
 ever uses the publishable key, so resetting that password does not affect the
 deployment.
+
+Migration 0013 is two idempotent `update` statements; run it the same way, or
+paste it into the SQL editor as it is. Until it is applied, entries seeded from
+`supabase/seed-entries.sql` still carry the old marker in their stored text.
 
 `supabase/repair-profile-roles.sql` is a standalone, tiny version of the
 role/profile repair that 0012 performs, for the case where an existing account
@@ -374,8 +380,9 @@ To migrate the existing archive examples, open
 `supabase/seed-entries.sql`, replace each `PASTE-YOUR-UUID-HERE` with your user
 UUID from Supabase Dashboard → Authentication → Users, and run the script in
 the Supabase SQL Editor after the migrations. The UUID is the `owner` foreign
-key on each migrated row. The eight existing examples remain marked as samples
-and published, so the public archive can display them with their sample labels.
+key on each migrated row. The eight existing examples are published, so the
+public archive displays them as archive content: `is_sample` stays moderation
+metadata and nothing in the interface labels an entry as a sample.
 The app reads the published entries and their searchable text directly from
 Supabase; it no longer falls back to `data/archive.js` for the archive listing.
 
@@ -414,8 +421,9 @@ npm test
 npm run build
 ```
 
-Archive cards and details label the seeded examples as samples. Gallery
-examples remain excluded from the public gallery.
+Archive cards and entry details carry no sample labels — every published entry
+reads as real archive content. Gallery examples remain excluded from the public
+gallery.
 
 To run the two-account ownership attack, set these environment variables
 without putting their values in a committed file:

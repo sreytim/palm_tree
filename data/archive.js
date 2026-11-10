@@ -23,7 +23,7 @@ export const archiveItems = [
       "Before a single leaf touches the frame of a roof, it passes through many hands.",
     image: images.archive1,
     imageAlt: "Bundles of palm leaves laid out to prepare for house covering",
-    location: "Kampong Speu Province, Cambodia (sample)",
+    location: "Kampong Speu Province, Cambodia",
     introduction:
       "Before a single leaf touches the frame of a roof, it passes through many hands. This entry documents the preparation stage as described by a community elder who learned the technique from her mother in the 1960s. Preparation is considered the foundation of a durable roof — leaves that are poorly chosen or poorly dried will not last a single rainy season.",
     steps: [
@@ -53,7 +53,7 @@ export const archiveItems = [
       "A frond that springs back after being gently bent is considered ready; one that stays folded is too old.",
     ],
     contributorStory:
-      '"My mother would wake before sunrise during harvest weeks. She always said the leaf remembers how it was cut — if you tear it in anger, it will tear again on the roof." — as recalled by a community elder, sample contributor.',
+      '"My mother would wake before sunrise during harvest weeks. She always said the leaf remembers how it was cut — if you tear it in anger, it will tear again on the roof." — as recalled by a community elder.',
     personId: "person-community-elder",
     techniqueStepIds: ["step-01-selecting", "step-02-preparing"],
     galleryIds: ["gal-01", "gal-05"],
@@ -82,7 +82,7 @@ export const archiveItems = [
     image: images.archive2,
     imageAlt:
       "Detail of a woven palm leaf roofing panel showing the cross pattern",
-    location: "Takeo Province, Cambodia (sample)",
+    location: "Takeo Province, Cambodia",
     introduction:
       "The cross-weave is the technique most families in this community used to bind loose leaflets into a single rigid panel strong enough to shed monsoon rain. This entry breaks the weave into its component folds, as demonstrated by a retired thatcher during a recorded interview.",
     steps: [
@@ -112,7 +112,7 @@ export const archiveItems = [
       "Weaving is traditionally done in the shade to keep the leaves pliable for longer.",
     ],
     contributorStory:
-      '"It took me two rainy seasons of watching before my hands understood the rhythm. My grandmother never explained it in words — she just wove, and I copied." — as recalled by a community contributor, sample entry.',
+      '"It took me two rainy seasons of watching before my hands understood the rhythm. My grandmother never explained it in words — she just wove, and I copied." — as recalled by a community contributor.',
     personId: "person-community-elder",
     techniqueStepIds: ["step-04-weaving"],
     galleryIds: ["gal-04", "gal-09"],
@@ -140,7 +140,7 @@ export const archiveItems = [
       "A palm-leaf covering is only as good as the frame beneath it.",
     image: images.archive3,
     imageAlt: "Bamboo frame of a traditional house under construction",
-    location: "Kampong Chhnang Province, Cambodia (sample)",
+    location: "Kampong Chhnang Province, Cambodia",
     introduction:
       "A palm-leaf covering is only as good as the frame beneath it. This entry documents how one family in the community describes the traditional timber and bamboo frame used to support a steep, water-shedding roof pitch.",
     steps: [
@@ -170,7 +170,7 @@ export const archiveItems = [
       "Bamboo is often smoked over a low fire before use to discourage insects.",
     ],
     contributorStory:
-      '"When we raised our frame, half the village came to help lift the ridge beam. Nobody built alone — that was the tradition as much as the house itself." — as recalled by a family contributor, sample entry.',
+      '"When we raised our frame, half the village came to help lift the ridge beam. Nobody built alone — that was the tradition as much as the house itself." — as recalled by a family contributor.',
     personId: "person-family-uncle",
     // No technique step covers framing yet — a gap in the six-stage process.
     techniqueStepIds: [],
@@ -198,7 +198,7 @@ export const archiveItems = [
       "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge.",
     image: images.archive4,
     imageAlt: "Woven palm leaf panels being tied to a roof frame",
-    location: "Kampong Speu Province, Cambodia (sample)",
+    location: "Kampong Speu Province, Cambodia",
     introduction:
       "Attaching the panels is done in careful, overlapping rows, always starting at the eaves and working toward the ridge, so that each higher row sheds water over the row below it — the same principle used with modern shingles.",
     steps: [
@@ -228,7 +228,7 @@ export const archiveItems = [
       "Ridge capping is often reinforced yearly, since it takes the most direct sun and rain exposure.",
     ],
     contributorStory:
-      '"My father always tied the ridge himself. He said if the top failed, everything below it failed too, no matter how well it was woven." — as recalled by a community elder, sample entry.',
+      '"My father always tied the ridge himself. He said if the top failed, everything below it failed too, no matter how well it was woven." — as recalled by a community elder.',
     personId: "person-community-elder",
     techniqueStepIds: ["step-05-attaching"],
     galleryIds: ["gal-06"],
@@ -253,7 +253,7 @@ export const archiveItems = [
       "A well-built palm-leaf roof can last several years, but it is rarely left untouched.",
     image: images.archive5,
     imageAlt: "A person repairing a section of a palm leaf roof",
-    location: "Takeo Province, Cambodia (sample)",
+    location: "Takeo Province, Cambodia",
     introduction:
       "A well-built palm-leaf roof can last several years, but it is rarely left untouched. This entry documents the yearly inspection and repair ritual described by a longtime resident, usually carried out in the weeks before the rainy season begins.",
     steps: [
@@ -283,7 +283,7 @@ export const archiveItems = [
       "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.",
     ],
     contributorStory:
-      '"Every year before the rains, my whole family spent a morning walking the house, finding the thin spots. It became a kind of yearly ritual, almost like a small celebration before the wet season began." — as recalled by a community elder, sample entry.',
+      '"Every year before the rains, my whole family spent a morning walking the house, finding the thin spots. It became a kind of yearly ritual, almost like a small celebration before the wet season began." — as recalled by a community elder.',
     personId: "person-community-elder",
     techniqueStepIds: ["step-06-maintaining", "step-04-weaving"],
     galleryIds: ["gal-09"],
@@ -311,7 +311,7 @@ export const archiveItems = [
     image: images.archive6,
     imageAlt:
       "A complete traditional house with a palm leaf roof, raised on wooden stilts",
-    location: "Kampong Speu Province, Cambodia (sample)",
+    location: "Kampong Speu Province, Cambodia",
     introduction:
       "This entry documents a single household's house as an example of a still-standing, actively maintained palm-leaf roof. The house is raised on stilts, a common feature in the region that keeps the living space above seasonal floodwater and improves airflow beneath the covering.",
     steps: [
@@ -336,7 +336,7 @@ export const archiveItems = [
       "Raised houses like this one are especially common in areas that flood seasonally.",
     ],
     contributorStory:
-      '"This roof has covered three generations of my family. We have replaced sections of it many times, but never all at once — it has always felt like the same roof, just renewed." — as recalled by the household contributor, sample entry.',
+      '"This roof has covered three generations of my family. We have replaced sections of it many times, but never all at once — it has always felt like the same roof, just renewed." — as recalled by the household contributor.',
     personId: "person-household-visit",
     // Its steps describe the standing house, not a leaf-processing stage.
     techniqueStepIds: [],
@@ -365,7 +365,7 @@ export const archiveItems = [
       "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking.",
     image: images.archive7,
     imageAlt: "Palm leaf panels resting on a raised drying rack in the shade",
-    location: "Kampong Chhnang Province, Cambodia (sample)",
+    location: "Kampong Chhnang Province, Cambodia",
     introduction:
       "Unlike leaving leaves in direct sun, some households in this community favor a slower, shaded drying process, which they believe results in panels that last longer and resist cracking. This entry documents that approach.",
     steps: [
@@ -390,7 +390,7 @@ export const archiveItems = [
       "A gentle, even color across the dried leaf is used as a visual sign that drying was successful.",
     ],
     contributorStory:
-      '"Direct sun is fast, but fast is not always better. Slow drying in the shade was something my grandfather insisted on, even when the family was in a hurry to finish a roof." — as recalled by a community elder, sample entry.',
+      '"Direct sun is fast, but fast is not always better. Slow drying in the shade was something my grandfather insisted on, even when the family was in a hurry to finish a roof." — as recalled by a community elder.',
     personId: "person-community-elder",
     techniqueStepIds: ["step-03-drying"],
     galleryIds: ["gal-05", "gal-13"],
@@ -417,7 +417,7 @@ export const archiveItems = [
       "The tools involved in this craft are few, simple, and often handmade.",
     image: images.archive8,
     imageAlt: "A set of traditional hand tools used for palm leaf thatching",
-    location: "Takeo Province, Cambodia (sample)",
+    location: "Takeo Province, Cambodia",
     introduction:
       "The tools involved in this craft are few, simple, and often handmade. This entry documents the small set of tools one contributor still keeps and uses today, each with its own specific role.",
     steps: [
@@ -442,7 +442,7 @@ export const archiveItems = [
       "A well-kept cutting knife is often mentioned as a source of pride among older thatchers.",
     ],
     contributorStory:
-      '"This knife belonged to my father. I have sharpened it more times than I can count, but I have never replaced it." — as recalled by a community elder, sample entry.',
+      '"This knife belonged to my father. I have sharpened it more times than I can count, but I have never replaced it." — as recalled by a community elder.',
     personId: "person-community-elder",
     // Tools are not one of the six leaf-processing stages.
     techniqueStepIds: [],

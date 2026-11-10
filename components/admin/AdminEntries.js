@@ -216,7 +216,6 @@ export default function AdminEntries({ initialEntries, role, justUpdated = false
                   <div className="min-w-0">
                     <p className="font-mono text-xs uppercase tracking-[0.15em] text-clay-deep">
                       {localizeLabel(entry.category, language)}
-                      {entry.isSample ? ` · ${t("sampleEntry")}` : ""}
                     </p>
                     <h2 className="mt-2 font-display text-xl font-medium text-ink">
                       {localizeLabel(entry.title, language)}

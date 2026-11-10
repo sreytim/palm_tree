@@ -36,11 +36,6 @@ export default function ArchiveCard({ item, view = "grid" }) {
               <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-clay-deep bg-clay/10 px-2.5 py-1 rounded-full">
                 {localizeLabel(item.category, language)}
               </span>
-              {item.isSample && (
-                <span className="font-mono text-[0.6rem] tracking-[0.1em] uppercase text-ink-soft/70">
-                  {t("sampleEntry")}
-                </span>
-              )}
               {topic && (
                 <span className="font-mono text-[0.6rem] tracking-[0.1em] uppercase text-clay-deep/80">
                   {localizeLabel(topic.name, language)}
@@ -85,11 +80,6 @@ export default function ArchiveCard({ item, view = "grid" }) {
             {topic && (
               <span className="w-fit rounded-full bg-beige-soft px-2.5 py-1 font-mono text-[0.6rem] tracking-[0.15em] uppercase text-clay-deep">
                 {localizeLabel(topic.name, language)}
-              </span>
-            )}
-            {item.isSample && (
-              <span className="font-mono text-[0.6rem] tracking-[0.1em] uppercase text-ink-soft/70">
-                {t("sampleEntry")}
               </span>
             )}
           </div>

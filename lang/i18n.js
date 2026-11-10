@@ -63,7 +63,6 @@ export const translations = {
     myAccount: "My account",
     accountMenu: "Account menu",
     signedInAs: "Signed in as",
-    sampleEntry: "Sample Entry",
     chooseLanguage: "Choose language",
     logOut: "Log out",
     logIn: "Log in",
@@ -234,7 +233,6 @@ export const translations = {
     palmLeafHouseArchive: "Palm-Leaf House Archive",
     whyKnowledgeMatters: "Why This Knowledge Matters",
     whatArchive: "What is this archive?",
-    sampleArchiveEntry: "Sample Archive Entry — for demonstration purposes",
     generalArchivePageTitle: "Archive",
     galleryPageTitle: "Gallery",
     noGalleryImages: "Community photographs will appear here as they are reviewed and added.",
@@ -415,7 +413,6 @@ export const translations = {
     myAccount: "គណនីរបស់ខ្ញុំ",
     accountMenu: "ម៉ឺនុយគណនី",
     signedInAs: "ចូលប្រើជា",
-    sampleEntry: "កំណត់ត្រាគំរូ",
     chooseLanguage: "ជ្រើសរើសភាសា",
     logOut: "ចាកចេញ",
     logIn: "ចូលប្រើ",
@@ -586,7 +583,6 @@ export const translations = {
     palmLeafHouseArchive: "បណ្ណសារផ្ទះស្លឹកត្នោត",
     whyKnowledgeMatters: "ហេតុអ្វីចំណេះដឹងនេះសំខាន់",
     whatArchive: "បណ្ណសារនេះជាអ្វី?",
-    sampleArchiveEntry: "កំណត់ត្រាគំរូ — សម្រាប់គោលបំណងបង្ហាញ",
     generalArchivePageTitle: "បណ្ណសារ",
     galleryPageTitle: "វិចិត្រសាល",
     noGalleryImages: "រូបថតសហគមន៍នឹងបង្ហាញនៅទីនេះ នៅពេលដែលរូបថតទាំងនោះត្រូវបានពិនិត្យ និងបន្ថែម។",
@@ -1201,17 +1197,17 @@ export const localizedLabels = {
     en: "Household Visit and Interview",
     km: "ទស្សនកិច្ចផ្ទះ និងសម្ភាសន៍",
   },
-  "Kampong Speu Province, Cambodia (sample)": {
-    en: "Kampong Speu Province, Cambodia (sample)",
-    km: "ខេត្តកំពង់ស្ពឺ ប្រទេសកម្ពុជា (គំរូ)",
+  "Kampong Speu Province, Cambodia": {
+    en: "Kampong Speu Province, Cambodia",
+    km: "ខេត្តកំពង់ស្ពឺ ប្រទេសកម្ពុជា",
   },
-  "Takeo Province, Cambodia (sample)": {
-    en: "Takeo Province, Cambodia (sample)",
-    km: "ខេត្តតាកែវ ប្រទេសកម្ពុជា (គំរូ)",
+  "Takeo Province, Cambodia": {
+    en: "Takeo Province, Cambodia",
+    km: "ខេត្តតាកែវ ប្រទេសកម្ពុជា",
   },
-  "Kampong Chhnang Province, Cambodia (sample)": {
-    en: "Kampong Chhnang Province, Cambodia (sample)",
-    km: "ខេត្តកំពង់ឆ្នាំង ប្រទេសកម្ពុជា (គំរូ)",
+  "Kampong Chhnang Province, Cambodia": {
+    en: "Kampong Chhnang Province, Cambodia",
+    km: "ខេត្តកំពង់ឆ្នាំង ប្រទេសកម្ពុជា",
   },
   "Selecting the Leaves": {
     en: "Selecting the Leaves",

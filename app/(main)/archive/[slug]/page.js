@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
 import { supabase } from "@/lib/supabase-client";
@@ -83,11 +84,6 @@ export default function ArchiveEntryPage({ params }) {
           {t("returnedPreviewNotice")}
         </p>
       )}
-      {item.isSample && (
-        <p className="bg-beige-soft px-5 py-3 text-center text-sm text-ink">
-          {t("sampleArchiveEntry")}
-        </p>
-      )}
       <div className="relative h-[46vh] min-h-[320px] w-full sm:h-[56vh]">
         <Image
           src={item.image}
@@ -98,14 +94,17 @@ export default function ArchiveEntryPage({ params }) {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-wood-deep/85 via-wood-deep/25 to-wood-deep/10" />
+        {/* On top of the photo, where the eye lands first, so the way back is
+            obvious without scrolling to the end of a long entry. */}
+        <Link
+          href="/archive"
+          className="absolute left-4 top-4 z-20 inline-flex items-center gap-2 rounded-full bg-cream/95 px-4 py-2.5 text-sm font-semibold text-wood-deep shadow-lg shadow-wood-deep/30 ring-1 ring-wood-deep/10 transition-colors hover:bg-cream sm:left-8 sm:top-6"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          {t("backToArchive")}
+        </Link>
         <div className="absolute inset-0 flex items-end">
           <div className="mx-auto w-full max-w-5xl px-5 pb-10 sm:px-8">
-            <Link
-              href="/archive"
-              className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-cream/90 hover:text-cream"
-            >
-              ← {t("backToArchive")}
-            </Link>
             <span className="rounded-full bg-palm-deep/90 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-cream">
               {localizeLabel(item.category, language)}
             </span>
@@ -181,6 +180,16 @@ export default function ArchiveEntryPage({ params }) {
             {localizeLabel(item.contributorStory, language)}
           </blockquote>
         </section>
+      </div>
+
+      <div className="mx-auto max-w-5xl px-5 pb-14 sm:px-8 sm:pb-20">
+        <Link
+          href="/archive"
+          className="inline-flex items-center gap-2 rounded-full border-2 border-wood px-6 py-3 text-sm font-semibold text-wood transition-colors duration-200 hover:bg-wood hover:text-cream"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          {t("backToArchive")}
+        </Link>
       </div>
     </article>
   );

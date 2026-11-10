@@ -44,14 +44,15 @@ function TechniquesPageContent() {
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-wood-deep/85 via-wood-deep/25 to-wood-deep/10" />
+          <Link
+            href="/#archive"
+            className="absolute left-4 top-4 z-20 inline-flex items-center gap-2 rounded-full bg-cream/95 px-4 py-2.5 text-sm font-semibold text-wood-deep shadow-lg shadow-wood-deep/30 ring-1 ring-wood-deep/10 transition-colors hover:bg-cream sm:left-8 sm:top-6"
+          >
+            <ArrowLeft size={16} aria-hidden="true" />
+            {t("backToArchive")}
+          </Link>
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto max-w-5xl w-full px-5 sm:px-8 pb-10">
-              <Link
-                href="/#archive"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/90 hover:text-cream mb-6"
-              >
-                <ArrowLeft size={15} /> {t("backToArchive")}
-              </Link>
               <span className="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-cream bg-palm-deep/90 px-2.5 py-1 rounded-full">
                 {localizeLabel(item.category, language)}
               </span>
@@ -63,11 +64,6 @@ function TechniquesPageContent() {
         </div>
 
         <div className="mx-auto max-w-5xl px-5 sm:px-8 py-10 sm:py-14">
-          {item.isSample && (
-            <p className="mb-8 inline-block font-mono text-[0.65rem] tracking-[0.15em] uppercase text-wood bg-beige-soft px-3 py-1.5 rounded-full">
-              {t("sampleArchiveEntry")}
-            </p>
-          )}
           {item.location && (
             <div className="flex items-center gap-2 pb-10 text-sm text-ink-soft">
               <MapPin size={16} className="text-palm-deep shrink-0" />
