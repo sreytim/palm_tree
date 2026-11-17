@@ -4,11 +4,13 @@ import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CalendarDays, Lightbulb, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/components/common/LanguageProvider";
+import ArchiveCard from "@/components/archive/ArchiveCard";
 import { localizeLabel } from "@/lang/i18n";
 import { supabase } from "@/lib/supabase-client";
 import { COLUMNS, toUiEntry } from "@/lib/entry-mapping";
+import { withBilingualContent } from "@/lib/entry-content";
 
 export default function ArchiveEntryPage({ params }) {
   const { slug } = use(params);
@@ -22,24 +24,68 @@ export default function ArchiveEntryPage({ params }) {
       .from("entries")
       .select(COLUMNS)
       .eq("slug", slug)
-      .maybeSingle()
-      .then(({ data, error }) => {
+      .then(async ({ data, error }) => {
         if (!active) return;
         if (error) {
-          console.error("Could not load contributed archive entry:", error);
-          setLookup({ slug, item: null, failed: true });
-        } else {
-          setLookup({
-            slug,
-            item: data ? toUiEntry(data) : null,
-            failed: false,
-          });
+          console.error("Could not load archive entry:", error);
+          setLookup({ slug, item: null, related: [], failed: true });
+          return;
         }
+
+        const row = Array.isArray(data) ? data[0] : data;
+
+        if (!row) {
+          setLookup({ slug, item: null, related: [], failed: false });
+          return;
+        }
+
+        const item = withBilingualContent(toUiEntry(row));
+
+        // Three more entries to read next: first the same section of the
+        // archive, then — when that section is small — anything that shares a
+        // topic with this entry.
+        let { data: siblings, error: siblingError } = await supabase
+          .from("entries")
+          .select(COLUMNS)
+          .eq("status", "published")
+          .eq("category", item.category)
+          .neq("id", item.id)
+          .limit(3);
+
+        if (
+          !siblingError &&
+          (siblings ?? []).length === 0 &&
+          item.topicSlugs.length > 0
+        ) {
+          const byTopic = await supabase
+            .from("entries")
+            .select(COLUMNS)
+            .eq("status", "published")
+            .overlaps("topic_slugs", item.topicSlugs)
+            .neq("id", item.id)
+            .limit(3);
+
+          siblings = byTopic.data;
+          siblingError = byTopic.error;
+        }
+
+        if (!active) return;
+
+        if (siblingError) {
+          console.error("Could not load related archive entries:", siblingError);
+        }
+
+        setLookup({
+          slug,
+          item,
+          related: (siblings ?? []).map(toUiEntry).map(withBilingualContent),
+          failed: false,
+        });
       })
       .catch((error) => {
         if (!active) return;
-        console.error("Could not load contributed archive entry:", error);
-        setLookup({ slug, item: null, failed: true });
+        console.error("Could not load archive entry:", error);
+        setLookup({ slug, item: null, related: [], failed: true });
       });
 
     return () => {
@@ -49,6 +95,7 @@ export default function ArchiveEntryPage({ params }) {
 
   const currentLookup = lookup?.slug === slug ? lookup : null;
   const item = currentLookup?.item ?? null;
+  const related = currentLookup?.related ?? [];
   const isLoading = !currentLookup;
   const loadFailed = Boolean(currentLookup?.failed);
   if (!item) {
@@ -71,9 +118,21 @@ export default function ArchiveEntryPage({ params }) {
 
   const isPending = item.status === "pending";
   const isReturned = item.status === "returned";
+  // The eight curated entries travel with both languages (see
+  // data/entry-content.js). A community submission that has not been translated
+  // yet says so, rather than quietly switching to English mid-page.
+  const hasKhmerCopy =
+    typeof item.title === "object"
+      ? Boolean(item.title?.km)
+      : /[\u1780-\u17FF]/.test(item.title ?? "");
 
   return (
     <article>
+      {language === "km" && !hasKhmerCopy && (
+        <p className="bg-clay/15 px-5 py-3 text-center text-sm text-clay-deep">
+          {t("untranslatedEntryNotice")}
+        </p>
+      )}
       {isPending && (
         <p className="bg-beige-soft px-5 py-3 text-center text-sm text-ink">
           {t("pendingReviewNotice")}
@@ -116,11 +175,36 @@ export default function ArchiveEntryPage({ params }) {
       </div>
 
       <div className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
-        {item.location && (
-          <div className="border-b border-beige pb-10 text-sm text-ink-soft">
-            {t("location")}: {localizeLabel(item.location, language)}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-x-8 gap-y-2 border-b border-beige pb-6 text-sm text-ink-soft">
+          {item.location && (
+            <span className="flex items-center gap-1.5">
+              <MapPin size={15} className="text-palm-deep" aria-hidden="true" />
+              <span>
+                {t("location")}: {localizeLabel(item.location, language)}
+              </span>
+            </span>
+          )}
+          {item.contributor && (
+            <span className="flex items-center gap-1.5">
+              <Users size={15} className="text-palm-deep" aria-hidden="true" />
+              <span>
+                {t("contributor")}: {item.contributor}
+              </span>
+            </span>
+          )}
+          {item.date && (
+            <span className="flex items-center gap-1.5">
+              <CalendarDays
+                size={15}
+                className="text-palm-deep"
+                aria-hidden="true"
+              />
+              <span>
+                {t("date")}: {item.date}
+              </span>
+            </span>
+          )}
+        </div>
 
         <section className="pt-10">
           <h2 className="mb-4 font-display text-2xl font-medium text-ink">
@@ -137,7 +221,7 @@ export default function ArchiveEntryPage({ params }) {
           </h2>
           <ol className="space-y-6">
             {item.steps.map((step, index) => (
-              <li key={step.title} className="flex gap-5">
+              <li key={`step-${index}`} className="flex gap-5">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-palm font-mono text-sm text-cream">
                   {String(index + 1).padStart(2, "0")}
                 </span>
@@ -159,30 +243,41 @@ export default function ArchiveEntryPage({ params }) {
             <h2 className="mb-6 font-display text-2xl font-medium text-ink">
               {t("traditionalKnowledgeTips")}
             </h2>
-            <ul className="space-y-3">
-              {item.tips.map((tip) => (
+            <ul className="space-y-4">
+              {item.tips.map((tip, index) => (
                 <li
-                  key={tip}
-                  className="rounded-2xl border border-beige bg-cream-deep p-4 text-sm leading-relaxed text-ink-soft sm:text-base"
+                  key={`tip-${index}`}
+                  className="flex gap-3 rounded-2xl border border-beige bg-cream-deep p-4 text-sm leading-relaxed text-ink-soft sm:text-base"
                 >
-                  {localizeLabel(tip, language)}
+                  <Lightbulb
+                    size={18}
+                    className="mt-0.5 shrink-0 text-clay-deep"
+                    aria-hidden="true"
+                  />
+                  <span>{localizeLabel(tip, language)}</span>
                 </li>
               ))}
             </ul>
           </section>
         )}
-
-        <section className="pt-10 sm:pt-12">
-          <h2 className="mb-4 font-display text-2xl font-medium text-ink">
-            {t("contributorStory")}
-          </h2>
-          <blockquote className="border-l-4 border-clay pl-5 text-base italic leading-relaxed text-ink sm:text-lg">
-            {localizeLabel(item.contributorStory, language)}
-          </blockquote>
-        </section>
       </div>
 
-      <div className="mx-auto max-w-5xl px-5 pb-14 sm:px-8 sm:pb-20">
+      {related.length > 0 && (
+        <section className="border-t border-beige bg-cream-deep/60">
+          <div className="mx-auto max-w-5xl px-5 py-12 sm:px-8 sm:py-14">
+            <h2 className="mb-6 font-display text-2xl font-medium text-ink">
+              {t("relatedEntries")}
+            </h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((sibling) => (
+                <ArchiveCard key={sibling.id} item={sibling} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:pb-20">
         <Link
           href="/archive"
           className="inline-flex items-center gap-2 rounded-full border-2 border-wood px-6 py-3 text-sm font-semibold text-wood transition-colors duration-200 hover:bg-wood hover:text-cream"

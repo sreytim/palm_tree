@@ -3,15 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
+import { roleLabelKey } from "@/lib/submission-status";
 
 const ROLES = ["contributor", "editor", "admin"];
-
-const ROLE_LABEL_KEYS = {
-  reader: "roleReader",
-  contributor: "roleContributor",
-  editor: "roleEditor",
-  admin: "roleAdmin",
-};
 
 export default function AdminUsers({ initialProfiles, currentUserId }) {
   const { t } = useLanguage();
@@ -119,7 +113,7 @@ export default function AdminUsers({ initialProfiles, currentUserId }) {
                     {isSelf ? ` · ${t("yourAccount")}` : ""}
                   </p>
                   <p className="mt-1 text-xs text-ink-soft">
-                    {t("currentRole")}: {t(ROLE_LABEL_KEYS[profile.role] ?? profile.role)}
+                    {t("currentRole")}: {t(roleLabelKey(profile.role))}
                   </p>
                 </div>
 
@@ -138,7 +132,7 @@ export default function AdminUsers({ initialProfiles, currentUserId }) {
                   >
                     {ROLES.map((role) => (
                       <option key={role} value={role}>
-                        {t(ROLE_LABEL_KEYS[role])}
+                        {t(roleLabelKey(role))}
                       </option>
                     ))}
                   </select>

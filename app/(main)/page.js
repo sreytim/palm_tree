@@ -27,7 +27,13 @@ export default function HomePage() {
             <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden">
               <Image
                 src={images.aboutCommunity}
-                alt="A craftswoman preparing palm leaves in shallow water"
+                alt={localizeLabel(
+                  {
+                    en: "A craftswoman preparing palm leaves in shallow water",
+                    km: "ស្ត្រីម្នាក់កំពុងរៀបចំស្លឹកត្នោតក្នុងទឹករាក់",
+                  },
+                  language,
+                )}
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 40vw"

@@ -1,5 +1,66 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Self-hosted webfonts
+
+   These files live in `public/fonts/` and are served by the app itself, so
+   `next dev`, `next build` and Vercel never reach out to fonts.googleapis.com.
+   The families are the same ones the design was built with:
+     Fraunces         display serif (variable, roman + italic)
+     Work Sans        interface and body text (variable)
+     IBM Plex Mono    labels, numbers, small caps (400 / 500)
+     Noto Sans Khmer  Khmer script (variable)
+   Each file is the `latin` subset, except Noto Sans Khmer which is the `khmer`
+   subset. Licences: all four are SIL Open Font License 1.1.
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/fraunces-2.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/fraunces-1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Work Sans";
+  src: url("/fonts/work-sans-1.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-1.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-2.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Noto Sans Khmer";
+  src: url("/fonts/noto-sans-khmer-1.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Core palette — grounded in palm leaf, roasted wood, sun-dried thatch */
   --cream: #f5ecd9; /* shared page and section background */
@@ -16,10 +77,19 @@
   --beige: #ddc79c; /* muted beige for borders, dividers */
   --beige-soft: #e8dcbe;
 
-  --font-display: var(--font-fraunces);
-  --font-body: var(--font-work-sans);
-  --font-mono: var(--font-plex-mono);
+  /* Font stacks. The self-hosted family comes first; the rest are system fonts
+     so text still renders before the woff2 file arrives (or if it never does). */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino,
+    Georgia, ui-serif, serif;
+  --font-body: "Work Sans", ui-sans-serif, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Khmer",
+    sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+  --font-khmer: "Noto Sans Khmer", "Khmer OS Battambang", "Khmer OS",
+    "Khmer OS System", "Khmer UI", "Leelawadee UI";
 }
+
 
 @theme inline {
   --color-cream: var(--cream);

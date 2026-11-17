@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import AdminUsers from "@/components/admin/AdminUsers";
 import ReviewStatusMessage from "@/components/admin/ReviewStatusMessage";
 import { getCurrentUser } from "@/lib/auth-session";
+import { readCurrentRole } from "@/lib/current-role";
 import { isAdminRole } from "@/lib/submission-status";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
@@ -27,19 +28,26 @@ export default async function AdminUsersPage() {
     redirect("/login?next=%2Fadmin%2Fusers");
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
+  const { role, error: roleError } = await readCurrentRole(supabase, user.id);
 
-  if (profileError) {
-    console.error("Could not verify manage-accounts permissions:", profileError);
-    return <ReviewStatusMessage message="reviewPermissionUnavailable" />;
+  if (roleError) {
+    console.error("Could not verify manage-accounts permissions:", roleError);
+    return (
+      <ReviewStatusMessage
+        message="reviewPermissionUnavailable"
+        signedInAs={user.email}
+      />
+    );
   }
 
-  if (!isAdminRole(profile?.role)) {
-    return <ReviewStatusMessage message="adminAccessRequired" />;
+  if (!isAdminRole(role)) {
+    return (
+      <ReviewStatusMessage
+        message="adminAccessRequired"
+        signedInAs={user.email}
+        role={role}
+      />
+    );
   }
 
   const { data: profiles, error: profilesError } = await supabase

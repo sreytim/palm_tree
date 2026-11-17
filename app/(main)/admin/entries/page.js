@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import AdminEntries from "@/components/admin/AdminEntries";
 import ReviewStatusMessage from "@/components/admin/ReviewStatusMessage";
 import { getCurrentUser } from "@/lib/auth-session";
+import { readCurrentRole } from "@/lib/current-role";
 import { SUBMISSION_COLUMNS, toSubmission } from "@/lib/entry-mapping";
 import { canManageEntries } from "@/lib/submission-status";
 import { createSupabaseServerClient } from "@/lib/supabase";
@@ -29,19 +30,26 @@ export default async function AdminEntriesPage({ searchParams }) {
     redirect("/login?next=%2Fadmin%2Fentries");
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
+  const { role, error: roleError } = await readCurrentRole(supabase, user.id);
 
-  if (profileError) {
-    console.error("Could not verify manage-entries permissions:", profileError);
-    return <ReviewStatusMessage message="reviewPermissionUnavailable" />;
+  if (roleError) {
+    console.error("Could not verify manage-entries permissions:", roleError);
+    return (
+      <ReviewStatusMessage
+        message="reviewPermissionUnavailable"
+        signedInAs={user.email}
+      />
+    );
   }
 
-  if (!canManageEntries(profile?.role)) {
-    return <ReviewStatusMessage message="editorAccessRequired" />;
+  if (!canManageEntries(role)) {
+    return (
+      <ReviewStatusMessage
+        message="editorAccessRequired"
+        signedInAs={user.email}
+        role={role}
+      />
+    );
   }
 
   const { data: entries, error: entriesError } = await supabase
@@ -57,7 +65,7 @@ export default async function AdminEntriesPage({ searchParams }) {
   return (
     <AdminEntries
       initialEntries={(entries ?? []).map(toSubmission)}
-      role={profile?.role ?? "editor"}
+      role={role}
       justUpdated={params?.updated === "1"}
     />
   );

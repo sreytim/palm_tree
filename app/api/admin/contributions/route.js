@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-session";
+import { readCurrentRole } from "@/lib/current-role";
 import {
   isSameOriginRequest,
   ORIGIN_MISMATCH_MESSAGE,
@@ -45,17 +46,13 @@ export async function PATCH(request) {
     return responseError("Please log in to review submissions.", 401);
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (profileError) {
-    console.error("Could not verify submission review role:", profileError);
+  const { role, error: roleError } = await readCurrentRole(supabase, user.id);
+
+  if (roleError) {
+    console.error("Could not verify submission review role:", roleError);
     return responseError("We couldn't verify your review permissions.", 500);
   }
 
-  const role = profile?.role ?? null;
   if (!canModerate(role)) {
     return responseError(
       "Only the archive owner can approve or return an entry.",

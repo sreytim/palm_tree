@@ -1,35 +1,17 @@
-import {
-  Fraunces,
-  Work_Sans,
-  IBM_Plex_Mono,
-  Noto_Sans_Khmer,
-} from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import LanguageProvider from "@/components/common/LanguageProvider";
 import "./globals.css";
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  axes: ["opsz", "SOFT", "WONK"],
-  weight: "variable",
-  style: ["normal", "italic"],
-});
-const workSans = Work_Sans({
-  variable: "--font-work-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
-const notoSansKhmer = Noto_Sans_Khmer({
-  variable: "--font-khmer",
-  subsets: ["khmer"],
-  weight: ["400", "500", "600", "700"],
-});
+
+/**
+ * Fonts are self-hosted.
+ *
+ * The four families used by the design (Fraunces, Work Sans, IBM Plex Mono and
+ * Noto Sans Khmer) are loaded with `@font-face` from `public/fonts/` instead of
+ * `next/font/google`. That removes every network request from the build and
+ * from `next dev`, which previously failed on a Turbopack font-CSS
+ * resolution error, and it keeps Khmer text rendering even offline.
+ */
 export const metadata = {
   title:
     "Traditional Palm-Leaf House Covering Techniques | A Community Cultural Archive",
@@ -41,7 +23,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} ${notoSansKhmer.variable} flex min-h-dvh flex-col antialiased bg-cream text-ink`}
+        className="flex min-h-dvh flex-col antialiased bg-cream text-ink"
       >
         <LanguageProvider>
           <Navbar />

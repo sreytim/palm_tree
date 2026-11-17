@@ -3,20 +3,21 @@
 import Gallery from "@/components/gallery/Gallery";
 import { galleryImages } from "@/data/gallery";
 import { getTopicBySlug } from "@/data/topics";
-import { getPersonById } from "@/data/people";
 import { useLanguage } from "@/components/common/LanguageProvider";
 
 /**
  * Gallery images reference a `topicSlug` in the shared vocabulary. Resolve it
- * to the display label here so the client gallery renders the same badge text
- * it always has, from a single source of truth.
+ * to the bilingual display label here so the client gallery renders the same
+ * badge text it always has, from a single source of truth.
+ *
+ * Every photograph in `data/gallery.js` belongs to the archive's own
+ * collection, so nothing is filtered out: an empty photo archive is worse than
+ * a small one.
  */
-const imagesWithTopicName = galleryImages
-  .filter((image) => getPersonById(image.personId)?.role !== "sample")
-  .map((image) => ({
-    ...image,
-    category: getTopicBySlug(image.topicSlug)?.name ?? image.topicSlug,
-  }));
+const imagesWithTopicName = galleryImages.map((image) => ({
+  ...image,
+  category: getTopicBySlug(image.topicSlug)?.name ?? image.topicSlug,
+}));
 
 export default function GalleryPage() {
   const { t } = useLanguage();

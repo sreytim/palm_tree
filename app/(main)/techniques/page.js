@@ -84,7 +84,7 @@ function TechniquesPageContent() {
             </h2>
             <ol className="space-y-6">
               {item.steps.map((step, i) => (
-                <li key={step.title} className="flex gap-5">
+                <li key={`step-${i}`} className="flex gap-5">
                   <span className="font-mono text-sm text-cream bg-palm flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -106,9 +106,9 @@ function TechniquesPageContent() {
                 {t("traditionalKnowledgeTips")}
               </h2>
               <ul className="space-y-3">
-                {item.tips.map((tip) => (
+                {item.tips.map((tip, index) => (
                   <li
-                    key={tip}
+                    key={`tip-${index}`}
                     className="flex gap-3 rounded-2xl bg-cream-deep border border-beige p-4 text-sm sm:text-base text-ink-soft leading-relaxed"
                   >
                     <Lightbulb
@@ -121,14 +121,6 @@ function TechniquesPageContent() {
               </ul>
             </section>
           )}
-          <section className="pt-10 sm:pt-12">
-            <h2 className="font-display text-2xl font-medium text-ink mb-4">
-              {t("contributorStory")}
-            </h2>
-            <blockquote className="border-l-4 border-clay pl-5 sm:pl-6 italic text-base sm:text-lg text-ink leading-relaxed font-display">
-              {localizeLabel(item.contributorStory, language)}
-            </blockquote>
-          </section>
           {item.relatedImages.length > 0 && (
             <section className="pt-10 sm:pt-12">
               <h2 className="font-display text-2xl font-medium text-ink mb-6">

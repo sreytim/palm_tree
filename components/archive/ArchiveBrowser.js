@@ -95,9 +95,9 @@ export default function ArchiveBrowser({ items, pageSize }) {
             localizeLabel(item.description, "en"),
             localizeLabel(item.description, "km"),
             ...topicsForItem.flatMap((topic) => [
-              topic.name,
+              localizeLabel(topic.name, "en"),
               localizeLabel(topic.name, "km"),
-              topic.description ?? "",
+              localizeLabel(topic.description ?? "", "en"),
               localizeLabel(topic.description ?? "", "km"),
             ]),
           ].join(" "),

@@ -211,16 +211,22 @@ export const translations = {
     photoSize: "The photo must be 10 MB or smaller.",
     loadingEntry: "Loading this entry...",
     entryLoadFailed: "We couldn't load this entry. Please try again.",
+    untranslatedEntryNotice:
+      "This entry has not been translated into Khmer yet. The text the contributor wrote is shown below.",
     pendingReviewNotice:
       "This is your pending contribution. Only you and the archive owner can see it until it is reviewed and published.",
     communityArchiveLabel: "Community archive",
     photoArchiveLabel: "Photo archive",
+    closeImageViewer: "Close image viewer",
+    previousImage: "Previous image",
+    nextImage: "Next image",
     backToArchive: "Back to Archive",
     introduction: "Introduction",
     stepByStepProcess: "Step-by-Step Process",
     traditionalKnowledgeTips: "Traditional Knowledge & Tips",
     contributorStory: "Contributor Story",
     relatedImages: "Related Images",
+    relatedEntries: "More in this category",
     contributor: "Contributor",
     date: "Date",
     location: "Location",
@@ -348,7 +354,9 @@ export const translations = {
       "As an editor you can correct this entry's text. Approving, returning, featuring and deleting are reserved for the archive owner.",
     adminAccessRequired: "Admin access required",
     adminAccessRequiredHint:
-      "Only the archive owner can approve submissions and manage accounts.",
+      "Only the archive owner can approve submissions and manage accounts. The owner is the e-mail listed in public.super_admins.",
+    accountRole: "Account role",
+    roleUnknown: "not assigned",
 
   },
   km: {
@@ -561,16 +569,22 @@ export const translations = {
     photoSize: "រូបថតមិនត្រូវធំជាង ១០ MB ទេ។",
     loadingEntry: "កំពុងផ្ទុកកំណត់ត្រានេះ...",
     entryLoadFailed: "មិនអាចផ្ទុកកំណត់ត្រានេះបានទេ។ សូមព្យាយាមម្តងទៀត។",
+    untranslatedEntryNotice:
+      "កំណត់ត្រានេះមិនទាន់បានបកប្រែជាភាសាខ្មែរនៅឡើយទេ។ អត្ថបទដែលអ្នករួមចំណែកបានសរសេរ ត្រូវបានបង្ហាញខាងក្រោម។",
     pendingReviewNotice:
       "នេះជាសេចក្តីចង់ពិនិត្យរបស់អ្នក។ មានតែអ្នក និងម្ចាស់បណ្ណសារប៉ុណ្ណោះអាចមើលឃើញ រហូតដល់ពិនិត្យ និងផ្សព្វផ្សាយ។",
     communityArchiveLabel: "បណ្ណសារសហគមន៍",
-    photoArchiveLabel: "បណ្ណសាររូបភាព",
+    photoArchiveLabel: "រូបថតបណ្ណសារ",
+    closeImageViewer: "បិទការមើលរូបភាព",
+    previousImage: "រូបភាពមុន",
+    nextImage: "រូបភាពបន្ទាប់",
     backToArchive: "ត្រឡប់ទៅបណ្ណសារ",
     introduction: "ការណែនាំ",
     stepByStepProcess: "ដំណើរការតាមជំហាន",
     traditionalKnowledgeTips: "ចំណេះដឹងប្រពៃណី និងគន្លឹះ",
     contributorStory: "រឿងពីអ្នករួមចំណែក",
     relatedImages: "រូបភាពដែលទាក់ទង",
+    relatedEntries: "កំណត់ត្រាផ្សេងទៀតក្នុងប្រភេទនេះ",
     contributor: "អ្នករួមចំណែក",
     date: "កាលបរិច្ឆេទ",
     location: "ទីតាំង",
@@ -697,7 +711,9 @@ export const translations = {
       "ក្នុងនាមជាអ្នកកែសម្រួល អ្នកអាចកែអត្ថបទនៃកំណត់ត្រានេះបាន។ ការអនុម័ត ការដាក់ត្រឡប់ ការធ្វើឱ្យលេចធ្លោ និងការលុប ត្រូវបានប្រគល់ជូនម្ចាស់បណ្ណសារប៉ុណ្ណោះ។",
     adminAccessRequired: "ត្រូវការសិទ្ធិអ្នកគ្រប់គ្រង",
     adminAccessRequiredHint:
-      "មានតែម្ចាស់បណ្ណសារប៉ុណ្ណោះដែលអាចអនុម័តការដាក់ស្នើ និងគ្រប់គ្រងគណនីបាន។",
+      "មានតែម្ចាស់បណ្ណសារប៉ុណ្ណោះដែលអាចអនុម័តការដាក់ស្នើ និងគ្រប់គ្រងគណនីបាន។ ម្ចាស់បណ្ណសារគឺជាអ៊ីមែលដែលបានកត់ទុកក្នុង public.super_admins។",
+    accountRole: "តួនាទីគណនី",
+    roleUnknown: "មិនបានកំណត់",
 
   },
 };
@@ -1294,12 +1310,43 @@ export const localizedLabels = {
       km: "ការរកមើលចំណុចដែលមានពន្លឺចាំងកាត់ពីខាងក្នុងផ្ទះ លឿន និងអាចទុកចិត្តបានជាងការត្រួតពិនិត្យដំបូលពីខាងក្រៅ។",
     },
 };
+/**
+ * Resolves a piece of archive copy to one language.
+ *
+ * Accepts three shapes, all of which exist in this project:
+ *   1. `{ en, km }` — bilingual content from `data/entry-content.js`, topics,
+ *      technique steps and gallery photographs. This is the preferred shape:
+ *      both languages travel together, so no text can silently fall back.
+ *   2. A plain string that a legacy `localizedLabels` entry translates
+ *      (categories, topic names, short interface sentences).
+ *   3. A plain string with no translation — shown as it is.
+ *
+ * Missing translations fall back to the other language instead of rendering
+ * `undefined`, so an entry never shows a blank heading.
+ */
 export function localizeLabel(label, language) {
-  var _a, _b;
-  return (_b =
-    (_a = localizedLabels[label]) === null || _a === void 0
-      ? void 0
-      : _a[language]) !== null && _b !== void 0
-    ? _b
-    : label;
+  if (label === null || label === undefined) {
+    return "";
+  }
+
+  if (typeof label === "object") {
+    return label[language] ?? label.en ?? label.km ?? "";
+  }
+
+  const translated = localizedLabels[label];
+
+  if (translated) {
+    return translated[language] ?? translated.en ?? label;
+  }
+
+  return label;
+}
+
+/** Whether a value already carries both languages. */
+export function isBilingual(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    (typeof value.en === "string" || typeof value.km === "string")
+  );
 }

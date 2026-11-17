@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import { images } from "@/lib/images";
+import { localizeLabel } from "@/lang/i18n";
 import { useLanguage } from "./LanguageProvider";
 export default function Hero() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   return (
     <section className="relative overflow-hidden weave-bg">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-10 sm:pt-14 pb-6 sm:pb-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -23,7 +24,13 @@ export default function Hero() {
           <div className="relative aspect-[16/9] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-25px_rgba(43,36,23,0.45)]">
             <Image
               src={images.heroHouse}
-              alt="Traditional palm-leaf house covering techniques"
+              alt={localizeLabel(
+                {
+                  en: "Traditional palm-leaf house covering techniques",
+                  km: "បច្ចេកទេសប្រពៃណីក្នុងការប្រក់ដំបូលផ្ទះដោយស្លឹកត្នោត",
+                },
+                language,
+              )}
               fill
               priority
               sizes="(max-width: 1024px) 90vw, 45vw"
@@ -34,7 +41,13 @@ export default function Hero() {
           <div className="hidden sm:block absolute -bottom-6 -left-6 w-28 h-28 rounded-2xl overflow-hidden border-4 border-cream shadow-xl rotate-[-6deg]">
             <Image
               src={images.heroTexture}
-              alt="Close-up texture of woven palm leaves"
+              alt={localizeLabel(
+                {
+                  en: "Close-up texture of woven palm leaves",
+                  km: "រូបភាពជិតនៃវាយនភាពស្លឹកត្នោតដែលត្បាញ",
+                },
+                language,
+              )}
               fill
               sizes="112px"
               className="object-cover"

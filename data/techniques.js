@@ -8,11 +8,11 @@ export const techniqueSteps = [
         topicSlugs: ["palm-leaf-preparation", "palm-leaves"],
         entryIds: ["arch-01"],
         galleryIds: ["gal-01"],
-        title: "Selecting the Leaves",
+        title: { en: "Selecting the Leaves", km: "ការជ្រើសរើសស្លឹកត្នោត" },
         image: images.step1Selecting,
-        imageAlt: "A person examining palm fronds still on the tree before cutting",
-        description: "Every roof begins in the palm grove. Fronds are chosen by hand — mature enough to be strong, but not so old that they have begun to dry unevenly on the tree. A frond that springs back gently when bent is considered ready to cut.",
-        tip: "Cutting is traditionally done in the early morning, while the fronds still hold moisture from the night and bend without cracking.",
+        imageAlt: { en: "A person examining palm fronds still on the tree before cutting", km: "មនុស្សម្នាក់កំពុងពិនិត្យទងស្លឹកត្នោតនៅលើដើម មុនពេលកាត់" },
+        description: { en: "Every roof begins in the palm grove. Fronds are chosen by hand — mature enough to be strong, but not so old that they have begun to dry unevenly on the tree. A frond that springs back gently when bent is considered ready to cut.", km: "ដំបូលទាំងអស់ចាប់ផ្តើមពីចម្ការត្នោត។ គេជ្រើសរើសទងស្លឹកដោយដៃ ដោយយកស្លឹកដែលធំល្មមរឹងមាំ ប៉ុន្តែមិនចាស់ពេករហូតចាប់ផ្តើមស្ងួតមិនស្មើគ្នានៅលើដើម។ ទងស្លឹកដែលត្រឡប់មកត្រង់វិញបន្តិចៗក្រោយពេលបត់ ត្រូវបានចាត់ទុកថាអាចកាត់បាន។" },
+        tip: { en: "Cutting is traditionally done in the early morning, while the fronds still hold moisture from the night and bend without cracking.", km: "តាមប្រពៃណី គេកាត់នៅពេលព្រឹកព្រលឹម ខណៈទងស្លឹកនៅមានសំណើមពីពេលយប់ និងអាចបត់បានដោយមិនប្រេះ។" },
     },
     {
         id: "step-02-preparing",
@@ -22,11 +22,11 @@ export const techniqueSteps = [
         topicSlugs: ["palm-leaf-preparation"],
         entryIds: ["arch-01"],
         galleryIds: [],
-        title: "Preparing the Leaves",
+        title: { en: "Preparing the Leaves", km: "ការរៀបចំស្លឹកត្នោត" },
         image: images.step2Preparing,
-        imageAlt: "Palm leaves being cleaned and sorted by hand",
-        description: "Back at the household, each frond is inspected leaflet by leaflet. Torn, discolored, or insect-damaged sections are trimmed away, since even a small weak point can let water through once the panel is on the roof.",
-        tip: "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.",
+        imageAlt: { en: "Palm leaves being cleaned and sorted by hand", km: "ស្លឹកត្នោតកំពុងត្រូវបានសម្អាត និងតម្រៀបដោយដៃ" },
+        description: { en: "Back at the household, each frond is inspected leaflet by leaflet. Torn, discolored, or insect-damaged sections are trimmed away, since even a small weak point can let water through once the panel is on the roof.", km: "នៅពេលយកមកដល់ផ្ទះ គេពិនិត្យទងស្លឹកនីមួយៗពីស្លឹកតូចមួយទៅស្លឹកតូចមួយ។ ផ្នែកដែលរហែក ប្រែពណ៌ ឬខូចដោយសត្វល្អិត ត្រូវកាត់ចេញ ព្រោះចំណុចខ្សោយតូចមួយក៏អាចឱ្យទឹកជ្រាបបាន នៅពេលដាក់បន្ទះលើដំបូល។" },
+        tip: { en: "Leaves are handled gently at this stage — rough handling now shows up later as tears in the finished weave.", km: "នៅដំណាក់កាលនេះ ត្រូវកាន់ស្លឹកដោយថ្នមៗ ព្រោះការកាន់ដោយមិនប្រុងប្រយ័ត្នអាចបណ្តាលឱ្យស្នាមរហែកលេចឡើងនៅលើកំណាត់ត្បាញដែលបានបញ្ចប់។" },
     },
     {
         id: "step-03-drying",
@@ -39,11 +39,11 @@ export const techniqueSteps = [
         // Provenance only: this guidance comes from arch-07's "Turning the
         // leaves daily" step. It is not duplicated in that entry's tips.
         tipSourceEntryId: "arch-07",
-        title: "Drying the Leaves",
+        title: { en: "Drying the Leaves", km: "ការសម្ងួតស្លឹកត្នោត" },
         image: images.step3Drying,
-        imageAlt: "Palm leaves resting on a raised bamboo drying rack in the shade",
-        description: "Cleaned leaves are laid across a raised rack to dry evenly over several days. Some households favor slow, shaded drying over direct sun, believing it produces panels that resist cracking and pests for longer.",
-        tip: "Leaves are turned once a day so both sides dry at the same rate, avoiding warping.",
+        imageAlt: { en: "Palm leaves resting on a raised bamboo drying rack in the shade", km: "ស្លឹកត្នោតដាក់លើរានឫស្សីសម្ងួតដែលលើកផុតពីដីក្នុងម្លប់" },
+        description: { en: "Cleaned leaves are laid across a raised rack to dry evenly over several days. Some households favor slow, shaded drying over direct sun, believing it produces panels that resist cracking and pests for longer.", km: "ស្លឹកដែលបានសម្អាតត្រូវបានដាក់លើរានហាលដែលលើកផុតពីដី ដើម្បីសម្ងួតឱ្យស្មើគ្នាក្នុងរយៈពេលច្រើនថ្ងៃ។ គ្រួសារខ្លះចូលចិត្តសម្ងួតយឺតៗក្នុងម្លប់ជាងហាលថ្ងៃផ្ទាល់ ដោយជឿថាវាធ្វើឱ្យបន្ទះមិនងាយប្រេះ និងខូចដោយសត្វល្អិត។" },
+        tip: { en: "Leaves are turned once a day so both sides dry at the same rate, avoiding warping.", km: "ត្រូវបង្វិលស្លឹកម្តងក្នុងមួយថ្ងៃ ដើម្បីឱ្យផ្នែកទាំងសងខាងស្ងួតក្នុងល្បឿនស្មើគ្នា និងជៀសវាងការកោងខូចទ្រង់ទ្រាយ។" },
     },
     {
         id: "step-04-weaving",
@@ -56,11 +56,11 @@ export const techniqueSteps = [
         // The `tip` above is the canonical wording for this guidance; arch-02
         // carries the same sentence (see also the entry's own tips).
         tipSourceEntryId: "arch-02",
-        title: "Weaving and Arranging",
+        title: { en: "Weaving and Arranging", km: "ការត្បាញ និងរៀបចំស្លឹក" },
         image: images.step4Weaving,
-        imageAlt: "Hands weaving palm leaflets into a cross pattern over a spine",
-        description: "Dried leaflets are folded over a central spine and woven into a tight cross pattern, one over another, until no gaps remain for water to pass through. This is the most skill-intensive stage, often taking years to learn by hand.",
-        tip: "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.",
+        imageAlt: { en: "Hands weaving palm leaflets into a cross pattern over a spine", km: "ដៃកំពុងត្បាញស្លឹកត្នោតតូចៗជាលំនាំឆ្លាស់លើឆ្អឹងកណ្តាល" },
+        description: { en: "Dried leaflets are folded over a central spine and woven into a tight cross pattern, one over another, until no gaps remain for water to pass through. This is the most skill-intensive stage, often taking years to learn by hand.", km: "ស្លឹកតូចៗដែលស្ងួតត្រូវបានបត់លើឆ្អឹងកណ្តាល ហើយត្បាញឆ្លាស់គ្នាយ៉ាងតឹង រហូតគ្មានចន្លោះឱ្យទឹកជ្រាប។ នេះជាដំណាក់កាលដែលត្រូវការជំនាញខ្ពស់បំផុត ហើយជាញឹកញាប់ត្រូវចំណាយពេលជាច្រើនឆ្នាំដើម្បីរៀនដោយអនុវត្តផ្ទាល់។" },
+        tip: { en: "A tighter weave near the base of each panel helps prevent pooling water where roof rows will later overlap.", km: "ការត្បាញឱ្យតឹងជាងនៅគល់បន្ទះនីមួយៗ ជួយការពារទឹកកុំឱ្យដក់នៅកន្លែងដែលជួរដំបូលត្រួតជាន់គ្នា។" },
     },
     {
         id: "step-05-attaching",
@@ -73,11 +73,11 @@ export const techniqueSteps = [
         // The `tip` above is the canonical wording for this guidance; arch-04
         // carries the same sentence (see also the entry's own tips).
         tipSourceEntryId: "arch-04",
-        title: "Attaching the Covering",
+        title: { en: "Attaching the Covering", km: "ការភ្ជាប់ស្រទាប់គ្របដំបូល" },
         image: images.step5Attaching,
-        imageAlt: "Finished woven panels being lashed to a roof frame",
-        description: "Finished panels are lashed to the roof's bamboo frame in overlapping rows, starting at the eaves and working up toward the ridge — the same shedding principle used by shingles the world over.",
-        tip: "Consistent overlap between rows matters more than the total number of panels used.",
+        imageAlt: { en: "Finished woven panels being lashed to a roof frame", km: "បន្ទះដែលបានត្បាញរួចកំពុងត្រូវបានចងភ្ជាប់ទៅនឹងគ្រោងដំបូល" },
+        description: { en: "Finished panels are lashed to the roof's bamboo frame in overlapping rows, starting at the eaves and working up toward the ridge — the same shedding principle used by shingles the world over.", km: "បន្ទះដែលបានបញ្ចប់ត្រូវបានចងភ្ជាប់ទៅនឹងគ្រោងឫស្សីរបស់ដំបូលជាជួរត្រួតជាន់គ្នា ដោយចាប់ផ្តើមពីចុងដំបូលឡើងទៅកាន់កំពូល។ វាប្រើគោលការណ៍បង្ហូរទឹកដូចនឹងការដាក់ក្បឿងដំបូលនៅទូទាំងពិភពលោក។" },
+        tip: { en: "Consistent overlap between rows matters more than the total number of panels used.", km: "ការត្រួតជាន់គ្នាឱ្យស្មើសាច់រវាងជួរនីមួយៗ សំខាន់ជាងចំនួនបន្ទះសរុបដែលបានប្រើ។" },
     },
     {
         id: "step-06-maintaining",
@@ -90,10 +90,10 @@ export const techniqueSteps = [
         // The `tip` above is the canonical wording for this guidance; arch-05
         // carries the same sentence (see also the entry's own tips).
         tipSourceEntryId: "arch-05",
-        title: "Maintaining and Repairing",
+        title: { en: "Maintaining and Repairing", km: "ការថែទាំ និងជួសជុល" },
         image: images.step6Maintaining,
-        imageAlt: "A person patching a worn section of a palm leaf roof",
-        description: "A palm-leaf roof is rarely left untouched. Each year before the rains, households check the underside for thin, light-letting spots and weave small patch panels to replace worn sections before the wet season begins.",
-        tip: "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.",
+        imageAlt: { en: "A person patching a worn section of a palm leaf roof", km: "មនុស្សម្នាក់កំពុងប៉ះជួសជុលផ្នែកដែលពុកផុយនៃដំបូលស្លឹកត្នោត" },
+        description: { en: "A palm-leaf roof is rarely left untouched. Each year before the rains, households check the underside for thin, light-letting spots and weave small patch panels to replace worn sections before the wet season begins.", km: "ដំបូលស្លឹកត្នោតកម្រនឹងមិនត្រូវបានថែទាំឡើយ។ រៀងរាល់ឆ្នាំមុនរដូវភ្លៀង គ្រួសារត្រួតពិនិត្យផ្នែកខាងក្រោមដើម្បីរកកន្លែងស្តើងដែលពន្លឺអាចចាំងកាត់ ហើយត្បាញបន្ទះបំណះតូចៗជំនួសផ្នែកដែលខូច មុនពេលរដូវវស្សាចាប់ផ្តើម។" },
+        tip: { en: "Checking for light spots from inside the house is faster and more reliable than inspecting the roof from outside.", km: "ការរកមើលចំណុចដែលមានពន្លឺចាំងកាត់ពីខាងក្នុងផ្ទះ លឿន និងអាចទុកចិត្តបានជាងការត្រួតពិនិត្យដំបូលពីខាងក្រៅ។" },
     },
 ];

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth-session";
+import { readCurrentRole } from "@/lib/current-role";
 import {
   isSameOriginRequest,
   ORIGIN_MISMATCH_MESSAGE,
@@ -42,16 +43,17 @@ export async function PATCH(request) {
     return responseError("Please log in to manage accounts.", 401);
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (profileError) {
-    console.error("Could not verify role management permissions:", profileError);
+  const { role: actorRole, error: roleError } = await readCurrentRole(
+    supabase,
+    user.id,
+  );
+
+  if (roleError) {
+    console.error("Could not verify role management permissions:", roleError);
     return responseError("We couldn't verify your permissions.", 500);
   }
-  if (!isAdminRole(profile?.role)) {
+
+  if (!isAdminRole(actorRole)) {
     return responseError(
       "Only the archive owner can manage account roles.",
       403,

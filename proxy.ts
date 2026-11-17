@@ -2,7 +2,13 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getStrayRecoveryRedirect } from "@/lib/password-recovery";
 
-export async function middleware(request: NextRequest) {
+/**
+ * Proxy (formerly middleware) — Next.js 16 renamed the convention.
+ *
+ * It runs before every request to keep the Supabase auth session fresh, and it
+ * forwards a stray password-recovery link to the reset form.
+ */
+export async function proxy(request: NextRequest) {
   // A password reset link that Supabase sent to the Site URL (because the
   // reset page was not an allowed redirect) is forwarded to the reset form
   // with its one-time credentials, instead of being dropped on the home page.

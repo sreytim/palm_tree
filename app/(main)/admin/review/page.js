@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import ReviewQueue from "@/components/admin/ReviewQueue";
 import ReviewStatusMessage from "@/components/admin/ReviewStatusMessage";
 import { getCurrentUser } from "@/lib/auth-session";
+import { readCurrentRole } from "@/lib/current-role";
 import { canModerate } from "@/lib/submission-status";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
@@ -18,19 +19,28 @@ export default async function ReviewPage() {
     redirect("/login?next=%2Fadmin%2Freview");
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
+  // The database decides the role: `current_profile_role()` answers 'admin' for
+  // the e-mail in public.super_admins even when profiles.role is out of date.
+  const { role, error: roleError } = await readCurrentRole(supabase, user.id);
 
-  if (profileError) {
-    console.error("Could not verify review permissions:", profileError);
-    return <ReviewStatusMessage message="reviewPermissionUnavailable" />;
+  if (roleError) {
+    console.error("Could not verify review permissions:", roleError);
+    return (
+      <ReviewStatusMessage
+        message="reviewPermissionUnavailable"
+        signedInAs={user.email}
+      />
+    );
   }
 
-  if (!canModerate(profile?.role)) {
-    return <ReviewStatusMessage message="adminAccessRequired" />;
+  if (!canModerate(role)) {
+    return (
+      <ReviewStatusMessage
+        message="adminAccessRequired"
+        signedInAs={user.email}
+        role={role}
+      />
+    );
   }
 
   const { data: entries, error: entriesError } = await supabase

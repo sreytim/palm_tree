@@ -2,6 +2,13 @@
 -- Lab 6, Part 2 — seed data for the entries table
 -- Source: data/archive.js (8 entries, one statement per entry)
 --
+-- UPDATED CONTENT
+--   The English copy below is the original seed. Migration
+--   0014_archive_content_refresh.sql refreshes the same eight rows (matched by
+--   slug) to the wording in data/entry-content.js, and the app always renders
+--   the Khmer copy from that catalogue. Run this seed first on a fresh
+--   database, then 0014.
+--
 -- HOW TO RUN
 --   1. Apply migrations 0001–0008 in order. Migration 0005 creates public.entries.
 --   2. In Supabase Dashboard -> Authentication -> Users, copy your user's UUID.

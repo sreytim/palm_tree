@@ -9,6 +9,8 @@ import { useLanguage } from "../common/LanguageProvider";
 import LanguageSwitcher from "../common/LanguageSwitcher";
 import { supabase } from "@/lib/supabase-client";
 import { images } from "@/lib/images";
+import { readCurrentRole } from "@/lib/current-role";
+import { roleLabelKey } from "@/lib/submission-status";
 
 // Pages every visitor can reach. Signed-in members get two more links appended
 // after a divider, so the header always stays one predictable row.
@@ -17,13 +19,6 @@ const PUBLIC_LINKS = [
   { href: "/techniques", labelKey: "techniques" },
   { href: "/about", labelKey: "about" },
 ];
-
-const ROLE_LABEL_KEYS = {
-  reader: "roleReader",
-  contributor: "roleContributor",
-  editor: "roleEditor",
-  admin: "roleAdmin",
-};
 
 // A link stays active on its own page and on every page nested under it, so
 // "My submissions" is still highlighted while a returned entry is edited.
@@ -63,17 +58,16 @@ export default function Navbar() {
       }
       if (!nextUser) return;
 
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", nextUser.id)
-        .maybeSingle();
+      const { role: nextRole, error } = await readCurrentRole(
+        supabase,
+        nextUser.id,
+      );
       if (error) {
         console.error("Could not check archive access role:", error);
         return;
       }
       if (mounted) {
-        setRole(profile?.role ?? null);
+        setRole(nextRole);
       }
     };
 
@@ -157,7 +151,7 @@ export default function Navbar() {
       : []),
     ...(isAdmin ? [{ href: "/admin/users", labelKey: "manageAccounts" }] : []),
   ];
-  const roleLabel = role ? t(ROLE_LABEL_KEYS[role] ?? role) : "";
+  const roleLabel = role ? t(roleLabelKey(role)) : "";
   const accountInitial = user?.email ? user.email.charAt(0).toUpperCase() : "?";
   const allLinks = [...PUBLIC_LINKS, ...memberLinks];
 
@@ -203,7 +197,7 @@ export default function Navbar() {
         <Link
           href="/"
           className="group flex shrink-0 items-center"
-          aria-label="Traditional Palm-Leaf House Covering Techniques — Home"
+          aria-label={`${t("palmLeafHouseArchive")} — ${t("home")}`}
         >
           <Image
             src={images.logo}

@@ -57,7 +57,7 @@ then behaves like a login instead of a password reset. Allowlisting localhost
 does not hand a stranger a usable session: the app uses the PKCE flow, so a
 recovery code only works in the browser that requested the reset, because its
 verifier cookie is scoped to the requesting origin. As a safety net,
-`middleware.ts` forwards such a stray recovery link from any page to
+`proxy.ts` forwards such a stray recovery link from any page to
 `/reset-password` (keeping its one-time credentials), but the Redirect URLs
 should still be configured so the email points at the reset form directly.
 
@@ -140,16 +140,29 @@ been used. Open the link in the same browser that requested it when the default
 
 ```
 app/                    Pages (App Router)
-  page.tsx               Home
-  archive/                Archive listing + [slug] detail pages
-  techniques/             Visual step-by-step process page
-  stories/                Elder stories listing + [slug] detail pages
-  gallery/                Photo gallery with lightbox
-  about/                  About the archive
+  (main)/page.js         Home
+  (main)/archive/        Archive listing + [slug] detail pages
+  (main)/techniques/     Visual step-by-step process page
+  (main)/gallery/        Photo gallery with lightbox
+  (main)/about/          About the archive
+  (auth)/                Sign up, log in, password reset
+  api/                   Contribution, edit and admin endpoints
 components/             Reusable UI components
-data/                   Collection entries, stories, gallery, and techniques
+  archive/               Cards, search, filters, pagination
+  gallery/               Lightbox gallery
+  contribute/            Contribution form and submission editor
+  admin/                 Review queue, entry manager, account roles
+data/                   Bilingual content catalogue and relations
+  entry-content.js       English/Khmer copy for every archive entry
+  archive.js             Entries: identity, photograph, relations
+  topics.js              Topic vocabulary (bilingual names)
+  techniques.js          Six technique stages (bilingual copy)
+  gallery.js             Photographs (bilingual captions)
   entries.js             Lab 2/Lab 3 entry surface required by the lab
-lib/                    Shared TypeScript types + central image registry
+lang/i18n.js            Interface translations + localizeLabel()
+lib/                    Data access, validation and helper modules
+supabase/               Schema, row-level security, storage and seed SQL
+tests/                  Node test runner suites (`npm test`)
 ```
 
 ## Lab 1-3 Checklist
@@ -180,12 +193,70 @@ before using the Vercel URL for the lab submission.
   `lib/types.ts`, so they can later be swapped for calls to a database or
   CMS without changing the UI.
 
+## Bilingual content (English / Khmer)
+
+Every page renders in English or Khmer, chosen with the language switcher in
+the header. Three rules keep a Khmer page from slipping back into English:
+
+1. **Interface text** lives in `lang/i18n.js` under `translations.en` and
+   `translations.km`. Components read it with `t("someKey")`; a missing key
+   shows the key itself, which is obvious in review.
+2. **Archive copy** (titles, introductions, steps, tips, contributor stories,
+   gallery captions, topic names) lives in `data/entry-content.js`,
+   `data/gallery.js` and `data/topics.js` as `{ en, km }` pairs. Both languages
+   travel together, so a field can never be half-translated.
+3. **`localizeLabel(value, language)`** resolves all of the above: a bilingual
+   object, a dictionary label, or a plain string. It falls back to the other
+   language rather than rendering `undefined`.
+
+### Adding or editing an archive entry
+
+- Edit the copy in `data/entry-content.js`. Each entry is a keyed block with
+  `title`, `description`, `imageAlt`, `location`, `introduction`, `steps`,
+  `tips` and `contributorStory`, each holding `en` and `km`.
+- `data/archive.js` pairs that copy with the entry's identity, photograph and
+  relations (topic slugs, technique steps, gallery photographs, contributor).
+- `tests/archive-content.test.js` fails if any field is missing a language, or
+  if Khmer copy still contains English words.
+
+### How the database and the catalogue meet
+
+The `entries` table keeps one text column per field, written in the language the
+contributor used. `lib/entry-content.js` pairs that text with the Khmer copy
+from `data/entry-content.js` by slug:
+
+- a database row with the same number of steps and tips as the catalogue keeps
+  its own English and gains the catalogue's Khmer;
+- a row whose structure no longer matches falls back to the curated pair, so a
+  Khmer reader is never shown the wrong sentence beside a step;
+- a submission the archive has not translated yet passes through untouched, and
+  the detail page says in Khmer that the entry has not been translated yet.
+
+`supabase/migrations/0014_archive_content_refresh.sql` brings the database's
+English text in line with the catalogue. It matches rows by `slug`, updates only
+text columns, and is safe to run more than once:
+
+```bash
+# Dashboard -> SQL editor: paste and run the file, or with psql:
+psql "$SUPABASE_DB_URL" -f supabase/migrations/0014_archive_content_refresh.sql
+```
+
+After that, both languages in the database and in the app describe exactly the
+same practice. Without it, Khmer pages are still complete — the Khmer copy comes
+from the catalogue — but an English page keeps whatever English wording the
+database already holds.
+
 ## Notes
 
 - Placeholder photography is served from Picsum (picsum.photos) purely as a
   stand-in. Swap in real photographs as they're collected.
-- Fonts (Fraunces, Work Sans, IBM Plex Mono) load via `next/font/google` and
-  require an internet connection during `npm run build` / `npm run dev`.
+- Fonts are **self-hosted** from `public/fonts/` (Fraunces, Work Sans, IBM Plex
+  Mono, Noto Sans Khmer — all SIL Open Font License 1.1) and declared with
+  `@font-face` in `app/globals.css`. Nothing is fetched from Google at build or
+  run time, so `npm run dev` and `npm run build` work offline; the CSS stacks
+  name system fonts as fallbacks in case a file is ever removed.
+- `proxy.ts` is Next.js 16's name for middleware. It refreshes the Supabase auth
+  session before each request and redirects stray password-recovery links.
 
 ## Community Contributions
 
@@ -238,11 +309,35 @@ Rules the database enforces, not just the UI:
 - only an admin can change a profile role, and the owner account can never be
   demoted — not even by another admin.
 
+### The admin menu or review queue is missing
+
+The app decides who may review from `public.current_profile_role()`, which
+returns the role of the signed-in account. The owner is the e-mail in
+`public.super_admins`; the function answers `admin` for it even when the
+`profiles.role` column is out of date, and Row Level Security calls the same
+function, so the UI and the data cannot disagree.
+
+If an owner account signs in without the "Archive team" menu, or `/admin/review`
+says "Admin access required" and shows a role other than *admin*:
+
+1. Run `supabase/migrations/0015_admin_access_repair.sql` in the Supabase SQL
+   editor. It is idempotent: it re-adds the allow list, recreates the sign-up
+   trigger, creates any missing profile row, promotes the owner to `admin`, and
+   makes `current_profile_role()` honour the allow list.
+2. The last statement prints every account with its role, whether it is
+   allow-listed, and how many submissions are pending — that output is the
+   verification.
+3. Reload the app and sign in again.
+
+An empty queue with a correct `admin` role means there are no `pending` rows in
+this project: a submission made against a different Supabase project (for
+example a deployed site with other environment variables) will not appear here.
+
 Apply migrations `0001_schema.sql` through
-`0013_remove_sample_location_markers.sql` in order to the Supabase project used
-by the app (migration 0012 is idempotent, so re-running it repairs a policy set
-that was edited by hand in the dashboard). Migration 0005 creates
-`public.entries`, including `owner uuid not null references auth.users(id)`,
+`0015_admin_access_repair.sql` in order to the Supabase project used
+by the app (migrations 0012 and 0015 are idempotent, so re-running them repairs a
+policy set or a role that was edited by hand in the dashboard). Migration 0005
+creates `public.entries`, including `owner uuid not null references auth.users(id)`,
 and enables contribution policies. Migrations 0006–0007 clear placeholder
 attributions and harden sample/contribution data. Migration 0008 allows
 anonymous reads of published entries (including the seeded example rows),
