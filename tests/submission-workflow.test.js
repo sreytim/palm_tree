@@ -132,11 +132,13 @@ test("owners cannot move moderation fields, except the resubmission", () => {
 
 const ENTRY_ID = "0ab49510-1029-4e92-b98a-1d6d3c2cd10a";
 
-test("owners may only change pending or returned submissions", () => {
+test("owners may correct their own pending, returned or published entries", () => {
   assert.equal(canOwnerEdit("pending"), true);
   assert.equal(canOwnerEdit("returned"), true);
-  assert.equal(canOwnerEdit("published"), false);
+  assert.equal(canOwnerEdit("published"), true);
+  // Withdrawing deletes the row and its photo, so it stays unapproved-only.
   assert.equal(canOwnerWithdraw("pending"), true);
+  assert.equal(canOwnerWithdraw("returned"), true);
   assert.equal(canOwnerWithdraw("published"), false);
   assert.equal(canOwnerEdit(undefined), false);
 });
@@ -247,7 +249,7 @@ test("submission actions follow the status", () => {
     isPublic: false,
   });
   assert.deepEqual(getSubmissionActions("published"), {
-    canEdit: false,
+    canEdit: true,
     canWithdraw: false,
     isPublic: true,
   });

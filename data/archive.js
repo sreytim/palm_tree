@@ -53,7 +53,6 @@ export const archiveItems = [
       },
     ],
     featured: true,
-    isSample: true,
   },
   {
     id: "arch-02",
@@ -83,7 +82,6 @@ export const archiveItems = [
       },
     ],
     featured: true,
-    isSample: true,
   },
   {
     id: "arch-03",
@@ -113,7 +111,6 @@ export const archiveItems = [
         },
       },
     ],
-    isSample: true,
   },
   {
     id: "arch-04",
@@ -143,7 +140,6 @@ export const archiveItems = [
       },
     ],
     featured: true,
-    isSample: true,
   },
   {
     id: "arch-05",
@@ -172,7 +168,6 @@ export const archiveItems = [
         },
       },
     ],
-    isSample: true,
   },
   {
     id: "arch-06",
@@ -203,7 +198,6 @@ export const archiveItems = [
       },
     ],
     featured: true,
-    isSample: true,
   },
   {
     id: "arch-07",
@@ -232,7 +226,6 @@ export const archiveItems = [
         },
       },
     ],
-    isSample: true,
   },
   {
     id: "arch-08",
@@ -262,7 +255,6 @@ export const archiveItems = [
         },
       },
     ],
-    isSample: true,
   },
 ];
 
@@ -271,25 +263,14 @@ export function getArchiveItemBySlug(slug) {
 }
 
 export function getFeaturedArchiveItems() {
-  return archiveItems.filter((item) => item.featured && !item.isSample);
+  return archiveItems.filter((item) => item.featured);
 }
 
 export function getRelatedArchiveItems(current, count = 3) {
-  return archiveItems
-    .filter(
-      (item) =>
-        !item.isSample &&
-        item.id !== current.id &&
-        item.category === current.category,
-    )
-    .slice(0, count)
-    .concat(
-      archiveItems.filter(
-        (item) =>
-          !item.isSample &&
-          item.id !== current.id &&
-          item.category !== current.category,
-      ),
-    )
-    .slice(0, count);
+  const others = archiveItems.filter((item) => item.id !== current.id);
+
+  return [
+    ...others.filter((item) => item.category === current.category),
+    ...others.filter((item) => item.category !== current.category),
+  ].slice(0, count);
 }

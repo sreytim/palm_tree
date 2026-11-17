@@ -76,6 +76,7 @@ export default async function AdminEditEntryPage({ params }) {
       backHref="/admin/entries"
       backLabelKey="manageEntries"
       redirectTo="/admin/entries"
+      resubmitsOnSave={false}
     />
   );
 }

@@ -7,33 +7,34 @@
  * now backed by a `personId` that points here.
  *
  * Named people are the four interview contributors. The remaining records
- * represent the anonymous attribution types the sample content used, so that no
- * contributor string is left unattached. Replace names with real contributor
- * names — and get permission — before publishing.
+ * represent the anonymous attribution types the content uses (a household
+ * visit, a family interview, the archive's photograph collection), so that no
+ * contributor string is left unattached. Replace role labels with real
+ * contributor names — and get permission — before publishing.
  */
 export const people = [
   {
     id: "person-01",
-    slug: "yeay-sokha",
-    name: "Yeay Sokha (sample name)",
+    slug: "community-weaver-1",
+    name: "Community weaver",
     role: "weaver",
   },
   {
     id: "person-02",
-    slug: "ta-sarun",
-    name: "Ta Sarun (sample name)",
+    slug: "householder",
+    name: "Householder",
     role: "householder",
   },
   {
     id: "person-03",
-    slug: "srey-neang",
-    name: "Srey Neang (sample name)",
+    slug: "community-weaver-2",
+    name: "Community weaver",
     role: "weaver",
   },
   {
     id: "person-04",
-    slug: "ta-vibol",
-    name: "Ta Vibol (sample name)",
+    slug: "community-carpenter",
+    name: "Community carpenter",
     role: "carpenter",
   },
 
@@ -59,18 +60,14 @@ export const people = [
     attributionLabel: "Household Visit and Interview",
   },
   {
-    id: "person-sample-archive",
-    slug: "sample-archive-entry",
+    id: "person-archive-collection",
+    slug: "archive-photograph-collection",
     name: null,
-    role: "sample",
-    attributionLabel: "Sample Archive Entry",
-  },
-  {
-    id: "person-sample-household",
-    slug: "sample-household-visit",
-    name: null,
-    role: "sample",
-    attributionLabel: "Household Visit, Sample Entry",
+    role: "anonymous-contributor",
+    attributionLabel: {
+      en: "Archive photograph collection",
+      km: "បណ្ដុំរូបថតរបស់បណ្ណសារ",
+    },
   },
 ];
 

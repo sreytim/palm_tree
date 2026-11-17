@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
+import { formatDate } from "@/lib/date-format";
 import {
   STATUS_HINT_KEYS,
   STATUS_LABEL_KEYS,
@@ -28,14 +29,6 @@ function StatusBadge({ status, t }) {
       {t(STATUS_LABEL_KEYS[status] ?? status)}
     </span>
   );
-}
-
-function formatDate(value) {
-  if (!value) {
-    return "";
-  }
-
-  return new Date(value).toLocaleDateString();
 }
 
 export default function MySubmissions({
@@ -203,7 +196,7 @@ export default function MySubmissions({
                     <p className="font-mono text-xs uppercase tracking-[0.15em] text-clay-deep">
                       {localizeLabel(entry.category, language)}
                     </p>
-                    <h2 className="mt-2 font-display text-2xl font-medium text-ink">
+                    <h2 className="mt-2 font-display text-2xl font-medium text-ink break-words">
                       {localizeLabel(entry.title, language)}
                     </h2>
                     <p className="mt-2 text-sm text-ink-soft">
@@ -240,7 +233,8 @@ export default function MySubmissions({
                       href={`/my-submissions/${encodeURIComponent(entry.id)}/edit`}
                       className="rounded-full bg-palm px-5 py-2.5 text-sm font-semibold text-cream hover:bg-palm-deep"
                     >
-                      {entry.status === "returned"
+                      {entry.status === "returned" ||
+                      entry.status === "published"
                         ? t("reviseAndResubmit")
                         : t("editSubmission")}
                     </Link>

@@ -258,20 +258,21 @@ export const translations = {
     submissionReceived:
       "Thank you. Your entry is in the review queue, and its status will change here once an editor has read it.",
     submissionUpdated:
-      "Your changes are saved and the entry has gone back into the review queue.",
+      "Your changes are saved. The entry is in the review queue.",
+    entryUpdated: "Your changes are saved.",
     statusPending: "Pending review",
     statusPublished: "Published",
     statusReturned: "Returned",
     statusPendingHint:
       "The archive owner is reviewing this entry. You can keep correcting it, or withdraw it while it waits.",
     statusPublishedHint:
-      "This entry is published in the public archive. Contact the archive team if it needs a correction.",
+      "This entry is published in the public archive. If you edit it, your changes go back into the review queue before they appear again.",
     statusReturnedHint:
       "The archive owner asked for changes. Read the note below, revise the entry, and it returns to the review queue.",
     viewPublishedEntry: "View published entry",
     editSubmission: "Edit submission",
     editSubmissionHint:
-      "Update the details and save your changes. A returned entry goes back into the review queue automatically.",
+      "Update the details and save your changes. A returned or published entry goes back into the review queue automatically.",
     reviseAndResubmit: "Revise and resubmit",
     withdrawSubmission: "Withdraw",
     withdrawingSubmission: "Withdrawing...",
@@ -296,6 +297,9 @@ export const translations = {
       "No note was left with this return. Contact the archive team if you are unsure what to change.",
     returnedNoticeResubmit:
       "Save your changes to send the entry back into the review queue.",
+    publishedEditNoticeTitle: "You are editing a published entry",
+    publishedEditNotice:
+      "Saving your changes returns this entry to the review queue. It stays hidden from the public archive until the archive owner approves it again.",
     photoReplaceHint:
       "Optional: choose a new photo to replace the current one. JPEG, PNG, or WebP, up to 10 MB.",
     saveSubmissionChanges: "Save changes",
@@ -305,7 +309,7 @@ export const translations = {
     contributionNotAllowed:
       "Your account cannot change this entry. Please contact the archive team.",
     contributionNotEditable:
-      "This entry can no longer be edited. Published entries are managed by the archive team.",
+      "This entry cannot be edited. It may belong to another contributor or be closed for changes. Please contact the archive team.",
     contributionNotDeletable:
       "A published entry cannot be withdrawn. Please contact the archive team.",
     returnedPreviewNotice:
@@ -322,6 +326,7 @@ export const translations = {
     allStatuses: "All",
     entriesShown: "entries shown",
     noEntriesMatch: "No entries match this search.",
+    noEntriesYet: "No entries have been added yet.",
     featuredLabel: "Featured",
     featureEntry: "Feature",
     unfeatureEntry: "Remove feature",
@@ -357,6 +362,13 @@ export const translations = {
       "Only the archive owner can approve submissions and manage accounts. The owner is the e-mail listed in public.super_admins.",
     accountRole: "Account role",
     roleUnknown: "not assigned",
+    notFoundTitle: "This page could not be found",
+    notFoundHint:
+      "The link may be broken, or the entry may have moved or gone back into review.",
+    backHome: "Back to the home page",
+    errorTitle: "Something went wrong",
+    errorHint:
+      "We couldn't load this page. Please try again; your saved content has not been changed.",
 
   },
   km: {
@@ -492,7 +504,7 @@ export const translations = {
     reviewSubmissions: "ពិនិត្យការដាក់ស្នើ",
     pendingSubmissions: "ការដាក់ស្នើពីសហគមន៍ដែលរង់ចាំ",
     reviewSubmissionsHint:
-      "ពិនិត្យកំណត់ត្រានីមួយៗ និងរូបថតដែលភ្ជាប់មក។ ការផ្សព្វផ្សាយនឹងធ្វើឱ្យវាបង្ហាញក្នុងបណ្ណសារសាធារណៈ។ ការដាក់ក្នុងបណ្ណសារនឹងដកវាចេញពីបញ្ជីរង់ចាំ ដោយមិនផ្សព្វផ្សាយ។",
+      "ពិនិត្យកំណត់ត្រានីមួយៗ និងរូបថតដែលភ្ជាប់មក។ ការផ្សព្វផ្សាយនឹងធ្វើឱ្យវាបង្ហាញក្នុងបណ្ណសារសាធារណៈ។ ការដាក់ត្រឡប់នឹងផ្ញើវាទៅអ្នកនិពន្ធវិញ ដើម្បីកែប្រែ។",
     noPendingSubmissions: "មិនមានការដាក់ស្នើដែលកំពុងរង់ចាំការពិនិត្យទេ។",
     locationNotProvided: "មិនបានផ្តល់ទីតាំង ឬកាលបរិច្ឆេទទេ",
     viewSubmissionPhoto: "មើលរូបថត",
@@ -500,8 +512,7 @@ export const translations = {
     submissionDetails: "អានការដាក់ស្នើពេញលេញ",
     submittedOn: "បានដាក់ស្នើ",
     publishSubmission: "ផ្សព្វផ្សាយកំណត់ត្រា",
-    archiveSubmission: "ដាក់ក្នុងបណ្ណសារ",
-    returnSubmission: "ដូនការដាក់ស្នើត្រឡប់សហគមន៍",
+    returnSubmission: "ត្រឡប់ការដាក់ស្នើទៅអ្នកនិពន្ធ",
     savingReview: "កំពុងរក្សាទុក...",
     reviewUpdateFailed: "មិនអាចធ្វើបច្ចុប្បន្នភាពការដាក់ស្នើនេះបានទេ។ សូមព្យាយាមម្ដងទៀត។",
     contributionAuthUnavailable: "មិនអាចពិនិត្យស្ថានភាពចូលគណនីរបស់អ្នកបានទេនៅពេលនេះ។",
@@ -542,7 +553,7 @@ export const translations = {
     photoUploadRules: "អនុញ្ញាតតែ JPEG, PNG ឬ WebP។ ទំហំអតិបរមា៖ ១០ MB។",
     photoPrivacyHint:
       "អ្នកណាក៏អាចមើលរូបថតតាមតំណរបស់វាបាន ទោះបីកំណត់ត្រាកំពុងរង់ចាំការពិនិត្យក៏ដោយ។ កុំបង្ហោះរូបថតឯកជន ឬព័ត៌មានរសើប។",
-    photoDescription: "ការពិពណ៌នារូបថត (alt text)",
+    photoDescription: "ការពិពណ៌នារូបថត (សម្រាប់អ្នកអានអេក្រង់)",
     submittingContribution: "កំពុងបង្ហោះរូបថត និងរក្សាទុក...",
     submitContribution: "ដាក់ស្នើដើម្បីពិនិត្យ",
     contributionSubmitFailed:
@@ -616,20 +627,21 @@ export const translations = {
     submissionReceived:
       "សូមអរគុណ។ កំណត់ត្រារបស់អ្នកស្ថិតក្នុងបញ្ជីរង់ចាំពិនិត្យ ហើយស្ថានភាពនឹងផ្លាស់ប្តូរនៅទីនេះ បន្ទាប់ពីអ្នកកែសម្រួលបានអាន។",
     submissionUpdated:
-      "ការកែប្រែរបស់អ្នកត្រូវបានរក្សាទុក ហើយកំណត់ត្រាបានត្រឡប់ទៅបញ្ជីរង់ចាំពិនិត្យវិញ។",
+      "ការកែប្រែរបស់អ្នកត្រូវបានរក្សាទុក។ កំណត់ត្រាស្ថិតក្នុងបញ្ជីរង់ចាំពិនិត្យ។",
+    entryUpdated: "ការកែប្រែរបស់អ្នកត្រូវបានរក្សាទុក។",
     statusPending: "រង់ចាំពិនិត្យ",
     statusPublished: "បានផ្សព្វផ្សាយ",
     statusReturned: "បានដាក់ត្រឡប់",
     statusPendingHint:
       "ម្ចាស់បណ្ណសារកំពុងពិនិត្យកំណត់ត្រានេះ។ អ្នកអាចបន្តកែ ឬដកវាចេញនៅពេលរង់ចាំ។",
     statusPublishedHint:
-      "កំណត់ត្រានេះបានផ្សព្វផ្សាយក្នុងបណ្ណសារសាធារណៈ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ ប្រសិនបើត្រូវកែ។",
+      "កំណត់ត្រានេះបានផ្សព្វផ្សាយក្នុងបណ្ណសារសាធារណៈ។ ប្រសិនបើអ្នកកែវា ការកែប្រែនឹងត្រឡប់ទៅបញ្ជីរង់ចាំពិនិត្យ មុនពេលបង្ហាញជាសាធារណៈម្តងទៀត។",
     statusReturnedHint:
       "ម្ចាស់បណ្ណសារបានស្នើឱ្យកែប្រែ។ សូមអានកំណត់សម្គាល់ខាងក្រោម កែកំណត់ត្រា ហើយវានឹងត្រឡប់ទៅបញ្ជីរង់ចាំវិញ។",
     viewPublishedEntry: "មើលកំណត់ត្រាដែលបានផ្សព្វផ្សាយ",
     editSubmission: "កែការដាក់ស្នើ",
     editSubmissionHint:
-      "កែព័ត៌មាន ហើយរក្សាទុកការផ្លាស់ប្តូរ។ កំណត់ត្រាដែលត្រូវដាក់ត្រឡប់នឹងត្រឡប់ទៅបញ្ជីរង់ចាំដោយស្វ័យប្រវត្តិ។",
+      "កែព័ត៌មាន ហើយរក្សាទុកការផ្លាស់ប្តូរ។ កំណត់ត្រាដែលត្រូវដាក់ត្រឡប់ ឬបានផ្សព្វផ្សាយនឹងត្រឡប់ទៅបញ្ជីរង់ចាំដោយស្វ័យប្រវត្តិ។",
     reviseAndResubmit: "កែ ហើយដាក់ស្នើឡើងវិញ",
     withdrawSubmission: "ដកចេញ",
     withdrawingSubmission: "កំពុងដកចេញ...",
@@ -654,6 +666,9 @@ export const translations = {
       "មិនមានកំណត់សម្គាល់ជាមួយការដាក់ត្រឡប់នេះទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ ប្រសិនបើមិនច្បាស់អំពីអ្វីត្រូវកែ។",
     returnedNoticeResubmit:
       "រក្សាទុកការផ្លាស់ប្តូរ ដើម្បីដាក់កំណត់ត្រាត្រឡប់ទៅបញ្ជីរង់ចាំវិញ។",
+    publishedEditNoticeTitle: "អ្នកកំពុងកែកំណត់ត្រាដែលបានផ្សព្វផ្សាយ",
+    publishedEditNotice:
+      "ការរក្សាទុកការកែប្រែនឹងដាក់កំណត់ត្រានេះត្រឡប់ទៅបញ្ជីរង់ចាំពិនិត្យ។ វានឹងមិនបង្ហាញក្នុងបណ្ណសារសាធារណៈទេ រហូតដល់ម្ចាស់បណ្ណសារអនុម័តម្តងទៀត។",
     photoReplaceHint:
       "ជាជម្រើស៖ ជ្រើសរូបថតថ្មីដើម្បីជំនួសរូបបច្ចុប្បន្ន។ JPEG, PNG ឬ WebP រហូតដល់ ១០ MB។",
     saveSubmissionChanges: "រក្សាទុកការផ្លាស់ប្តូរ",
@@ -663,7 +678,7 @@ export const translations = {
     contributionNotAllowed:
       "គណនីរបស់អ្នកមិនអាចផ្លាស់ប្តូរកំណត់ត្រានេះបានទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ។",
     contributionNotEditable:
-      "កំណត់ត្រានេះមិនអាចកែបានទៀតទេ។ កំណត់ត្រាដែលផ្សព្វផ្សាយហើយ គ្រប់គ្រងដោយក្រុមការងារបណ្ណសារ។",
+      "កំណត់ត្រានេះមិនអាចកែបានទេ។ វាអាចជារបស់អ្នករួមចំណែកផ្សេង ឬត្រូវបានបិទមិនឱ្យកែប្រែ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ។",
     contributionNotDeletable:
       "កំណត់ត្រាដែលផ្សព្វផ្សាយហើយមិនអាចដកចេញបានទេ។ សូមទាក់ទងក្រុមការងារបណ្ណសារ។",
     returnedPreviewNotice:
@@ -679,6 +694,7 @@ export const translations = {
     allStatuses: "ទាំងអស់",
     entriesShown: "កំណត់ត្រាបង្ហាញ",
     noEntriesMatch: "គ្មានកំណត់ត្រាត្រូវនឹងការស្វែងរកនេះទេ។",
+    noEntriesYet: "មិនទាន់មានកំណត់ត្រាត្រូវបានបន្ថែមទេ។",
     featuredLabel: "លេចធ្លោ",
     featureEntry: "ធ្វើឱ្យលេចធ្លោ",
     unfeatureEntry: "ដកចេញពីលេចធ្លោ",
@@ -714,6 +730,13 @@ export const translations = {
       "មានតែម្ចាស់បណ្ណសារប៉ុណ្ណោះដែលអាចអនុម័តការដាក់ស្នើ និងគ្រប់គ្រងគណនីបាន។ ម្ចាស់បណ្ណសារគឺជាអ៊ីមែលដែលបានកត់ទុកក្នុង public.super_admins។",
     accountRole: "តួនាទីគណនី",
     roleUnknown: "មិនបានកំណត់",
+    notFoundTitle: "រកមិនឃើញទំព័រនេះទេ",
+    notFoundHint:
+      "តំណអាចខូច ឬកំណត់ត្រាអាចត្រូវបានផ្លាស់ប្តូរ ឬដាក់ត្រឡប់ទៅបញ្ជីរង់ចាំពិនិត្យវិញ។",
+    backHome: "ត្រឡប់ទៅទំព័រដើម",
+    errorTitle: "មានបញ្ហាមួយបានកើតឡើង",
+    errorHint:
+      "យើងមិនអាចផ្ទុកទំព័រនេះបានទេ។ សូមព្យាយាមម្តងទៀត។ មាតិកាដែលបានរក្សាទុករបស់អ្នកមិនត្រូវបានផ្លាស់ប្តូរទេ។",
 
   },
 };
@@ -1212,6 +1235,26 @@ export const localizedLabels = {
   "Household Visit and Interview": {
     en: "Household Visit and Interview",
     km: "ទស្សនកិច្ចផ្ទះ និងសម្ភាសន៍",
+  },
+  "Interview with a community elder": {
+    en: "Interview with a community elder",
+    km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+  },
+  "Community Elder Interview": {
+    en: "Community Elder Interview",
+    km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+  },
+  "Family interview with the contributor's uncle": {
+    en: "Family interview with the contributor's uncle",
+    km: "សម្ភាសន៍គ្រួសារជាមួយពូរបស់អ្នករួមចំណែក",
+  },
+  "Household visit and interview": {
+    en: "Household visit and interview",
+    km: "ទស្សនកិច្ចផ្ទះ និងសម្ភាសន៍",
+  },
+  "Archive photograph collection": {
+    en: "Archive photograph collection",
+    km: "បណ្ដុំរូបថតរបស់បណ្ណសារ",
   },
   "Kampong Speu Province, Cambodia": {
     en: "Kampong Speu Province, Cambodia",

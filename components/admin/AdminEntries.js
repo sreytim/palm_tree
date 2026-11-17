@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import { localizeLabel } from "@/lang/i18n";
+import { formatDate } from "@/lib/date-format";
 import {
   MIN_RETURN_NOTE_LENGTH,
   STATUS_LABEL_KEYS,
@@ -189,7 +190,7 @@ export default function AdminEntries({ initialEntries, role, justUpdated = false
           role="status"
           className="mb-6 rounded-xl bg-palm/10 p-4 text-sm text-palm-deep"
         >
-          {t("submissionUpdated")}
+          {t("entryUpdated")}
         </p>
       )}
 
@@ -199,7 +200,7 @@ export default function AdminEntries({ initialEntries, role, justUpdated = false
 
       {visibleEntries.length === 0 ? (
         <p className="rounded-2xl border border-beige bg-cream-deep p-6 text-ink-soft">
-          {t("noEntriesMatch")}
+          {entries.length === 0 ? t("noEntriesYet") : t("noEntriesMatch")}
         </p>
       ) : (
         <ul className="space-y-4">
@@ -217,12 +218,14 @@ export default function AdminEntries({ initialEntries, role, justUpdated = false
                     <p className="font-mono text-xs uppercase tracking-[0.15em] text-clay-deep">
                       {localizeLabel(entry.category, language)}
                     </p>
-                    <h2 className="mt-2 font-display text-xl font-medium text-ink">
+                    <h2 className="mt-2 font-display text-xl font-medium text-ink break-words">
                       {localizeLabel(entry.title, language)}
                     </h2>
-                    <p className="mt-2 text-sm text-ink-soft">
-                      {entry.contributor ? `${entry.contributor} · ` : ""}
-                      {new Date(entry.createdAt).toLocaleDateString()}
+                    <p className="mt-2 text-sm text-ink-soft break-words">
+                      {entry.contributor
+                        ? `${localizeLabel(entry.contributor, language)} · `
+                        : ""}
+                      {formatDate(entry.createdAt)}
                       {entry.date ? ` · ${entry.date}` : ""}
                       {entry.featured ? ` · ${t("featuredLabel")}` : ""}
                     </p>

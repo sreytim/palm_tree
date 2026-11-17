@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, Lightbulb, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/components/common/LanguageProvider";
 import ArchiveCard from "@/components/archive/ArchiveCard";
@@ -113,7 +112,31 @@ export default function ArchiveEntryPage({ params }) {
         </p>
       );
     }
-    notFound();
+
+    // A missing row is either an unknown slug or a pending/returned entry the
+    // visitor is not allowed to read. This component runs on the client, where
+    // `notFound()` is not supported, so it renders the same plain-word panel
+    // the app's not-found page uses instead of failing with a stack trace.
+    return (
+      <section className="mx-auto max-w-2xl px-5 py-24 text-center sm:px-8">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-clay-deep">
+          404
+        </p>
+        <h1 className="mt-3 font-display text-3xl font-medium text-ink sm:text-4xl">
+          {t("notFoundTitle")}
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl leading-relaxed text-ink-soft">
+          {t("notFoundHint")}
+        </p>
+        <Link
+          href="/archive"
+          className="mt-8 inline-flex items-center gap-2 rounded-full bg-palm px-6 py-3 font-semibold text-cream transition-colors hover:bg-palm-deep"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          {t("backToArchive")}
+        </Link>
+      </section>
+    );
   }
 
   const isPending = item.status === "pending";
@@ -167,7 +190,7 @@ export default function ArchiveEntryPage({ params }) {
             <span className="rounded-full bg-palm-deep/90 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-cream">
               {localizeLabel(item.category, language)}
             </span>
-            <h1 className="mt-4 max-w-3xl font-display text-3xl font-medium text-cream sm:text-5xl">
+            <h1 className="mt-4 max-w-3xl font-display text-3xl font-medium text-cream sm:text-5xl break-words">
               {localizeLabel(item.title, language)}
             </h1>
           </div>
@@ -188,7 +211,8 @@ export default function ArchiveEntryPage({ params }) {
             <span className="flex items-center gap-1.5">
               <Users size={15} className="text-palm-deep" aria-hidden="true" />
               <span>
-                {t("contributor")}: {item.contributor}
+                {t("contributor")}:{" "}
+                {localizeLabel(item.contributor, language)}
               </span>
             </span>
           )}
@@ -210,7 +234,7 @@ export default function ArchiveEntryPage({ params }) {
           <h2 className="mb-4 font-display text-2xl font-medium text-ink">
             {t("introduction")}
           </h2>
-          <p className="max-w-3xl text-base leading-relaxed text-ink-soft sm:text-lg">
+          <p className="max-w-3xl text-base leading-relaxed text-ink-soft sm:text-lg break-words">
             {localizeLabel(item.introduction, language)}
           </p>
         </section>

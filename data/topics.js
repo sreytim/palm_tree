@@ -118,7 +118,7 @@ export const topics = [
     name: { en: "Traditional Houses", km: "ផ្ទះប្រពៃណី" },
     scope: "gallery",
   },
-  { id: "topic-tools", slug: "tools", name: { en: "Tools", km: "ឧបករណ៍" }, scope: "gallery" },
+  { id: "topic-tools", slug: "tools", name: { en: "Tools", km: "ឧបករណ៍" }, scope: "archive" },
   { id: "topic-weaving", slug: "weaving", name: { en: "Weaving", km: "ការត្បាញ" }, scope: "gallery" },
   {
     id: "topic-preparing-leaves",

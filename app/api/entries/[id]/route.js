@@ -16,6 +16,7 @@ import {
 import {
   canManageEntries,
   canOwnerEdit,
+  canOwnerWithdraw,
   isAdminRole,
   isEntryId,
 } from "@/lib/submission-status";
@@ -121,10 +122,12 @@ async function removeUnreferencedPhoto(supabase, photoUrl) {
 /**
  * Edit an entry.
  *
- * The author may correct a pending or returned submission; saving a returned
- * entry puts it back in the review queue automatically (the database trigger
- * moves `returned` to `pending` and clears the old review note). Editors and
- * admins may correct any entry, including a published one.
+ * The author may correct a pending, returned or published submission. Saving a
+ * returned or published entry puts it back in the review queue automatically:
+ * the database trigger moves it to `pending` and clears the old review note, so
+ * a public entry is re-approved before it is visible again. Editors and admins
+ * may correct any entry, and their changes to a published entry keep it
+ * published (reviewing is not a resubmission).
  *
  * The request is multipart when a new photo is attached, JSON otherwise.
  */
@@ -347,10 +350,11 @@ export async function DELETE(request, { params }) {
 
   const isOwner = entry.owner === user.id;
   // Removing a row is the archive owner's call; an author may only withdraw
-  // their own unapproved submission.
+  // their own unapproved submission (a published entry is not withdrawn this
+  // way, even though its author may still revise it).
   const allowedToDelete = isAdminRole(role)
     ? true
-    : isOwner && canOwnerEdit(entry.status);
+    : isOwner && canOwnerWithdraw(entry.status);
 
   if (!allowedToDelete) {
     return responseError(

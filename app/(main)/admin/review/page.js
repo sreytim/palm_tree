@@ -46,7 +46,7 @@ export default async function ReviewPage() {
   const { data: entries, error: entriesError } = await supabase
     .from("entries")
     .select(
-      "id, slug, title, description, category, location, image_path, image_alt, introduction, steps, tips, contributor_story, created_at",
+      "id, slug, title, description, category, contributor, location, image_path, image_alt, introduction, steps, tips, contributor_story, created_at",
     )
     .eq("status", "pending")
     .order("created_at", { ascending: true });

@@ -70,9 +70,6 @@ export default function EntriesBrowser({ pageSize }) {
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft">
           {t("loadErrorHint")}
         </p>
-        <p className="mx-auto mt-3 max-w-2xl font-mono text-xs text-ink-soft/70">
-          {error}
-        </p>
       </div>
     );
   }

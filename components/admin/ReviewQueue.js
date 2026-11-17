@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/common/LanguageProvider";
+import { localizeLabel } from "@/lang/i18n";
+import { formatDateTime } from "@/lib/date-format";
 import { MIN_RETURN_NOTE_LENGTH } from "@/lib/submission-status";
 
 export default function ReviewQueue({ initialEntries }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const router = useRouter();
   const [entries, setEntries] = useState(initialEntries);
   const [notes, setNotes] = useState({});
@@ -81,12 +83,18 @@ export default function ReviewQueue({ initialEntries }) {
               <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                   <p className="font-mono text-xs uppercase tracking-[0.15em] text-clay-deep">
-                    {entry.category}
+                    {localizeLabel(entry.category, language)}
                   </p>
-                  <h2 className="mt-2 font-display text-2xl font-medium text-ink">
+                  <h2 className="mt-2 font-display text-2xl font-medium text-ink break-words">
                     {entry.title}
                   </h2>
-                  <p className="mt-3 leading-relaxed text-ink-soft">
+                  {entry.contributor && (
+                    <p className="mt-2 text-sm text-ink-soft break-words">
+                      {t("contributor")}:{" "}
+                      {localizeLabel(entry.contributor, language)}
+                    </p>
+                  )}
+                  <p className="mt-3 leading-relaxed text-ink-soft break-words">
                     {entry.description}
                   </p>
                   {entry.location && (
@@ -119,7 +127,7 @@ export default function ReviewQueue({ initialEntries }) {
                 <summary className="cursor-pointer font-medium text-ink">
                   {t("submissionDetails")}
                 </summary>
-                <div className="mt-4 space-y-4 text-sm leading-relaxed text-ink-soft">
+                <div className="mt-4 space-y-4 text-sm leading-relaxed text-ink-soft break-words">
                   <p>
                     <strong className="text-ink">{t("introduction")}: </strong>
                     {entry.introduction}
@@ -155,7 +163,7 @@ export default function ReviewQueue({ initialEntries }) {
                   )}
                   <p className="text-xs">
                     {t("submittedOn")}:{" "}
-                    {new Date(entry.created_at).toLocaleString()}
+                    {formatDateTime(entry.created_at)}
                     {entry.image_alt && (
                       <>
                         {" · "}

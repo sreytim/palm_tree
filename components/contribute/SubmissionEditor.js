@@ -21,6 +21,7 @@ export default function SubmissionEditor({
   backHref = "/my-submissions",
   backLabelKey = "mySubmissions",
   redirectTo = "/my-submissions",
+  resubmitsOnSave = true,
 }) {
   const { t } = useLanguage();
 
@@ -43,11 +44,26 @@ export default function SubmissionEditor({
 
       {status === "returned" && (
         <div className="mb-8 rounded-2xl bg-clay/10 p-5 text-sm text-clay-deep">
-          <p className="font-semibold text-ink">{t("returnedNoticeTitle")}</p>
-          <p className="mt-1 leading-relaxed">
-            {reviewNote || t("returnedNoticeNoNote")}
+          <p className="font-semibold text-ink">
+            {resubmitsOnSave ? t("returnedNoticeTitle") : t("reviewNoteLabel")}
           </p>
-          <p className="mt-2 leading-relaxed">{t("returnedNoticeResubmit")}</p>
+          {(reviewNote || resubmitsOnSave) && (
+            <p className="mt-1 leading-relaxed">
+              {reviewNote || t("returnedNoticeNoNote")}
+            </p>
+          )}
+          {resubmitsOnSave && (
+            <p className="mt-2 leading-relaxed">{t("returnedNoticeResubmit")}</p>
+          )}
+        </div>
+      )}
+
+      {status === "published" && resubmitsOnSave && (
+        <div className="mb-8 rounded-2xl bg-beige-soft p-5 text-sm text-ink-soft">
+          <p className="font-semibold text-ink">
+            {t("publishedEditNoticeTitle")}
+          </p>
+          <p className="mt-1 leading-relaxed">{t("publishedEditNotice")}</p>
         </div>
       )}
 

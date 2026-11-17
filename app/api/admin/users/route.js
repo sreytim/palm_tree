@@ -95,8 +95,7 @@ export async function PATCH(request) {
     console.error("Could not change the profile role:", updateError);
     if (updateError.code === "42501") {
       return responseError(
-        updateError.message ||
-          "This account role cannot be changed.",
+        "This account role cannot be changed.",
         403,
         "roleNotAllowed",
       );

@@ -13,10 +13,11 @@ export const metadata = {
 };
 
 /**
- * The author corrects a pending or returned submission. Row Level Security
- * (`entries_owner_update`) only allows writes while the entry is pending or
- * returned, so this page refuses to open for a published entry. Saving a
- * returned entry puts it back in the review queue.
+ * The author corrects a pending, returned or published submission. Row Level
+ * Security (`entries_owner_update`) allows those three statuses, and the
+ * database trigger turns a returned or published row back into 'pending' when
+ * its author saves it. A published entry therefore has to be re-approved before
+ * it appears in the public archive again.
  */
 export default async function EditSubmissionPage({ params }) {
   const { id } = await params;

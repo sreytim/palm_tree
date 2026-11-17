@@ -21,6 +21,15 @@ const nextConfig = {
     "192.168.0.112",
   ],
   images: {
+    // The archive's illustration set is SVG (gallery, category cards, process
+    // timeline). Next refuses to serve SVG through the image optimizer unless
+    // this is enabled, which returned HTTP 400 and broke every illustration.
+    // Every SVG here ships from `public/`, so it is first-party, static and
+    // trusted; the security policy below keeps it inert if one is ever opened
+    // directly.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "images.unsplash.com" },

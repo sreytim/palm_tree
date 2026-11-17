@@ -24,6 +24,10 @@ export const entryContent = {
   // arch-01 — preparation
   // -------------------------------------------------------------------------
   "preparing-palm-leaves-for-house-covering": {
+    contributor: {
+      en: "Community Elder Interview",
+      km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+    },
     title: {
       en: "Preparing Palm Leaves for House Covering",
       km: "ការរៀបចំស្លឹកត្នោតសម្រាប់ប្រក់ដំបូលផ្ទះ",
@@ -109,6 +113,10 @@ export const entryContent = {
   // arch-02 — weaving the panel
   // -------------------------------------------------------------------------
   "the-cross-weave-pattern": {
+    contributor: {
+      en: "Community Elder Interview",
+      km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+    },
     title: {
       en: "The Cross-Weave Pattern",
       km: "លំនាំត្បាញឆ្លាស់គ្នា",
@@ -195,6 +203,10 @@ export const entryContent = {
   // arch-03 — the frame that carries the covering
   // -------------------------------------------------------------------------
   "raising-the-roof-frame": {
+    contributor: {
+      en: "Family Interview, Contributor's Uncle",
+      km: "សម្ភាសន៍គ្រួសារ៖ ពូរបស់អ្នករួមចំណែក",
+    },
     title: {
       en: "Raising the Roof Frame",
       km: "ការលើកគ្រោងដំបូល",
@@ -282,6 +294,10 @@ export const entryContent = {
   // arch-04 — fixing the covering
   // -------------------------------------------------------------------------
   "tying-panels-to-the-roof-frame": {
+    contributor: {
+      en: "Community Elder Interview",
+      km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+    },
     title: {
       en: "Tying Panels to the Roof Frame",
       km: "ការចងបន្ទះស្លឹកលើគ្រោងដំបូល",
@@ -364,6 +380,10 @@ export const entryContent = {
   // arch-05 — keeping the roof alive
   // -------------------------------------------------------------------------
   "seasonal-roof-repair": {
+    contributor: {
+      en: "Community Elder Interview",
+      km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+    },
     title: {
       en: "Seasonal Roof Repair",
       km: "ការជួសជុលដំបូលតាមរដូវកាល",
@@ -450,6 +470,10 @@ export const entryContent = {
   // arch-06 — a house that is lived in
   // -------------------------------------------------------------------------
   "the-family-house-in-kampong-speu": {
+    contributor: {
+      en: "Household Visit and Interview",
+      km: "ទស្សនកិច្ចផ្ទះ និងសម្ភាសន៍",
+    },
     title: {
       en: "The Family House in Kampong Speu",
       km: "ផ្ទះគ្រួសារមួយនៅកំពង់ស្ពឺ",
@@ -536,6 +560,10 @@ export const entryContent = {
   // arch-07 — drying
   // -------------------------------------------------------------------------
   "drying-technique-for-longer-lasting-panels": {
+    contributor: {
+      en: "Community Elder Interview",
+      km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+    },
     title: {
       en: "Drying Leaves in the Shade",
       km: "ការហាលស្លឹកក្នុងម្លប់",
@@ -612,6 +640,10 @@ export const entryContent = {
   // arch-08 — the tools
   // -------------------------------------------------------------------------
   "the-tools-of-a-traditional-thatcher": {
+    contributor: {
+      en: "Community Elder Interview",
+      km: "សម្ភាសន៍ជាមួយចាស់ទុំសហគមន៍",
+    },
     title: {
       en: "The Tools of a Traditional Thatcher",
       km: "ឧបករណ៍របស់ជាងប្រក់ស្លឹកត្នោត",

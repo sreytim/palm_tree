@@ -41,6 +41,7 @@ const proseFields = [
   "description",
   "imageAlt",
   "location",
+  "contributor",
   "introduction",
   "contributorStory",
 ];
@@ -172,6 +173,7 @@ test("a database row gains the Khmer copy that matches its slug", () => {
     description: "A short English description.",
     imageAlt: "A patched roof",
     location: "Takeo Province, Cambodia",
+    contributor: "Community Elder Interview",
     introduction: "English introduction kept from the database.",
     contributorStory: "A story from the database.",
     // Same number of steps and tips as the catalogue, so the English the editor
@@ -187,6 +189,8 @@ test("a database row gains the Khmer copy that matches its slug", () => {
 
   assert.equal(merged.title.en, "Seasonal Roof Repair");
   assert.equal(merged.title.km, catalogue.title.km);
+  assert.equal(merged.contributor.en, "Community Elder Interview");
+  assert.equal(merged.contributor.km, catalogue.contributor.km);
   assert.equal(merged.introduction.en, row.introduction);
   assert.equal(merged.introduction.km, catalogue.introduction.km);
   assert.equal(merged.steps.length, catalogue.steps.length);
@@ -194,6 +198,37 @@ test("a database row gains the Khmer copy that matches its slug", () => {
   assert.equal(merged.steps[0].title.km, catalogue.steps[0].title.km);
   assert.equal(merged.tips[0].en, catalogue.tips[0].en);
   assert.equal(merged.tips[0].km, catalogue.tips[0].km);
+});
+
+test("legacy (sample) markers never reach a public page", () => {
+  const catalogue = entryContent["seasonal-roof-repair"];
+  const merged = withBilingualContent({
+    slug: "seasonal-roof-repair",
+    location: "Takeo Province, Cambodia (sample)",
+    introduction:
+      "An English introduction kept from the database. (sample)",
+    steps: catalogue.steps.map((step) => ({
+      title: `${step.title.en} (sample)`,
+      description: step.description.en,
+    })),
+    tips: catalogue.tips.map((tip) => `${tip.en} (sample)`),
+  });
+
+  assert.equal(merged.location.en, "Takeo Province, Cambodia");
+  assert.doesNotMatch(merged.introduction.en, /sample/i);
+  assert.doesNotMatch(merged.steps[0].title.en, /sample/i);
+  assert.doesNotMatch(merged.tips[0].en, /sample/i);
+});
+
+test("a legacy row with no contributor gains the catalogue's bilingual credit", () => {
+  const catalogue = entryContent["seasonal-roof-repair"];
+  const merged = withBilingualContent({
+    slug: "seasonal-roof-repair",
+    contributor: null,
+  });
+
+  assert.equal(merged.contributor.en, catalogue.contributor.en);
+  assert.equal(merged.contributor.km, catalogue.contributor.km);
 });
 
 test("a rewritten step list falls back to the curated bilingual pair", () => {

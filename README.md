@@ -37,6 +37,11 @@ is intended for browser use; never put a `service_role` key or other secret in
 a `NEXT_PUBLIC_` variable or committed file. `.env.local` is git-ignored.
 Restart `npm run dev` after changing environment variables.
 
+A history scan (`git log -p`) shows that only `.env.example` is tracked, with
+empty values; no service key, database URL or password has ever been committed.
+If a secret ever does reach a commit, rotate it first and rewrite the history
+before pushing again — deleting it in a later commit does not remove it.
+
 In Supabase Authentication → URL Configuration, configure:
 
 - **Site URL**: `https://palm-tree-gilt.vercel.app`
@@ -158,7 +163,8 @@ data/                   Bilingual content catalogue and relations
   topics.js              Topic vocabulary (bilingual names)
   techniques.js          Six technique stages (bilingual copy)
   gallery.js             Photographs (bilingual captions)
-  entries.js             Lab 2/Lab 3 entry surface required by the lab
+  people.js              Contributor and attribution records
+  entries.js             Stable entry exports used by older lab pages
 lang/i18n.js            Interface translations + localizeLabel()
 lib/                    Data access, validation and helper modules
 supabase/               Schema, row-level security, storage and seed SQL
@@ -169,29 +175,29 @@ tests/                  Node test runner suites (`npm test`)
 
 1. **Lab 1:** Run `npm run dev`, confirm the collection name on the home page,
    then import this repository into Vercel and submit the deployed URL.
-2. **Lab 2:** Replace the draft objects in `data/entries.js` with at least two
-   real grandmother interview entries. Each entry should include a title,
-   description, image, contributor, location, and date. They render through
-   `components/EntryCard.tsx`.
-3. **Lab 3:** Confirm every real entry appears at `/archive`, search filters as
-   you type, categories still filter correctly, and the empty state is useful.
-   Commit these changes in small pieces before pushing to GitHub.
+2. **Lab 2:** The archive content lives in `data/entry-content.js` (bilingual
+   copy) and `data/archive.js` (identity, photograph, relations). Each entry
+   carries a title, description, image, contributor credit, location and date,
+   and renders through `components/archive/EntryCard.js`.
+3. **Lab 3:** Confirm the entries appear at `/archive`, search filters as you
+   type in English and Khmer, categories still filter correctly, and the empty
+   state is useful. Commit these changes in small pieces before pushing.
 
-Do not submit the current draft entries as real interviews. Replace their names,
-quotes, locations, dates, images, and descriptions with your collected material
-before using the Vercel URL for the lab submission.
+The eight curated entries are the archive's shipped catalogue. Replace their
+copy, credits, locations and photographs with your collected interview material
+before submitting them as first-hand documentation.
 
-## Replacing Draft Content
+## Replacing the Curated Content
 
-- Draft text is currently stored in `data/archive.ts` and exposed through the
-  required `data/entries.js` file. For the lab submission, replace the draft
-  objects there with your real grandmother interview entries.
-- All images are referenced through `lib/images.ts`. Replace the URLs there
-  (e.g. point them to files in `/public/photos/...` once you add your own
-  photography) — no component code needs to change.
-- Data files are plain TypeScript objects matching the interfaces in
-  `lib/types.ts`, so they can later be swapped for calls to a database or
-  CMS without changing the UI.
+- Copy lives in `data/entry-content.js` as `{ en, km }` pairs.
+- Identity and relations live in `data/archive.js`; gallery captions in
+  `data/gallery.js`; people and attribution records in `data/people.js`.
+- Images are referenced through `lib/images.js`. Point a key at a file in
+  `public/` and every component picks it up; no component code changes.
+- The same data is stored in Supabase for the live archive. The SQL companion
+  files are `supabase/seed-entries.sql` (fresh project) and
+  `supabase/migrations/0014_archive_content_refresh.sql` (existing rows).
+
 
 ## Bilingual content (English / Khmer)
 
@@ -248,8 +254,10 @@ database already holds.
 
 ## Notes
 
-- Placeholder photography is served from Picsum (picsum.photos) purely as a
-  stand-in. Swap in real photographs as they're collected.
+- Photography and illustrations are served from `public/` (SVG illustrations
+  for the archive cards and gallery, photographs for the technique stages).
+  New photographs can replace a file without changing component code; the
+  image registry is `lib/images.js`.
 - Fonts are **self-hosted** from `public/fonts/` (Fraunces, Work Sans, IBM Plex
   Mono, Noto Sans Khmer — all SIL Open Font License 1.1) and declared with
   `@font-face` in `app/globals.css`. Nothing is fetched from Google at build or
@@ -268,8 +276,11 @@ reviewed. The workflow is:
 | Status      | Who can see it          | What happens next                                        |
 | ----------- | ----------------------- | -------------------------------------------------------- |
 | `pending`   | author + archive owner  | the owner publishes it, or returns it with a note          |
-| `published` | everyone                | live in `/archive`; only the archive owner can change it   |
+| `published` | everyone                | live in `/archive`; an author's edit sends it back to `pending` |
 | `returned`  | author + archive owner  | the author fixes it, saving sends it back to `pending`     |
+
+Only the author's own edit resubmits a published entry. When an editor or admin
+corrects a published entry in `/admin/entries`, it stays published.
 
 Screens:
 
@@ -299,8 +310,9 @@ has Row Level Security enabled and no policy, so the API roles cannot read it.
 
 Rules the database enforces, not just the UI:
 
-- a contributor may edit or withdraw only their own `pending` or `returned`
-  entries; a `published` entry is locked to them;
+- a contributor may edit their own `pending`, `returned` or `published` entries
+  (saving a returned or published one puts it back in the review queue) and may
+  withdraw only the unapproved ones;
 - `status`, `featured`, `is_sample` and the review columns belong to the archive
   owner alone (editors can edit text, never publish), and a return must carry a
   note;
@@ -334,11 +346,11 @@ this project: a submission made against a different Supabase project (for
 example a deployed site with other environment variables) will not appear here.
 
 Apply migrations `0001_schema.sql` through
-`0015_admin_access_repair.sql` in order to the Supabase project used
-by the app (migrations 0012 and 0015 are idempotent, so re-running them repairs a
+`0019_tools_is_an_archive_topic.sql` in order to the Supabase project used
+by the app (migrations 0012, 0015, 0016, 0017, 0018 and 0019 are idempotent, so re-running them repairs a
 policy set or a role that was edited by hand in the dashboard). Migration 0005
 creates `public.entries`, including `owner uuid not null references auth.users(id)`,
-and enables contribution policies. Migrations 0006–0007 clear placeholder
+and enables contribution policies. Migrations 0006–0007 clear draft
 attributions and harden sample/contribution data. Migration 0008 allows
 anonymous reads of published entries (including the seeded example rows),
 while revoking anonymous insert, update, and delete privileges.
@@ -348,7 +360,18 @@ update, and delete policies. Migration 0012 restores owner-only review powers
 review-note columns, the super-admin allow list, the pending cap, and the admin
 policies. Migration 0013 removes the leftover "(sample)" markers that the seeded
 rows carried inside their location text and contributor stories, so a project
-seeded before it stops showing them once it is applied.
+seeded before it stops showing them once it is applied. The display layer also
+strips that marker from the eight curated entries, so a deployment that has not
+run 0013 yet never shows a test label; the migration remains the permanent fix. Migration 0016 repairs
+the guard that stopped an author from saving a returned entry: the resubmission
+trigger clears the old review note before the guard runs, so the guard now
+accepts that one transition (and only when the review columns end up empty).
+Migration 0017 lets an author revise a published entry (saving returns it to
+`pending`) while a reviewer's edit keeps it published, and refuses an
+author-supplied status change. Migration 0018 fills the contributor credit on
+the eight curated rows that were seeded blank. Migration 0019 promotes the
+"tools" topic to the archive scope, so the Tools entry can be edited or
+re-tagged like every other archive entry.
 
 ### Applying migration 0012 with psql
 
@@ -468,8 +491,9 @@ Then, with two real accounts (one contributor, one editor or the owner):
    `/archive` for anonymous visitors, and `/my-submissions` shows **published**.
 3. Return another submission with a note: the author sees the note and can
    revise it; saving puts it back into the queue as **pending**.
-4. Try to edit or withdraw a published entry as the contributor: the action is
-   refused, and the database returns 403 if the request is replayed by hand.
+4. Edit the published entry as its author: it leaves `/archive` and returns to
+   **pending** until it is approved again. Withdrawing it is refused. Replaying
+   a "publish" request from the browser console fails with SQLSTATE 42501.
 
 To migrate the existing archive examples, open
 `supabase/seed-entries.sql`, replace each `PASTE-YOUR-UUID-HERE` with your user
@@ -492,14 +516,21 @@ Row Level Security remains enabled on `public.entries`. Anonymous users can
 select only published rows; the `anon` and `public` roles have no insert,
 update, or delete table privileges. Authenticated contributors, editors, and
 admins may insert only rows whose `owner` is their own `auth.uid()`.
-Contributors may update or delete only their own `pending`/`returned` rows;
-UPDATE checks ownership both before and after the change, preventing ownership
-transfer. Editors may update any row (that is what reviewing means) and delete
-unapproved ones; admins may update or delete any row, including published
-entries. A database trigger reserves `status`, `is_sample`, `featured` and the
-review columns to the archive owner, so neither a contributor nor an editor can
-self-publish an entry or unmark a sample. Keep the publishable key in the client; do not expose a
-service-role key or disable RLS.
+Contributors may update their own `pending`/`returned`/`published` rows (the
+trigger turns a published save into `pending`) and delete only `pending` or
+`returned` rows; UPDATE checks ownership both before and after the change,
+preventing ownership transfer. Editors may update any row (that is what
+reviewing means) and delete unapproved ones; admins may update or delete any
+row, including published entries. A database trigger reserves `status`,
+`is_sample`, `featured` and the review columns to the archive owner, so neither a
+contributor nor an editor can self-publish an entry or change a moderation flag.
+Keep the publishable key in the client; do not expose a service-role key or
+disable RLS.
+
+A direct REST update against a row the caller cannot see returns zero rows and
+no error — that is how Supabase applies Row Level Security, not a gap in the
+policies. The app's own API never does that silently: it answers 404 or 403 with
+a plain message, and `npm run test:ownership` proves the target row is unchanged.
 
 Grant access only to trusted archive team members: sign in as the archive owner
 and set their profile role at `/admin/users`. An `editor` can open the entry
@@ -517,14 +548,14 @@ npm run build
 ```
 
 Archive cards and entry details carry no sample labels — every published entry
-reads as real archive content. Gallery examples remain excluded from the public
-gallery.
+reads as real archive content, and gallery photographs credit the archive's
+photograph collection and the province they document.
 
 To run the two-account ownership attack, set these environment variables
 without putting their values in a committed file:
 `SPRINT2_ACCOUNT_A_EMAIL`, `SPRINT2_ACCOUNT_A_PASSWORD`,
 `SPRINT2_ACCOUNT_B_EMAIL`, and `SPRINT2_ACCOUNT_B_PASSWORD`. Account B must own
-at least one non-sample entry. Then run:
+at least one entry. Then run:
 
 ```bash
 npm run test:ownership
@@ -535,6 +566,7 @@ update and delete B's entry as A, and verifies through B's session that the row
 is unchanged. Account A should be the contributor used for the attack; use a
 separate trusted editor account only when testing review/publish controls.
 
-Live sign-up, photo upload, Khmer rendering/search, deployed image performance,
-and the ownership script still need to be checked against the configured
-Supabase/Vercel deployment with two real accounts.
+Before submitting the deployed archive, run the Lab 13 review on the live URL
+with two real accounts: sign-up and photo upload, English/Khmer search, a
+returned-entry revision, a published-entry revision that returns to pending,
+the console publish/ownership attempts, and `npm run test:ownership`.

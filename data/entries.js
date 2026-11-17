@@ -1,9 +1,9 @@
 /**
  * Lab 3 entry collection.
  *
- * Replace the draft objects in archive.ts with real grandmother interviews,
- * or move those objects into this file as the collection grows. This named
- * export is the one used by the browse page and EntryCard.
+ * Named exports used by the browse page and EntryCard. The catalogue itself
+ * lives in `archive.js`; this file is the stable entry point older lab pages
+ * import, so it re-exports the same records and lookups.
  */
 export {
   archiveItems as entries,
