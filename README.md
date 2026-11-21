@@ -99,4 +99,3 @@ Useful project commands are `npm run lint`, `npm test`, `npm run build`, and `np
 - **Four-question reflection — separate Canvas submission.** The reflection is not included in this repository; answer the four questions in the Canvas text box.
 - **Finished experience — implementation evidence present; live inspection required.** Loading, error, and empty states are handled in `components/archive/EntriesBrowser.js`; responsive layout rules are in `app/globals.css`. Check the live app on a phone, confirm no test entries are visible, and inspect the browser console on the main pages.
 
-The final submission also requires the live URL and repository, a demo video of five minutes or less, a booked Q&A slot, and the Show Your Archive post with the video link. Test the video link in a private browser window and complete the Canvas submission steps before the deadline.
