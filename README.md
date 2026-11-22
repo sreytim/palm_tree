@@ -1,101 +1,330 @@
-# Palm Leaf Archive
 
-## 1. What this is
+# Palm Leaf House Archive
 
-Palm Leaf Archive is a bilingual digital collection about traditional Khmer palm-leaf houses and the knowledge involved in preparing leaves, weaving panels, covering and repairing roofs, and building homes. I collected knowledge for the archive through conversations with my grandmother, a neighbor who is also a grandmother, and elders in Cambodian provinces. The repository contains eight curated entries with English and Khmer copy, plus contribution features for adding further material.
+## 1. What This Is
 
-## 2. Who it's for
+Palm Leaf House Archive is a bilingual digital collection that documents traditional Cambodian palm-leaf houses and the knowledge behind their construction and maintenance. The project preserves practical knowledge gathered through conversations with my grandmother, a neighbor who is also a grandmother, and elders from different Cambodian provinces. It covers topics such as palm-leaf preparation, weaving techniques, roof and wall covering, house construction, traditional house types, and maintenance. The archive currently contains eight curated entries in Khmer and English. Visitors can browse and search the collection without creating an account, while registered community members can contribute their own knowledge and photographs for review before publication.
 
-The archive is designed for people in Cambodia who want to learn about or contribute knowledge of palm-leaf building, including Khmer-speaking readers and community members using a phone. The interface offers English and Khmer through a language switcher. Archive copy, topic names, page text, and image descriptions are paired in both languages, and the project includes a self-hosted Noto Sans Khmer font. The layouts use responsive CSS breakpoints for smaller screens. The archive loads its published entries from Supabase and shows a plain connection message when loading fails; it does not document offline use or a low-bandwidth mode.
+**Live Website:** https://palm-tree-gilt.vercel.app/
 
-I do not publish the interviewees’ names in order to protect their privacy; the archive uses anonymous or role-based credits. Locations recorded in the curated entries include Kampong Speu Province. Gallery records also refer to Takeo and Kampong Chhnang provinces. These locations and the current credits are stored in `data/entry-content.js`, `data/people.js`, and `data/gallery.js`. Some photographs are mine; others were found online to accompany related content. The repository does not record the original creator, source URL, or reuse permission for each online image, so those image credits are incomplete.
+## 2. Who It's For
 
-## 3. How it works
+The archive is designed for people in Cambodia who want to learn about, preserve, or share traditional knowledge related to palm-leaf houses. This includes younger generations who may have limited experience with traditional building techniques, as well as community members who still practice or remember these methods.
 
-The application uses Next.js 16 App Router and React 19. The source is JavaScript. Vercel hosts the web application; Supabase provides authentication, PostgreSQL data, row-level security (RLS), and photo storage. The main archive browser fetches published rows from the Supabase `entries` table. Bilingual curated copy is maintained in `data/entry-content.js` and combined with database entries by the entry-content mapping code. English and Khmer interface strings live in `lang/i18n.js`.
+The design focuses on the needs of local users:
 
-The main account and contribution data is held in:
+- **Khmer and English support:** Users can switch between Khmer and English. The interface, archive content, topic names, and image descriptions support both languages.
+- **Mobile-first experience:** The layout uses responsive CSS to support browsing on smartphones, making the collection accessible to users who primarily access the internet through their phones.
+- **Accessible content:** Entries are organized into clear topics so visitors can explore traditional knowledge without needing technical knowledge or an account.
+- **Community contributions:** Registered users can submit written knowledge and photographs, allowing the archive to grow beyond its original eight entries.
+- **Source acknowledgment:** Knowledge is credited using anonymous or role-based descriptions when contributors prefer not to have their names published.
 
-- `entries`: archive and community-submitted entries, including the owner UUID, text, photo URL, status, and review metadata.
-- `profiles`: application role and display information linked to Supabase Auth users.
-- `super_admins`: the archive-owner allow-list used when resolving administrative access.
-- Supabase Storage bucket `photos`: uploaded contribution photographs.
+The project also includes a self-hosted Noto Sans Khmer font to support Khmer text rendering. Although the website is designed to work on smaller screens, it does not currently provide a dedicated offline mode or a specialized low-bandwidth mode.
 
-The migration history also defines curated/reference tables for topics, categories, people, stories, techniques, and galleries, with join tables for their relationships. The current contribution and public archive workflow uses `entries`.
+## 3. How It Works
 
-Entry statuses are `pending`, `published`, and `returned`:
+### Technology Stack
 
-| Status | Visibility and next step |
-| --- | --- |
-| `pending` | The contributor and archive team can review it; it is not returned by the public published-entry query. |
-| `published` | Publicly readable and displayed in the archive. |
-| `returned` | The contributor can read and edit it; the reviewer’s note explains what to change. Saving a returned entry sends it back to `pending`. |
+The application uses the following technologies:
 
-The visitor flow is to browse or search the published archive without an account. Search and category filters are applied to the entries returned to the public browser. A contributor creates an account, submits text and a photo, and follows the entry under My Submissions. New submissions are written as `pending`. The archive owner reviews submissions in the queue and publishes or returns them. A contributor may edit their own pending, returned, or published entry; an edit to a returned or published entry goes back to pending for review.
+| Technology | Purpose |
+|---|---|
+| Next.js 16 | Application framework and routing |
+| React 19 | User interface |
+| JavaScript | Application logic |
+| Tailwind CSS and CSS | Styling and responsive layouts |
+| Supabase | Authentication, PostgreSQL database, Row Level Security, and photo storage |
+| Vercel | Application hosting and deployment |
+| GitHub | Source code management |
 
-RLS is enabled on `entries`. Anonymous visitors can select published entries only. Signed-in users can also read their own submissions, and editors/admins can read entries for their archive work. Inserts must use the authenticated user’s own UUID as `owner`. Owner update/delete policies are scoped to that owner and the allowed statuses. Editors can correct entry content, but database triggers reserve status and moderation fields for the admin. The archive admin can review, feature, and manage entries. Profile role changes are protected separately; a user cannot grant themselves an elevated role.
+The application is built with Next.js App Router and deployed on Vercel. Supabase handles user authentication, database operations, access permissions, and contribution photo storage.
 
-## 4. Security decisions
+### Database Structure
 
-The review action currently goes through `PATCH /api/admin/contributions` in `app/api/admin/contributions/route.js`. The route checks the request origin, verifies the signed-in user and role, validates the requested transition and return note, then updates the row through the Supabase server client. The review page at `/admin/review` also checks the current role before loading pending entries. These route and page checks provide clear behavior in the application, but are not the only security boundary.
+The main tables and storage resources include:
 
-The database enforces the boundary even if a user bypasses the page or manually changes a request. RLS policies in `supabase/migrations/0012_community_contributor_workflow.sql` and later repairs scope reads and writes by role and owner. The `prevent_owner_moderation_changes` trigger blocks non-admin changes to moderation fields, while `enforce_contribution_rules` validates submissions and handles resubmission. Migration `0017_owner_revision_of_published_entries.sql` permits an owner to revise their published entry only by sending it back to `pending`. A hidden or disabled button improves the interface, but does not authorize a database write; the API and database policies/triggers do that.
+- **entries:** Stores curated and community-submitted archive entries, including titles, descriptions, owner IDs, photographs, publication status, and review information.
+- **profiles:** Stores user profile information and application roles linked to Supabase Auth.
+- **super_admins:** Maintains the allow-list used to identify authorized archive administrators.
+- **photos (Supabase Storage):** Stores photographs uploaded by contributors.
 
-The current repository does not define or call a database function named `review_entry`. The Week 11 prompt journal records an earlier intention to use `supabase.rpc('review_entry', ...)`, and says a direct table update was rejected at that time. That historical note does not match the current route, which performs a direct Supabase update after its checks. In the current implementation, authorization for that update is enforced by the API checks together with RLS and the moderation trigger. This README describes the code that is present now.
+The migration history also includes reference tables for topics, categories, people, stories, techniques, and galleries, together with relationship tables.
 
-Contribution photos are uploaded to the public `photos` bucket and stored by public URL. The contribution form warns that a photo’s URL can be accessed while its entry is still under review. A pending entry is hidden from the public archive query, but the photo URL itself should not be treated as private.
+The original curated archive content is maintained in JavaScript data files, including `data/entry-content.js`, while community contributions are managed through the Supabase `entries` table.
 
-Local verification completed for this project: `npm run lint` finished without reported errors, `npm test` passed all 111 tests, and `npm run build` completed successfully with Next.js 16.3.2. I also checked the live visitor, contributor, and reviewer workflows and confirmed they work as intended. The ownership-attack script is available as `npm run test:ownership` and requires two configured test accounts.
+### Entry Status and Workflow
 
-## 5. AI use
+Every community submission follows one of three statuses:
 
-I used AI as a coding and review assistant during the project, while making decisions about what to keep, change, test, or reject. My process logs record Cline in VS Code with OpenRouter, Gemini 2.5 Flash, Gemini 3.5 Flash-Lite, `openai/gpt-5.1-codex`, `openrouter/free`, and DeepSeek Flash Latest (`~deepseek/deepseek-flash-latest`), as well as ChatGPT. The notes do not identify which model produced every change.
+| Status | Description |
+|---|---|
+| `pending` | A newly submitted entry or an entry awaiting review. It is not publicly visible. |
+| `published` | An approved entry that can be viewed by public visitors. |
+| `returned` | An entry sent back to its contributor with a review note explaining the requested changes. |
 
-I used Cline to help set up the archive pages and navigation, develop browse/search and bilingual empty-state copy, integrate Supabase authentication and data, and work through ownership and review controls. I edited suggested topics and descriptions, revised Khmer wording, and used smaller follow-up prompts when a change did not work as expected. I reviewed code and database policies instead of treating generated code as correct by default.
+The general workflow is:
 
-One mistake I caught was an AI suggestion to use the outdated `NEXT_PUBLIC_SUPABASE_ANON_KEY` variable name. I corrected the configuration to the project’s publishable-key variable and reviewed the change so a secret key would not be exposed in the frontend. In the review-queue work, my prompt journal records that Cline initially proposed a direct table update where I expected a `review_entry` RPC; I rejected that suggestion then. The current repository has no such RPC and now implements review through the API route and database protections described above. This difference between my process notes and the code is a reminder to check both the proposed approach and the final implementation.
+1. **Visitors:** Anyone can browse and search published entries without creating an account.
+2. **Contributors:** Registered users can submit new entries with text and photographs.
+3. **Review:** New submissions enter the `pending` status and appear in the administrator's review queue.
+4. **Publication:** The administrator reviews each submission and either publishes it or returns it with feedback.
+5. **Revision:** Contributors can edit their own submissions. Editing a returned or published entry sends it back to `pending` for another review.
 
-My logs also describe difficulty understanding generated database changes, changes that caused regressions elsewhere, and the need to test role boundaries rather than assume they work. I used follow-up prompts, code review, and manual checks to decide what to keep. During final local verification, all 111 tests passed; the live visitor, contributor, and reviewer workflows were also confirmed.
+### Access Control
 
-## 6. Sources and credits
+Row Level Security (RLS) is enabled on the `entries` table to control database access.
 
-The eight curated entries cover palm-leaf preparation, cross-weaving, roof-frame construction, tying panels, seasonal roof repair, a family house in Kampong Speu, drying panels, and traditional thatching tools. The knowledge comes from conversations with my grandmother, a neighbor-grandmother, and elders in the provinces represented in the archive. I keep their names private and credit them anonymously or by role. `data/entry-content.js`, `data/archive.js`, and `data/people.js` contain the entry text and contributor credits; `data/gallery.js` contains gallery locations and credits.
+The main access rules are:
 
-I took some of the photographs myself. Other images were found online to accompany related content. The repository does not preserve the source URL, original creator, or reuse terms for each online image, so those images are not fully credited in the current project. The About page describes photographs as taken with permission, but that statement does not identify which images were self-produced or establish reuse permission for online images.
+- Anonymous visitors can read published entries only.
+- Authenticated contributors can read their own submissions.
+- Contributors can insert entries using their own authenticated user ID.
+- Contributors can update and delete only their own eligible entries.
+- Editors and administrators have additional permissions for archive management.
+- Moderation fields and status changes are protected from unauthorized modifications.
+- Users cannot change their own roles to obtain elevated permissions.
 
-## 7. Running it locally
+These permissions are enforced through Supabase policies, database triggers, and application-level authorization checks.
 
-Requirements: Node.js and npm.
+## 4. Security Decisions
 
-1. Install dependencies:
+Security was an important part of the contribution and review workflow because users should not be able to publish their own submissions or modify another contributor's content without authorization.
 
-   ```bash
-   npm install
-   ```
+### Review and Publication Protection
 
-2. Copy `.env.example` to `.env.local` and set the Supabase project values in your local, ignored environment file. The application needs:
+The current implementation handles moderation through the API route:
 
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+`app/api/admin/contributions/route.js`
 
-   Do not put a Supabase `service_role` key in the browser environment or commit credentials. Configure the same variable names in Vercel and redeploy after changing production values.
+When an administrator reviews a submission, the route:
 
-3. Start the development server:
+1. Checks the request origin.
+2. Verifies the authenticated user's identity and role.
+3. Validates the requested moderation action and return note.
+4. Performs the database update through the Supabase server client.
 
-   ```bash
-   npm run dev
-   ```
+The review page also checks the user's role before loading the review queue.
 
-   Open `http://localhost:3000`. The project’s production URL is [https://palm-tree-gilt.vercel.app](https://palm-tree-gilt.vercel.app).
+However, hiding or disabling the Publish button is not sufficient security. A user could still attempt to send a request manually through the browser console or another client. Therefore, the actual protection comes from server-side authorization, database RLS policies, and triggers that prevent unauthorized changes to moderation fields.
 
-Useful project commands are `npm run lint`, `npm test`, `npm run build`, and `npm run start`. The optional `npm run test:ownership` script additionally requires `SPRINT2_ACCOUNT_A_EMAIL`, `SPRINT2_ACCOUNT_A_PASSWORD`, `SPRINT2_ACCOUNT_B_EMAIL`, and `SPRINT2_ACCOUNT_B_PASSWORD`; use test accounts and keep these values outside committed files.
+### Why the Review Logic Is Protected
 
-## 8. Submission checklist
+The current repository does not contain a database function named `review_entry`. Instead, moderation is implemented through the API route, together with database-level access restrictions.
 
-- **Yes — End-to-end visitor, contributor, stranger, and reviewer paths.** I confirmed the live workflows work as intended. The public archive is in `app/(main)/archive/` and `components/archive/`; contributions are in `app/api/contributions/route.js` and `app/(main)/contribute/`; review is in `app/api/admin/contributions/route.js` and `app/(main)/admin/review/`.
-- **Yes — Review gate, published-only access, and ownership controls.** I checked the live role workflows, and `npm test` passed 111 tests covering published-only reads, ownership writes, moderation fields, and resubmission. See `tests/entries-rls.test.js`, `tests/submission-workflow.test.js`, `tests/owner-revision.test.js`, and migrations `0012_community_contributor_workflow.sql` and `0017_owner_revision_of_published_entries.sql`. `.env.example` is the only environment-file path in Git history and contains empty values. A full history-wide scan for every type of secret is not recorded here.
-- **Yes — Community-sourced entry knowledge and Khmer-first-class content.** The entry knowledge came from my grandmother, a grandmother who is my neighbor, and elders in Cambodian provinces. Their names are withheld and their credits are anonymous or role-based. Bilingual copy and interface translations are in `data/entry-content.js`, `lang/i18n.js`, and `data/`. Some photos are self-produced and some were found online; source and reuse details for the online images are incomplete in the repository.
-- **Accurate README — documented here.** This file describes the current repository and its documented limitations.
-- **Four-question reflection — separate Canvas submission.** The reflection belongs in the Canvas text box and is not stored in this repository; its submission status is not visible here.
-- **Yes — Finished experience.** `npm run lint`, all 111 tests under `npm test`, and `npm run build` completed successfully. I checked the live app on a phone, confirmed the main workflows work, and found no console errors or test entries in the archive. Loading, error, and empty states are handled in `components/archive/EntriesBrowser.js`; responsive layout rules are in `app/globals.css`.
+An earlier development approach considered using a Supabase RPC function. The final implementation uses the API route and database protections described above. This README documents the implementation currently present in the repository rather than an earlier development plan.
 
+### Additional Security Decisions
+
+- **Returned submissions:** When an entry is returned, the contributor can see the reviewer's note and make the requested corrections. Saving the revised entry sends it back to `pending` for another review.
+- **Published entry revisions:** Contributors are allowed to revise their own published entries, but the revised version must go through the review process again before becoming public.
+- **Ownership protection:** Contributors cannot edit or delete entries belonging to other users. Database policies enforce ownership using the authenticated user's UUID.
+- **Role protection:** Regular users cannot assign themselves an editor or administrator role.
+- **Photo visibility:** Contribution photographs are stored in the public `photos` bucket. Therefore, a photograph's URL may be accessible even while its entry is pending review. The application informs contributors about this when they submit photographs.
+
+These decisions help protect the archive's content while allowing community members to participate in preserving traditional knowledge.
+
+### Verification
+
+The following local verification commands completed successfully:
+
+- `npm run lint` — completed without reported errors.
+- `npm test` — all 111 tests passed.
+- `npm run build` — production build completed successfully.
+
+The repository also includes an ownership verification script:
+
+`npm run test:ownership`
+
+This script requires two configured test accounts to verify ownership restrictions.
+
+## 5. AI Use
+
+AI tools were used throughout development as coding assistants, debugging support, and review tools. I used Cline in VS Code with models accessed through OpenRouter, as well as ChatGPT, to help develop and improve the application.
+
+The following models and tools were recorded during development:
+
+| Model / Tool | Main Purpose | How I Used the Output |
+|---|---|---|
+| Gemini 2.5 Flash | Initial development and feature implementation | Reviewed and adjusted generated code to fit the project requirements. |
+| Gemini 3.5 Flash-Lite | Development assistance and smaller coding tasks | Used suggestions as a starting point and checked the resulting changes. |
+| OpenAI GPT-5.1 Codex | Coding assistance | Reviewed proposed code and made adjustments where needed. |
+| DeepSeek Flash Latest | Coding and debugging assistance | Tested generated changes and corrected issues when they appeared. |
+| OpenRouter Free | Access to available AI models during development | Used as part of the development workflow through Cline. |
+| Claude Haiku 5.5 | Final project review and verification | Used to scan the project, identify potential problems, and check features against the project requirements. |
+| ChatGPT | Writing, planning, debugging explanations, and documentation | Used suggestions to improve explanations, review decisions, and prepare project documentation. |
+
+### How AI Contributed to the Project
+
+AI assistance was used in several parts of development:
+
+- **Application structure:** Helped establish the initial page structure, navigation, and archive browsing experience.
+- **Bilingual content and interface:** Assisted with interface text, search messages, empty states, and other user-facing content. I reviewed and adjusted the wording to fit the archive.
+- **Supabase integration:** Assisted with authentication, database queries, and the contribution workflow.
+- **Security implementation:** Helped investigate RLS policies, ownership restrictions, and administrator review permissions.
+- **Debugging and testing:** Helped identify potential problems and suggest fixes during development.
+- **Final review:** Claude Haiku 5.5 was used to examine the project against its requirements and identify issues that needed further checking.
+
+### Human Review and Verification
+
+I did not treat AI-generated code or suggestions as automatically correct. I reviewed the changes, compared them with the intended functionality, and tested the actual application before keeping them.
+
+For example, during development, an AI suggestion used an outdated Supabase environment variable name. I corrected the configuration to use the publishable-key variable required by the current project setup and checked that a secret key was not exposed in the frontend.
+
+I also encountered suggestions that did not match the intended database review workflow. Rather than following them without checking, I compared the suggestions with the existing API routes, database policies, and actual implementation.
+
+For the final review, I used Claude Haiku 5.5 to scan the project and identify potential problems against the requirements. I then reviewed the findings and checked the relevant implementation and application behavior before deciding whether any changes were necessary.
+
+AI helped speed up development, but the final implementation decisions, adjustments, and verification remained part of my work.
+
+## 6. Sources and Credits
+
+The knowledge in this archive comes from both community conversations and external research materials. I wanted to preserve traditional knowledge shared by people in my community while also referring to existing publications and visual resources about Cambodian traditional houses and palm-leaf construction.
+
+### Community Sources
+
+The main knowledge contributors include:
+
+- My grandmother, who shared traditional knowledge and experiences related to palm-leaf houses.
+- A neighbor who is also a grandmother, who contributed knowledge about traditional practices.
+- Elders from different Cambodian provinces who shared information about traditional house construction and maintenance.
+
+Their names are not published because I want to respect their privacy. Their contributions are acknowledged through anonymous or role-based credits in the archive.
+
+The eight curated entries cover:
+
+1. Palm-leaf preparation.
+2. Leaf weaving and cross-weaving techniques.
+3. Roof-frame construction.
+4. Techniques for tying palm-leaf panels.
+5. Seasonal roof repair.
+6. A traditional family house in Kampong Speu Province.
+7. Drying palm-leaf panels.
+8. Traditional thatching tools.
+
+### External Research and Reference Materials
+
+The following online resources were consulted as references during the development of the archive:
+
+1. **Yosothor – សម្ភារៈប្រក់ដំបូល (Traditional Roofing Materials)**
+
+   Author: ព្រាប ចាន់ម៉ារ៉ា
+
+   This Khmer-language article discusses traditional materials used for Cambodian roofs, including palm leaves, thatch, and other natural materials.
+
+   Source: https://www.yosothor.org/publications/khmer-renaissance/chapter-five/samphearak-brok-dombul.html
+
+2. **YouTube Video Reference 1**
+
+   Video: https://www.youtube.com/watch?v=_KdY5LXeQ9k
+
+3. **YouTube Video Reference 2**
+
+   Video: https://www.youtube.com/watch?v=r7i4pDAH3iU
+
+4. **CNC News – Conservation of Cambodian Palm Trees**
+
+   This Khmer-language news article discusses the conservation and expansion of Cambodian palm tree cultivation, as well as the importance of preserving traditional knowledge and practices associated with palm trees.
+
+   Source: https://www.cnc.com.kh/detail/news/40196
+
+5. **Additional Image Reference**
+
+   Image reference: https://encrypted-tbn0.gstatic.com/images?q=ANd9GcTkIgChv3O-OCpw6AN4RWhPE69g9mqKG3GxPCSMD2mHpiLhDpQbMTr1p6A&s=10
+
+### Photograph Credits
+
+The photographs were obtained from online references to illustrate traditional houses, construction techniques, and related materials.
+
+The available links above document some of the visual references used during development. However, the direct image link does not identify its original creator or original publishing website. The original creators and reuse permissions for some online photographs have not been fully verified.
+
+I acknowledge this as a limitation of the current collection and aim to maintain proper attribution for external materials.
+
+## 7. Running It Locally
+
+### Requirements
+
+- Node.js
+- npm
+- Git
+- A Supabase project with the required database configuration
+
+### Installation
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/sreytim/palm_tree.git
+cd palm_tree
+```
+
+**2. Install dependencies**
+
+```bash
+npm install
+```
+
+**3. Configure environment variables**
+
+Create a `.env.local` file in the project root based on `.env.example`.
+
+The application requires:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+Add the corresponding values from your Supabase project to your local environment file.
+
+Never commit environment values, passwords, service-role keys, or other private credentials to GitHub. The publishable Supabase key is designed to be used in the frontend; database access must still be protected through RLS and other security controls.
+
+**4. Start the development server**
+
+```bash
+npm run dev
+```
+
+Open the following address in your browser:
+
+```text
+http://localhost:3000
+```
+
+### Useful Commands
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Starts the development server. |
+| `npm run lint` | Checks the project for linting issues. |
+| `npm test` | Runs the automated test suite. |
+| `npm run build` | Creates a production build. |
+| `npm run start` | Starts the production server. |
+| `npm run test:ownership` | Runs ownership verification using two configured test accounts. |
+
+The ownership test additionally requires the following environment variables:
+
+- `SPRINT2_ACCOUNT_A_EMAIL`
+- `SPRINT2_ACCOUNT_A_PASSWORD`
+- `SPRINT2_ACCOUNT_B_EMAIL`
+- `SPRINT2_ACCOUNT_B_PASSWORD`
+
+Use dedicated test accounts and keep their credentials in an ignored local environment file.
+
+## 8. Submission Checklist
+
+- [x] Live URL loads logged out and shows published entries only: yes, https://palm-tree-gilt.vercel.app/
+- [x] A stranger cannot publish their own entry through the page or the console: yes, tested multiple times; last verified November 22, 2026.
+- [x] Logged out, the API returns nothing pending or returned: yes, tested multiple times; last verified November 22, 2026.
+- [x] Contributors can edit and delete only their own entries: yes, verified through RLS policies and automated tests.
+- [x] No secrets anywhere in the repo history: yes, checked with Gitleaks (`gitleaks git . --verbose`); 130 commits scanned, approximately 9.36 MB checked, no leaks found.
+- [x] At least eight real entries, each with a credited source: yes, 8 curated entries with anonymous or role-based source credits.
+- [x] Khmer renders on every screen a user meets, including the queue: yes.
+- [x] Works at phone width: yes, tested on a mobile device, iPhone 15 Pro.
+- [x] No test entries, lorem ipsum or TODO comments in shipped pages: yes.
+- [x] No console errors on the main pages: yes.
+- [x] jesseorndorff is a collaborator on this repo: yes.
+- [x] Supabase project restored and awake on November 22, 2026.
+- [x] Demo video link opens in a private window: yes, https://youtu.be/qwdrtMaACaE
+- [x] Reflection pasted in the Canvas submission: yes.
+- [x] Posted in the Show Your Archive discussion: yes.
+- [x] Q&A slot booked for Friday, December 4, 2026, 1:50 PM–1:55 PM.
