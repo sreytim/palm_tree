@@ -1,11 +1,10 @@
-
 # Palm Leaf House Archive
 
 ## 1. What This Is
 
 Palm Leaf House Archive is a bilingual digital collection that documents traditional Cambodian palm-leaf houses and the knowledge behind their construction and maintenance. The project preserves practical knowledge gathered through conversations with my grandmother, a neighbor who is also a grandmother, and elders from different Cambodian provinces. It covers topics such as palm-leaf preparation, weaving techniques, roof and wall covering, house construction, traditional house types, and maintenance. The archive currently contains eight curated entries in Khmer and English. Visitors can browse and search the collection without creating an account, while registered community members can contribute their own knowledge and photographs for review before publication.
 
-**Live Website:** https://palm-tree-gilt.vercel.app/
+**Live Website:** <a href="https://palm-tree-gilt.vercel.app/" target="_blank" rel="noopener noreferrer">https://palm-tree-gilt.vercel.app/</a>
 
 ## 2. Who It's For
 
@@ -201,7 +200,7 @@ The eight curated entries cover:
 7. Drying palm-leaf panels.
 8. Traditional thatching tools.
 
-### External Research and Reference Materials
+### Reference Materials
 
 The following online resources were consulted as references during the development of the archive:
 
@@ -211,25 +210,25 @@ The following online resources were consulted as references during the developme
 
    This Khmer-language article discusses traditional materials used for Cambodian roofs, including palm leaves, thatch, and other natural materials.
 
-   Source: https://www.yosothor.org/publications/khmer-renaissance/chapter-five/samphearak-brok-dombul.html
+   Source: <a href="https://www.yosothor.org/publications/khmer-renaissance/chapter-five/samphearak-brok-dombul.html" target="_blank" rel="noopener noreferrer">https://www.yosothor.org/publications/khmer-renaissance/chapter-five/samphearak-brok-dombul.html</a>
 
 2. **YouTube Video Reference 1**
 
-   Video: https://www.youtube.com/watch?v=_KdY5LXeQ9k
+   Video: <a href="https://www.youtube.com/watch?v=_KdY5LXeQ9k" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=_KdY5LXeQ9k</a>
 
 3. **YouTube Video Reference 2**
 
-   Video: https://www.youtube.com/watch?v=r7i4pDAH3iU
+   Video: <a href="https://www.youtube.com/watch?v=r7i4pDAH3iU" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=r7i4pDAH3iU</a>
 
 4. **CNC News – Conservation of Cambodian Palm Trees**
 
    This Khmer-language news article discusses the conservation and expansion of Cambodian palm tree cultivation, as well as the importance of preserving traditional knowledge and practices associated with palm trees.
 
-   Source: https://www.cnc.com.kh/detail/news/40196
+   Source: <a href="https://www.cnc.com.kh/detail/news/40196" target="_blank" rel="noopener noreferrer">https://www.cnc.com.kh/detail/news/40196</a>
 
 5. **Additional Image Reference**
 
-   Image reference: https://encrypted-tbn0.gstatic.com/images?q=ANd9GcTkIgChv3O-OCpw6AN4RWhPE69g9mqKG3GxPCSMD2mHpiLhDpQbMTr1p6A&s=10
+   Image reference: <a href="https://encrypted-tbn0.gstatic.com/images?q=ANd9GcTkIgChv3O-OCpw6AN4RWhPE69g9mqKG3GxPCSMD2mHpiLhDpQbMTr1p6A&s=10" target="_blank" rel="noopener noreferrer">https://encrypted-tbn0.gstatic.com/images?q=ANd9GcTkIgChv3O-OCpw6AN4RWhPE69g9mqKG3GxPCSMD2mHpiLhDpQbMTr1p6A&amp;s=10</a>
 
 ### Photograph Credits
 
@@ -312,7 +311,7 @@ Use dedicated test accounts and keep their credentials in an ignored local envir
 
 ## 8. Submission Checklist
 
-- [x] Live URL loads logged out and shows published entries only: yes, https://palm-tree-gilt.vercel.app/
+- [x] Live URL loads logged out and shows published entries only: yes, <a href="https://palm-tree-gilt.vercel.app/" target="_blank" rel="noopener noreferrer">https://palm-tree-gilt.vercel.app/</a>
 - [x] A stranger cannot publish their own entry through the page or the console: yes, tested multiple times; last verified November 22, 2026.
 - [x] Logged out, the API returns nothing pending or returned: yes, tested multiple times; last verified November 22, 2026.
 - [x] Contributors can edit and delete only their own entries: yes, verified through RLS policies and automated tests.
@@ -324,7 +323,7 @@ Use dedicated test accounts and keep their credentials in an ignored local envir
 - [x] No console errors on the main pages: yes.
 - [x] jesseorndorff is a collaborator on this repo: yes.
 - [x] Supabase project restored and awake on November 22, 2026.
-- [x] Demo video link opens in a private window: yes, https://youtu.be/qwdrtMaACaE
+- [x] Demo video link opens in a private window: yes, <a href="https://youtu.be/qwdrtMaACaE" target="_blank" rel="noopener noreferrer">https://youtu.be/qwdrtMaACaE</a>
 - [x] Reflection pasted in the Canvas submission: yes.
 - [x] Posted in the Show Your Archive discussion: yes.
 - [x] Q&A slot booked for Friday, December 4, 2026, 1:50 PM–1:55 PM.
